@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { LoginModule } from './modules/login/login.module';
+import { LoginModule } from './modules/auth/login/login.module';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,8 +19,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   declarations: [
     AppComponent
   ],
-
-
   imports: [
     BrowserModule,
     LoginModule,
