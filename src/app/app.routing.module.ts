@@ -4,13 +4,18 @@ import { LoginComponent } from './modules/auth/login/components/login.component'
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'login',
     component: LoginComponent,
     children: []
   },
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'login'
+  },
+  {
     path: '**',
-    component: LoginComponent
+    redirectTo: '/login'
   }
 ];
 
