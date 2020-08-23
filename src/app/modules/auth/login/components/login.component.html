@@ -3,8 +3,8 @@
     <div class="login-img">
       <img class="login-image" src="https://s4827.pcdn.co/wp-content/uploads/2013/08/iBooks-for-Mac-Thumb.png" alt="Login Image">
     </div>
-      <form class="login-inputs" [formGroup]="form" (submit)="onLogin()">
-        <mat-form-field>
+      <form class="inputs" [formGroup]="form" (submit)="onLogin()">
+        <mat-form-field class="email-form">
           <mat-label>E-mail</mat-label>
           <input
             matInput
@@ -13,7 +13,7 @@
             placeholder="E-mail">
             <mat-error *ngIf="form.get('email').invalid">Please enter your e-mail</mat-error>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field class="password-form">
           <mat-label>Password</mat-label>
           <input
             matInput
@@ -26,6 +26,8 @@
           mat-raised-button
           color="primary"
           type="submit">Login</button>
+<!--        <a class="sign-up-link" mat-button routerLink="/signup" routerLinkActive="mat-accent">Don't have an account?</a>-->
+        <a class="sign-up-link" mat-button routerLink="/" routerLinkActive="mat-accent">Don't have an account?</a>
       </form>
   </div>
 </div>

@@ -12,10 +12,22 @@
     display: flex;
     justify-content: space-between;
 
-    .login-inputs {
+    .inputs {
       display: flex;
       flex-direction: column;
       flex-wrap: wrap;
+
+      .email-form {
+        margin-bottom: 10px;
+      }
+
+      .password-form {
+        margin-bottom: 30px;
+      }
+
+      .sign-up-link {
+        margin-top: 30px;
+      }
     }
   }
 
