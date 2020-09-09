@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { HomepageComponent } from './components/homepage.component';
-import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  imports: [SharedModule],
-  declarations: [HomepageComponent]
+  imports: [],
+  declarations: [HomepageComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class HomepageModule {}
