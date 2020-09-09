@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './login.component.html',
@@ -7,6 +8,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
+
+  constructor(private router: Router) {}
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -20,7 +23,6 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin() {
-    console.log('logged in')
+    this.router.navigate(['homepage']);
   }
-
 }

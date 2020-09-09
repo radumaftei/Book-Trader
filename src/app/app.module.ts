@@ -15,12 +15,16 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HomepageModule } from './modules/homepage/homepage.module';
+import { SharedModule } from './modules/shared/shared.module';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
+    CommonModule,
+    SharedModule,
     BrowserModule,
     AuthModule,
     HomepageModule,
