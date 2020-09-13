@@ -6,7 +6,8 @@ import { HomepageComponent } from './modules/homepage/components/homepage.compon
 const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    children: []
   },
   { path: 'homepage',
     component: HomepageComponent

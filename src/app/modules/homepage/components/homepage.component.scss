@@ -1,3 +1,7 @@
+body {
+  background: none;
+}
+
 .wrapper {
   background: rgb(255,255,255);
   background: linear-gradient(164deg, rgba(255,255,255,1) 25%, rgba(128,128,128,1) 69%, rgba(128,128,128,1) 81%, rgba(101,101,101,1) 96%, rgba(94,94,94,1) 100%, rgba(0,0,0,1) 100%, rgba(0,0,0,1) 100%);
@@ -5,3 +9,4 @@
   top: 0;
   height: 100vh;
 }
+
