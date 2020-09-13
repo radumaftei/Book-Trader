@@ -11,6 +11,10 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router) {}
 
+  get loginButtonDisabled() {
+    return !this.form.valid;
+  }
+
   ngOnInit() {
     this.form = new FormGroup({
       email: new FormControl(null, {

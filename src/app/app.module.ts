@@ -11,12 +11,14 @@ import { HomepageModule } from './modules/homepage/homepage.module';
 import { HeaderModule } from './modules/header/header.module';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from './constants/material.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
+    RouterModule,
     CommonModule,
     BrowserModule,
     AuthModule,

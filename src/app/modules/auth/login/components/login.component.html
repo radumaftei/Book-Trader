@@ -25,7 +25,8 @@
         <button
           mat-raised-button
           color="primary"
-          type="submit">Login</button>
+          type="submit"
+          [disabled]="loginButtonDisabled">Login</button>
 <!--        <a class="sign-up-link" mat-button routerLink="/signup" routerLinkActive="mat-accent">Don't have an account?</a>-->
         <a class="sign-up-link" mat-button routerLink="/" routerLinkActive="mat-accent">Don't have an account?</a>
       </form>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -8,4 +9,14 @@ import { Component } from '@angular/core';
 })
 export class HeaderComponent {
 
+  constructor(private router: Router) {
+  }
+
+  onLogoutClick($event: MouseEvent) {
+    this.router.navigate(['login']);
+  }
+
+  onHomepageClick($event: MouseEvent) {
+    this.router.navigate(['homepage']);
+  }
 }
