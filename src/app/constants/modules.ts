@@ -8,9 +8,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 export const MATERIAL_MODULES = [
   MatInputModule,
+  MatTooltipModule,
   MatGridListModule,
   MatSliderModule,
   MatFormFieldModule,

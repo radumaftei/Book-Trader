@@ -7,19 +7,26 @@
 
   <button mat-icon-button
           class="header_icon"
-          aria-label="Example icon-button with heart icon">
+          aria-label="Example icon-button with heart icon"
+          matTooltip="My account"
+          [matTooltipPosition]="'below'">
     <mat-icon>account_circle</mat-icon>
   </button>
 
   <button mat-icon-button
           class="header_icon"
-          aria-label="Example icon-button with heart icon">
+          aria-label="Example icon-button with heart icon"
+          matTooltip="My books"
+          [matTooltipPosition]="'below'">
     <mat-icon>book</mat-icon>
   </button>
 
   <button mat-icon-button
           class="header_icon"
-          aria-label="Example icon-button with heart icon" (click)="onLogoutClick($event)">
+          aria-label="Example icon-button with heart icon"
+          (click)="onLogoutClick($event)"
+          matTooltip="Logout"
+          [matTooltipPosition]="'below'">
     <mat-icon>exit_to_app</mat-icon>
   </button>
 </mat-toolbar>
