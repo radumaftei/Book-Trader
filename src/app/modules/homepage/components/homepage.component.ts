@@ -35,7 +35,10 @@ export class HomepageComponent implements OnInit{
 
   onPrevious(element, category) {
     const minOffset = 0;
-    if (this.offsetBookNumberMapper[category].offset > minOffset) {
+    const maxOffset = (this.offsetBookNumberMapper[category].bookNumber - 8) * 200;
+    if (this.offsetBookNumberMapper[category].offset > maxOffset) {
+      this.offsetBookNumberMapper[category].offset = this.offsetBookNumberMapper[category].offset - 400;
+    } else if (this.offsetBookNumberMapper[category].offset > minOffset) {
       this.offsetBookNumberMapper[category].offset = this.offsetBookNumberMapper[category].offset - 200;
     }
     element.scrollTo({
