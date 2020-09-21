@@ -20,8 +20,16 @@
           </mat-card-actions>
         </mat-card>
       </div>
-      <button mat-button (click)="onPrevious(bookCategory, category)">Previous</button>
-      <button mat-button (click)="onNext(bookCategory, category)">Next</button>
+      <button mat-button
+              (click)="onPrevious(bookCategory, category)"
+              [disabled]="setNavigationStatus(category)">
+              Previous
+      </button>
+      <button mat-button
+              (click)="onNext(bookCategory, category)"
+              [disabled]="setNavigationStatus(category)">
+              Next
+      </button>
     </ng-container>
   </ng-container>
 </div>

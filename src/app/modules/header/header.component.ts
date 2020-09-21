@@ -19,4 +19,8 @@ export class HeaderComponent {
   onHomepageClick($event: MouseEvent) {
     this.router.navigate(['homepage']);
   }
+
+  onMyBooksClick($event: MouseEvent) {
+    this.router.navigate(['myBooks']);
+  }
 }

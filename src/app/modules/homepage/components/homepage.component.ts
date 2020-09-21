@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BookCardsMock } from '../book-cards.mock';
 import { BOOK_CATEGORIES } from '../../../constants';
 import { Book } from '../../../interfaces';
@@ -29,11 +29,15 @@ export class HomepageComponent implements OnInit{
     });
   }
 
-  booksByCategory(category: string): Book[] {
+  booksByCategory = (category: string): Book[] => {
     return this.bookCards.reduce((r, item) => item.category === category ? [...r, item] : r, []);
   }
 
-  onPrevious(element, category) {
+  setNavigationStatus = (category: string) => {
+    return this.offsetBookNumberMapper[category].bookNumber <= 8;
+  }
+
+  onPrevious = (element: any, category: string) => {
     const minOffset = 0;
     const maxOffset = (this.offsetBookNumberMapper[category].bookNumber - 8) * 200;
     if (this.offsetBookNumberMapper[category].offset > maxOffset) {
@@ -47,7 +51,7 @@ export class HomepageComponent implements OnInit{
     });
   }
 
-  onNext(element, category) {
+  onNext = (element: any, category: string) => {
     let maxOffset;
     if (this.offsetBookNumberMapper[category].bookNumber > 8) {
       maxOffset = (this.offsetBookNumberMapper[category].bookNumber - 8) * 200;

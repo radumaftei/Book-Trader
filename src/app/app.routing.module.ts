@@ -2,6 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { LoginComponent } from './modules/auth/login/components/login.component';
 import { HomepageComponent } from './modules/homepage/components/homepage.component';
+import { CreateBookComponent } from './modules/my-books/components/create-book/create-book.component';
 
 const routes: Routes = [
   {
@@ -9,8 +10,13 @@ const routes: Routes = [
     component: LoginComponent,
     children: []
   },
-  { path: 'homepage',
+  {
+    path: 'homepage',
     component: HomepageComponent
+  },
+  {
+    path: 'myBooks',
+    component: CreateBookComponent
   },
   {
     path: '',

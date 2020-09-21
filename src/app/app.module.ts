@@ -12,6 +12,8 @@ import { HeaderModule } from './modules/header/header.module';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from './constants/material.module';
 import { RouterModule } from '@angular/router';
+import { MyBooksModule } from './modules/my-books/my-books.module';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { RouterModule } from '@angular/router';
     BrowserModule,
     AuthModule,
     HomepageModule,
+    MyBooksModule,
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
@@ -31,7 +34,9 @@ import { RouterModule } from '@angular/router';
     MaterialModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [],
+  providers: [
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {floatLabel: 'auto'} }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
