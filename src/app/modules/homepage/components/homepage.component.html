@@ -5,7 +5,7 @@
     <ng-container *ngFor="let category of bookCategories">
       <div class="mat-title">{{ category }}</div>
       <div class="card-row-wrapper" #bookCategory>
-        <mat-card *ngFor="let book of bookCards">
+        <mat-card *ngFor="let book of booksByCategory(category)">
           <mat-card-header>
             <div mat-card-avatar class="example-header-image"></div>
             <mat-card-title>{{ book.title }}</mat-card-title>

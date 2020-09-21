@@ -25,6 +25,10 @@ export class HomepageComponent implements OnInit{
     console.log('height ', this.bodyHeight );
   }
 
+  booksByCategory(category: string): Book[] {
+    return this.bookCards.reduce((r, item) => item.category === category ? [...r, item] : r, []);
+  }
+
   onPrevious(category) {
     category.scrollTo({
       left: 0,
