@@ -18,3 +18,25 @@ body {
 .is-active {
   text-decoration: underline;
 }
+
+.form-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+
+  .formular {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+
+    .inputs {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+    }
+  }
+}

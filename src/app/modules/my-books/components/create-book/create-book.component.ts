@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -6,4 +7,10 @@ import { Component } from '@angular/core';
   templateUrl: './create-book.component.html',
   styleUrls: ['./create-book.component.scss']
 })
-export class CreateBookComponent {}
+export class CreateBookComponent implements OnInit{
+  form: FormGroup;
+
+  ngOnInit() {
+    // this.form
+  }
+}

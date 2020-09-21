@@ -3,10 +3,11 @@ import { CreateBookComponent } from './components/create-book/create-book.compon
 import { HeaderModule } from '../header/header.module';
 import { MaterialModule } from '../../constants/material.module';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
-  imports: [HeaderModule, MaterialModule, CommonModule],
+  imports: [HeaderModule, MaterialModule, CommonModule, ReactiveFormsModule],
   declarations: [CreateBookComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

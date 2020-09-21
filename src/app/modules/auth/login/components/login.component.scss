@@ -1,22 +1,6 @@
-.container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-
-  .login-form {
-    background: white;
-    padding: 40px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: space-between;
-
+.form-container {
+  .formular {
     .inputs {
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-
       .email-form {
         margin-bottom: 10px;
       }
@@ -50,8 +34,5 @@
     justify-content: center;
     padding-right: 50px;
   }
-
-
-
 }
 

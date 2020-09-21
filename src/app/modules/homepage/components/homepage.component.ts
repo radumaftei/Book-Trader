@@ -13,6 +13,7 @@ export class HomepageComponent implements OnInit{
   offsetBookNumberMapper = {};
   // 852px + rows.length - 1
   bodyHeight = '852';
+  navigationButtonsStatuses = {};
 
   get bookCategories() {
     return Object.keys(BOOK_CATEGORIES).map(r => BOOK_CATEGORIES[r]);
@@ -24,8 +25,11 @@ export class HomepageComponent implements OnInit{
     this.bodyHeight = (Number(this.bodyHeight) + (this.bookCategories.length - 1) * 450).toString();
     this.bookCategories.forEach(category => {
       this.offsetBookNumberMapper[category] = {};
+      this.navigationButtonsStatuses[category] = {};
       this.offsetBookNumberMapper[category].offset = 0;
       this.offsetBookNumberMapper[category].bookNumber = this.booksByCategory(category).length;
+      this.navigationButtonsStatuses[category].previous = false;
+      this.navigationButtonsStatuses[category].next = false;
     });
   }
 
@@ -40,10 +44,14 @@ export class HomepageComponent implements OnInit{
   onPrevious = (element: any, category: string) => {
     const minOffset = 0;
     const maxOffset = (this.offsetBookNumberMapper[category].bookNumber - 8) * 200;
+    this.navigationButtonsStatuses[category].next = false;
     if (this.offsetBookNumberMapper[category].offset > maxOffset) {
-      this.offsetBookNumberMapper[category].offset = this.offsetBookNumberMapper[category].offset - 400;
+      this.offsetBookNumberMapper[category].offset = this.offsetBookNumberMapper[category].offset - 1800;
     } else if (this.offsetBookNumberMapper[category].offset > minOffset) {
-      this.offsetBookNumberMapper[category].offset = this.offsetBookNumberMapper[category].offset - 200;
+      this.offsetBookNumberMapper[category].offset = this.offsetBookNumberMapper[category].offset - 1600;
+    }
+    if (this.offsetBookNumberMapper[category].offset <= minOffset) {
+      this.navigationButtonsStatuses[category].previous = true;
     }
     element.scrollTo({
       left: this.offsetBookNumberMapper[category].offset,
@@ -53,11 +61,15 @@ export class HomepageComponent implements OnInit{
 
   onNext = (element: any, category: string) => {
     let maxOffset;
+    this.navigationButtonsStatuses[category].previous = false;
     if (this.offsetBookNumberMapper[category].bookNumber > 8) {
       maxOffset = (this.offsetBookNumberMapper[category].bookNumber - 8) * 200;
       if (this.offsetBookNumberMapper[category].offset <= maxOffset) {
-        this.offsetBookNumberMapper[category].offset = this.offsetBookNumberMapper[category].offset + 200;
+        this.offsetBookNumberMapper[category].offset = this.offsetBookNumberMapper[category].offset + 1600;
       }
+    }
+    if (this.offsetBookNumberMapper[category].offset > maxOffset) {
+      this.navigationButtonsStatuses[category].next = true;
     }
     element.scrollTo({
       left: this.offsetBookNumberMapper[category].offset,
