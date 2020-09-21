@@ -12,6 +12,7 @@ import { HeaderModule } from './modules/header/header.module';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from './constants/material.module';
 import { RouterModule } from '@angular/router';
+import { TrackScrollDirective } from './directives/scroll-directive/scroll-directive.directive';
 
 @NgModule({
   declarations: [

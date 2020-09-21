@@ -6,9 +6,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSliderModule } from '@angular/material/slider';
 
 export const MATERIAL_MODULES = [
   MatInputModule,
+  MatGridListModule,
+  MatSliderModule,
   MatFormFieldModule,
   MatCardModule,
   MatButtonModule,
