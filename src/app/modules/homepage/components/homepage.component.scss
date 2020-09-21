@@ -3,7 +3,6 @@ body {
 }
 
 .wrapper {
-  width: 203vh;
   background: rgb(255,255,255);
   background: linear-gradient(164deg, rgba(255,255,255,1) 25%, rgba(128,128,128,1) 69%, rgba(128,128,128,1) 81%, rgba(101,101,101,1) 96%, rgba(94,94,94,1) 100%, rgba(0,0,0,1) 100%, rgba(0,0,0,1) 100%);
 }
@@ -21,10 +20,24 @@ mat-card {
   }
 }
 
+mat-slider {
+  width: 1000px;
+  margin-left: 150px;
+}
+
+mat-spinner {
+  margin: auto;
+}
+
+.mat-title {
+  margin: 20px;
+}
+
 .card-row-wrapper {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
+  overflow: hidden;
 }
 
 .example-header-image {

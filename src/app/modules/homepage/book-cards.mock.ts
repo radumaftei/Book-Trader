@@ -44,7 +44,29 @@ export class BookCardsMock {
       category: BOOK_CATEGORIES.SCIENCE,
       description: 'morometii e fun the third',
       tradingPreference: TRADING_PREFERENCES.FEW_MATCH
-    },    {
+    },
+    {
+      username: 'Radu Maftei the third',
+      title: 'Morometii the third',
+      category: BOOK_CATEGORIES.SCIENCE,
+      description: 'morometii e fun the third',
+      tradingPreference: TRADING_PREFERENCES.FEW_MATCH
+    },
+    {
+      username: 'Radu Maftei the third',
+      title: 'Morometii the third',
+      category: BOOK_CATEGORIES.SCIENCE,
+      description: 'morometii e fun the third',
+      tradingPreference: TRADING_PREFERENCES.FEW_MATCH
+    },
+    {
+      username: 'Radu Maftei the third',
+      title: 'Morometii the third',
+      category: BOOK_CATEGORIES.SCIENCE,
+      description: 'morometii e fun the third',
+      tradingPreference: TRADING_PREFERENCES.FEW_MATCH
+    },
+    {
       username: 'Radu Maftei the third',
       title: 'Morometii the third',
       category: BOOK_CATEGORIES.SCIENCE,

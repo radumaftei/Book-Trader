@@ -3,10 +3,9 @@ import { HomepageComponent } from './components/homepage.component';
 import { HeaderModule } from '../header/header.module';
 import { MaterialModule } from '../../constants/material.module';
 import { CommonModule } from '@angular/common';
-import { ScrollDirectiveModule } from '../../directives/scroll-directive/scroll.directive.module';
 
 @NgModule({
-  imports: [HeaderModule, MaterialModule, CommonModule, ScrollDirectiveModule],
+  imports: [HeaderModule, MaterialModule, CommonModule],
   declarations: [HomepageComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
