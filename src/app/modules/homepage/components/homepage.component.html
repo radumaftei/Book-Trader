@@ -22,12 +22,12 @@
       </div>
       <button mat-button
               (click)="onPrevious(bookCategory, category)"
-              [disabled]="this.navigationButtonsStatuses[category]['previous'] || setNavigationStatus(category)">
+              [disabled]="this.navigationButtonsStatuses[category]['previous']">
               Previous
       </button>
       <button mat-button
               (click)="onNext(bookCategory, category)"
-              [disabled]="this.navigationButtonsStatuses[category]['next'] || setNavigationStatus(category)">
+              [disabled]="this.navigationButtonsStatuses[category]['next']">
               Next
       </button>
     </ng-container>

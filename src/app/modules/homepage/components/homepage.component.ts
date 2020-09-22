@@ -28,17 +28,13 @@ export class HomepageComponent implements OnInit{
       this.navigationButtonsStatuses[category] = {};
       this.offsetBookNumberMapper[category].offset = 0;
       this.offsetBookNumberMapper[category].bookNumber = this.booksByCategory(category).length;
-      this.navigationButtonsStatuses[category].previous = false;
-      this.navigationButtonsStatuses[category].next = false;
+      this.navigationButtonsStatuses[category].previous = true;
+      this.navigationButtonsStatuses[category].next = this.offsetBookNumberMapper[category].bookNumber <= 8;
     });
   }
 
   booksByCategory = (category: string): Book[] => {
     return this.bookCards.reduce((r, item) => item.category === category ? [...r, item] : r, []);
-  }
-
-  setNavigationStatus = (category: string) => {
-    return this.offsetBookNumberMapper[category].bookNumber <= 8;
   }
 
   onPrevious = (element: any, category: string) => {
