@@ -9,3 +9,5 @@ export const BOOK_CATEGORIES = {
   ACTION: 'Action',
   SCIENCE: 'Science'
 };
+
+export const getBookCategoriesArr = (): string[] => Object.values(BOOK_CATEGORIES);

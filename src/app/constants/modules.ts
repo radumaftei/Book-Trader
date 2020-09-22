@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
 
 export const MATERIAL_MODULES = [
   MatInputModule,
@@ -16,6 +17,7 @@ export const MATERIAL_MODULES = [
   MatGridListModule,
   MatSliderModule,
   MatFormFieldModule,
+  MatSelectModule,
   MatCardModule,
   MatButtonModule,
   MatToolbarModule,

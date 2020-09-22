@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BookCardsMock } from '../book-cards.mock';
-import { BOOK_CATEGORIES } from '../../../constants';
+import { getBookCategoriesArr } from '../../../constants';
 import { Book } from '../../../interfaces';
 
 @Component({
@@ -10,14 +10,11 @@ import { Book } from '../../../interfaces';
 export class HomepageComponent implements OnInit{
   isLoading = false;
   bookCards: Book[];
+  bookCategories = getBookCategoriesArr();
   offsetBookNumberMapper = {};
   // 852px + rows.length - 1
   bodyHeight = '852';
   navigationButtonsStatuses = {};
-
-  get bookCategories() {
-    return Object.keys(BOOK_CATEGORIES).map(r => BOOK_CATEGORIES[r]);
-  }
 
   ngOnInit() {
     // this.isLoading = true;

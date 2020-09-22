@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { getBookCategoriesArr } from '../../../../constants';
 
 
 @Component({
@@ -9,8 +10,19 @@ import { FormGroup } from '@angular/forms';
 })
 export class CreateBookComponent implements OnInit{
   form: FormGroup;
+  bookCategories = getBookCategoriesArr();
 
   ngOnInit() {
-    // this.form
+    this.form = new FormGroup({
+      title: new FormControl(null, [
+        Validators.required
+      ]),
+      description: new FormControl(null, [
+        Validators.required
+      ]),
+      bookCategory: new FormControl(null, [
+        Validators.required
+      ])
+    });
   }
 }
