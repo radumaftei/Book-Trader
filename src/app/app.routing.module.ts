@@ -2,7 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { LoginComponent } from './modules/auth/login/components/login.component';
 import { HomepageComponent } from './modules/homepage/components/homepage.component';
-import { CreateBookComponent } from './modules/my-books/components/create-book/create-book.component';
+import { DashboardComponent } from './modules/my-books/components/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
@@ -16,7 +16,7 @@ const routes: Routes = [
   },
   {
     path: 'myBooks',
-    component: CreateBookComponent
+    component: DashboardComponent
   },
   {
     path: '',

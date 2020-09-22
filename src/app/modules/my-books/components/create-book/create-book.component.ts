@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { getBookCategoriesArr } from '../../../../constants';
 
-
 @Component({
   selector: 'app-create-book',
   templateUrl: './create-book.component.html',

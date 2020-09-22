@@ -1,0 +1,55 @@
+<div class="book-list-wrapper">
+  <div class="top-table-wrapper">
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Filter books" #input>
+    </mat-form-field>
+    <button *ngIf="!editPressed" class="top-table-buttons" mat-raised-button color="primary" (click)="topTableButtonClicked('edit')"> Edit </button>
+    <button *ngIf="editPressed" class="top-table-buttons" mat-raised-button color="primary" (click)="topTableButtonClicked('save')"> Save </button>
+    <button *ngIf="editPressed" class="top-table-buttons" mat-raised-button color="warn" (click)="topTableButtonClicked('cancel')"> Cancel </button>
+  </div>
+  <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="id">
+      <th class="header-text" mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="title">
+      <th class="header-text" mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+      <td mat-cell *matCellDef="let element"> <input type="text" [disabled]="!this.editPressed" [(ngModel)]="element.title"> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <th class="header-text" mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+      <td mat-cell *matCellDef="let element"> <input type="text" [disabled]="!this.editPressed" [(ngModel)]="element.category"> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th class="header-text" mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
+      <td mat-cell *matCellDef="let element"> <textarea cols="25" rows="5" [disabled]="!this.editPressed" [(ngModel)]="element.description"></textarea> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tradingPreference">
+      <th class="header-text" mat-header-cell *matHeaderCellDef mat-sort-header> Trading Preference </th>
+      <td mat-cell *matCellDef="let element"> <textarea cols="25" rows="5" [disabled]="!this.editPressed" [(ngModel)]="element.tradingPreference"></textarea> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <th class="header-text" mat-header-cell *matHeaderCellDef mat-sort-header> Delete </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button
+                aria-label="Delete"
+                matTooltip="Delete"
+                [matTooltipPosition]="'right'"
+                (click)="deleteRow(element.position)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+  <div class="no-filtered-data" *ngIf="dataSource.filteredData.length === 0">No data for {{ input.value }}</div>
+</div>

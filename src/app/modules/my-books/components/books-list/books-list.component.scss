@@ -1,0 +1,52 @@
+table, mat-paginator {
+  width: 90%;
+  margin-left: 5%;
+
+  input[type="text"]:disabled, textarea:disabled {
+    background: none;
+    border: none;
+  }
+}
+
+.header-text {
+  font-size: 15px;
+  line-height: 5;
+}
+
+.mat-header-row {
+  background-color: #D4B5A5;
+}
+
+input, textarea {
+  font-family: "Times New Roman", serif;
+  font-size: 15px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+textarea {
+  resize: none;
+  overflow: auto;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 20%;
+  margin-left: 20%;
+}
+
+.book-list-wrapper {
+  height: 84vh;
+  margin-top: 20px;
+}
+
+.top-table-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.top-table-buttons {
+  height: 38px;
+  margin-left: 20px;
+}

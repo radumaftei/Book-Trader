@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BookCardsMock } from '../book-cards.mock';
 import { getBookCategoriesArr } from '../../../constants';
-import { Book } from '../../../interfaces';
+import { BookHomepage } from '../../../interfaces';
 
 @Component({
   templateUrl: './homepage.component.html',
@@ -9,7 +9,7 @@ import { Book } from '../../../interfaces';
 })
 export class HomepageComponent implements OnInit{
   isLoading = false;
-  bookCards: Book[];
+  bookCards: BookHomepage[];
   bookCategories = getBookCategoriesArr();
   offsetBookNumberMapper = {};
   // 852px + rows.length - 1
@@ -30,7 +30,7 @@ export class HomepageComponent implements OnInit{
     });
   }
 
-  booksByCategory = (category: string): Book[] => {
+  booksByCategory = (category: string): BookHomepage[] => {
     return this.bookCards.reduce((r, item) => item.category === category ? [...r, item] : r, []);
   }
 
