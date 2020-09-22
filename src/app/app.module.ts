@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomepageModule } from './modules/homepage/homepage.module';
 import { HeaderModule } from './modules/header/header.module';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from './constants/material.module';
+import { MaterialModule } from './shared/material.module';
 import { RouterModule } from '@angular/router';
 import { MyBooksModule } from './modules/my-books/my-books.module';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';

@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { MaterialModule } from '../../constants/material.module';
+import { MaterialModule } from '../../shared/material.module';
 
 @NgModule({
   declarations: [LoginComponent],
