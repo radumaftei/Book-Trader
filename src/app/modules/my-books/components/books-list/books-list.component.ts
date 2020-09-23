@@ -56,7 +56,6 @@ export class BooksListComponent implements AfterViewInit, OnInit {
       // do save logic
       this.editPressed = false;
     }
-
   }
 
   applyFilter = (event: Event) => {

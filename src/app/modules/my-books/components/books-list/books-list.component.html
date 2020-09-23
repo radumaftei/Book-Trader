@@ -1,6 +1,6 @@
 <div class="book-list-wrapper">
   <div class="top-table-wrapper">
-    <mat-form-field>
+    <mat-form-field class="filter">
       <mat-label>Filter</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Filter books" #input>
     </mat-form-field>
@@ -16,22 +16,38 @@
 
     <ng-container matColumnDef="title">
       <th class="header-text" mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
-      <td mat-cell *matCellDef="let element"> <input type="text" [disabled]="!this.editPressed" [(ngModel)]="element.title"> </td>
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field>
+          <input matInput [disabled]="!this.editPressed" [(ngModel)]="element.title">
+        </mat-form-field>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="category">
       <th class="header-text" mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
-      <td mat-cell *matCellDef="let element"> <input type="text" [disabled]="!this.editPressed" [(ngModel)]="element.category"> </td>
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field>
+          <input matInput [disabled]="!this.editPressed" [(ngModel)]="element.category">
+        </mat-form-field>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="description">
       <th class="header-text" mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
-      <td mat-cell *matCellDef="let element"> <textarea cols="25" rows="5" [disabled]="!this.editPressed" [(ngModel)]="element.description"></textarea> </td>
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field>
+          <input  matInput [disabled]="!this.editPressed" [(ngModel)]="element.description">
+        </mat-form-field>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="tradingPreference">
       <th class="header-text" mat-header-cell *matHeaderCellDef mat-sort-header> Trading Preference </th>
-      <td mat-cell *matCellDef="let element"> <textarea cols="25" rows="5" [disabled]="!this.editPressed" [(ngModel)]="element.tradingPreference"></textarea> </td>
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field>
+          <input matInput [disabled]="!this.editPressed" [(ngModel)]="element.tradingPreference">
+        </mat-form-field>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="delete">
