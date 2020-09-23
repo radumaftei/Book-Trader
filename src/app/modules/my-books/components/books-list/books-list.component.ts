@@ -1,32 +1,48 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { BookProfile } from '../../../../interfaces';
-import { BookCardsMock } from '../../../homepage/book-cards.mock';
+import { MyBooksService } from '../../my-books.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-books-list',
   templateUrl: './books-list.component.html',
   styleUrls: ['./books-list.component.scss']
 })
-export class BooksListComponent implements AfterViewInit, OnInit {
-  nameInputDisabled = {};
+export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   pageSizeOptions = [5, 10, 25, 100];
+  invalidElements = document.getElementsByClassName('ng-invalid');
   editPressed = false;
-  booksMock = new BookCardsMock().bookCardsProfile;
-  displayedColumns: string[] = ['id', 'title', 'category', 'description', 'tradingPreference', 'delete'];
-  dataSource = new MatTableDataSource<BookProfile>(this.booksMock);
-  selection = new SelectionModel<BookProfile>(true, []);
+  subscription = new Subscription();
+  books: BookProfile[] = [];
+  displayedColumns: string[] = ['id', 'title', 'category', 'description', 'tradingPreferenceList', 'delete'];
+  dataSource;
+  filterValue = '';
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  get editDisabled() {
+    return !this.books.length;
+  }
+
+  get dirtyState() {
+    return !this.invalidElements.length;
+  }
+
+  constructor(private myBooksService: MyBooksService) { }
+
   ngOnInit(): void {
-    this.booksMock.forEach(row => {
-      this.nameInputDisabled[row.id] = true;
-    });
+    this.books = this.myBooksService.getBooks();
+    this.subscription.add(this.myBooksService.booksUpdated
+      .subscribe((books: BookProfile[]) => {
+       this.books = books;
+       console.log('BOOKS = ', books);
+        this.dataSource = new MatTableDataSource<BookProfile>(this.books);
+      }));
+
   }
 
   ngAfterViewInit() {
@@ -60,6 +76,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   applyFilter = (event: Event) => {
     const filterValue = (event.target as HTMLInputElement).value;
+    this.filterValue = filterValue;
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
@@ -68,6 +85,9 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   deleteRow = position => {
     // do delete logic
-    this.nameInputDisabled[position] = !this.nameInputDisabled[position];
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

@@ -1,7 +1,7 @@
 <div class="form-container">
   <div class="formular">
     <form class="inputs" [formGroup]="form">
-      <mat-form-field class="title-form" appearance="fill">
+      <mat-form-field appearance="fill">
         <mat-label>Enter book title</mat-label>
         <input
           matInput
@@ -10,22 +10,36 @@
           placeholder="Book Title">
         <mat-error *ngIf="form.get('title').invalid">Please enter a title</mat-error>
       </mat-form-field>
-      <mat-form-field class="description-form" appearance="fill">
+      <mat-form-field appearance="fill">
         <mat-label>Enter book description</mat-label>
-        <input
+        <textarea
           matInput
-          type="text"
+          class="description-form"
           formControlName="description"
-          placeholder="Book Description">
+          placeholder="Book Description"></textarea>
         <mat-error *ngIf="form.get('description').invalid">Please enter a description</mat-error>
       </mat-form-field>
-      <mat-form-field class="category-form" appearance="fill">
+      <mat-form-field appearance="fill">
+        <mat-label>Enter trading preferences</mat-label>
+        <textarea
+          matInput
+          class="trading-form"
+          formControlName="tradingPreferences"
+          placeholder="Trading preferences"></textarea>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
         <mat-label>Select book category</mat-label>
         <mat-select formControlName="bookCategory">
           <mat-option *ngFor="let category of bookCategories" [value]="category">{{ category }}</mat-option>
         </mat-select>
-        <mat-error *ngIf="form.get('bookCategory').invalid">You must make a selection</mat-error>
+        <mat-error *ngIf="form.get('bookCategory').invalid">You must select a category</mat-error>
       </mat-form-field>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        (click)="onCreateBook()"
+        [disabled]="createBookDisabled">Add Book</button>
     </form>
   </div>
 </div>

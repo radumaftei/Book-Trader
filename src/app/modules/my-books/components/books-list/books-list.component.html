@@ -4,7 +4,7 @@
       <mat-label>Filter</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Filter books" #input>
     </mat-form-field>
-    <button *ngIf="!editPressed" class="top-table-buttons" mat-raised-button color="primary" (click)="topTableButtonClicked('edit')"> Edit </button>
+    <button [disabled]="editDisabled" *ngIf="!editPressed" class="top-table-buttons" mat-raised-button color="primary" (click)="topTableButtonClicked('edit')"> Edit </button>
     <button *ngIf="editPressed" class="top-table-buttons" mat-raised-button color="primary" (click)="topTableButtonClicked('save')"> Save </button>
     <button *ngIf="editPressed" class="top-table-buttons" mat-raised-button color="warn" (click)="topTableButtonClicked('cancel')"> Cancel </button>
   </div>
@@ -18,7 +18,7 @@
       <th class="header-text" mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
       <td mat-cell *matCellDef="let element">
         <mat-form-field>
-          <input matInput [disabled]="!this.editPressed" [(ngModel)]="element.title">
+          <input matInput [disabled]="!this.editPressed" [(ngModel)]="element.title" required>
         </mat-form-field>
       </td>
     </ng-container>
@@ -27,7 +27,7 @@
       <th class="header-text" mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
       <td mat-cell *matCellDef="let element">
         <mat-form-field>
-          <input matInput [disabled]="!this.editPressed" [(ngModel)]="element.category">
+          <input matInput [disabled]="!this.editPressed" [(ngModel)]="element.category" required>
         </mat-form-field>
       </td>
     </ng-container>
@@ -36,16 +36,16 @@
       <th class="header-text" mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
       <td mat-cell *matCellDef="let element">
         <mat-form-field>
-          <input  matInput [disabled]="!this.editPressed" [(ngModel)]="element.description">
+          <input  matInput [disabled]="!this.editPressed" [(ngModel)]="element.description" required>
         </mat-form-field>
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="tradingPreference">
+    <ng-container matColumnDef="tradingPreferenceList">
       <th class="header-text" mat-header-cell *matHeaderCellDef mat-sort-header> Trading Preference </th>
       <td mat-cell *matCellDef="let element">
         <mat-form-field>
-          <input matInput [disabled]="!this.editPressed" [(ngModel)]="element.tradingPreference">
+          <input matInput placeholder=" {{ !element.tradingPreferenceList ? 'No preferences': '' }}" [disabled]="!this.editPressed" [(ngModel)]="element.tradingPreferenceList">
         </mat-form-field>
       </td>
     </ng-container>
@@ -67,5 +67,5 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
   <mat-paginator [pageSizeOptions]="pageSizeOptions"></mat-paginator>
-  <div class="no-filtered-data" *ngIf="dataSource.filteredData.length === 0">No data for {{ input.value }}</div>
+  <div class="no-filtered-data" *ngIf="dataSource.filteredData.length === 0 && filterValue.length !== 0">No data for {{ input.value }}</div>
 </div>

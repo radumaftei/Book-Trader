@@ -1,7 +1,11 @@
-export const TRADING_PREFERENCES = {
-  NO_PREFERENCE: 'no_preference',
-  FEW_MATCH: 'few_match',
-  NO_MATCH: 'no_match'
+export const NO_PREFERENCE = 'NO_PREFERENCE';
+export const FEW_MATCH = 'FEW_MATCH';
+export const NO_MATCH = 'NO_MATCH';
+
+export const TRADING_PREFERENCES_STATUS = {
+  NO_PREFERENCE,
+  FEW_MATCH,
+  NO_MATCH
 };
 
 export const BOOK_CATEGORIES = {
@@ -9,5 +13,7 @@ export const BOOK_CATEGORIES = {
   ACTION: 'Action',
   SCIENCE: 'Science'
 };
+
+
 
 export const getBookCategoriesArr = (): string[] => Object.values(BOOK_CATEGORIES);
