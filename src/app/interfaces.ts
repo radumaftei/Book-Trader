@@ -4,17 +4,9 @@ export interface BookHomepage extends BookProfile {
 }
 
 export interface BookProfile {
+  id: string;
   title: string;
   category: string;
   description: string;
   tradingPreferenceList: string | null;
 }
-
-// DTOs
-
-// export interface BookProfileDTO {
-//   title: string;
-//   category: string;
-//   description: string;
-//   tradingPreferenceList: string | null;
-// }

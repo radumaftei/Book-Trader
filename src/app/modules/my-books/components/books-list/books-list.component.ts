@@ -35,12 +35,12 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   constructor(private myBooksService: MyBooksService) { }
 
   ngOnInit(): void {
-    this.books = this.myBooksService.getBooks();
-    this.subscription.add(this.myBooksService.booksUpdated
+    this.myBooksService.getBooks();
+    this.subscription.add(this.myBooksService.booksUpdate
       .subscribe((books: BookProfile[]) => {
        this.books = books;
        console.log('BOOKS = ', books);
-        this.dataSource = new MatTableDataSource<BookProfile>(this.books);
+       this.dataSource = new MatTableDataSource<BookProfile>(this.books);
       }));
 
   }

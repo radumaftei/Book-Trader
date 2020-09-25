@@ -31,7 +31,7 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
     BrowserAnimationsModule,
     HttpClientModule,
     HeaderModule,
-    MaterialModule
+    MaterialModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [

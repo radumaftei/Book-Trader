@@ -18,7 +18,8 @@ export class HomepageComponent implements OnInit{
 
   ngOnInit() {
     // this.isLoading = true;
-    this.bookCards = new BookCardsMock().bookCards;
+    // CREATE API FOR THIS
+    this.bookCards = [];
     this.bodyHeight = (Number(this.bodyHeight) + (this.bookCategories.length - 1) * 450).toString();
     this.bookCategories.forEach(category => {
       this.offsetBookNumberMapper[category] = {};
