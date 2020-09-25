@@ -11,7 +11,7 @@
   <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="#">
       <th class="header-text" mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
-      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.lineNumber}} </td>
     </ng-container>
 
     <ng-container matColumnDef="title">
@@ -57,7 +57,7 @@
                 aria-label="Delete"
                 matTooltip="Delete"
                 [matTooltipPosition]="'right'"
-                (click)="deleteRow(element.position)">
+                (click)="deleteRow(element.id)">
           <mat-icon>delete</mat-icon>
         </button>
       </td>

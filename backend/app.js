@@ -51,4 +51,13 @@ app.get("/api/myBooks", (req, res, next) => {
   })
 });
 
+app.delete('/api/myBooks/:id', (req, res, next) => {
+  console.log('HELLLOO')
+  Book.deleteOne({ _id: req.params.id})
+    .then(result => {
+      console.log(result);
+      res.status(200).json({ message: 'Book deleted !'});
+    })
+});
+
 module.exports = app;

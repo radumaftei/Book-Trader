@@ -39,7 +39,6 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
     this.subscription.add(this.myBooksService.booksUpdate
       .subscribe((books: BookProfile[]) => {
        this.books = books;
-       console.log('BOOKS = ', books);
        this.books = this.books.map((book, idx) => {
          book['lineNumber'] = idx + 1;
          return book;
@@ -87,8 +86,8 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
-  deleteRow = position => {
-    // do delete logic
+  deleteRow = id => {
+    this.myBooksService.deleteBook(id);
   }
 
   ngOnDestroy(): void {
