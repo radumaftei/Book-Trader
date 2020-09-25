@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BookProfile } from '../../interfaces';
+import { BookProfile, BookProfileDTO } from '../../interfaces';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,11 @@ export class MyBooksService {
   constructor(private httpClient: HttpClient) { }
 
   getBooks = () => {
-    this.httpClient.get<{ message: string, books: BookProfile[] }>('http://localhost:3000/api/myBooks')
-      .subscribe(({ books }) => {
+    this.httpClient.get<{ message: string, books: BookProfileDTO[] }>('http://localhost:3000/api/myBooks')
+      .pipe(
+        map(data => data.books.map(book => ({ ...book, id: book._id })))
+      )
+      .subscribe(books => {
         if (!books || !books.length) { return; }
         this.booksList = books;
         this.BOOKS_UPDATE.next([...this.booksList]);

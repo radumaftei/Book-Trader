@@ -1,8 +1,18 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const app = express();
 
+mongoose.connect('mongodb+srv://radu:UnthoeP6JuOec6qe@bachelorscluster.nrvdc.mongodb.net/BookTraderDB?retryWrites=true&w=majority')
+  .then(() => {
+    console.log('Connected to the DB')
+  })
+  .catch(() => {
+    console.log('Error connecting to DB')
+  })
+
+const Book = require('./models/book')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -20,34 +30,25 @@ app.use((req, res, next) => {
 });
 
 app.post("/api/myBooks", (req, res, next) => {
-  const book = req.body;
-  console.log('POSTED BOOKS = ', book);
+  const { title, category, description, tradingPreferenceList } = req.body;
+  new Book({
+    title,
+    category,
+    description,
+    tradingPreferenceList
+  }).save()
   res.status(201).json({
     message: 'Book added successfully'
   });
 });
 
 app.get("/api/myBooks", (req, res, next) => {
-  const books = [
-    {
-      id: "fadf12421l",
-      title: "First server-side book",
-      description: "This is coming from the server",
-      category: 'SF',
-      tradingPreferenceList: 'Harry Potter, Capra cu trei iezi'
-    },
-    {
-      id: "freq21l",
-      title: "Second server-side book",
-      description: "This is coming from the server",
-      category: 'SF 2',
-      tradingPreferenceList: 'Harry Potter, Capra cu trei iezi'
-    }
-  ];
-  res.status(200).json({
-    message: "Books fetched successfully!",
-    books: books
-  });
+  Book.find().then(books => {
+    res.status(200).json({
+      message: "Books fetched successfully!",
+      books: books
+    });
+  })
 });
 
 module.exports = app;

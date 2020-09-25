@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { BookCardsMock } from '../book-cards.mock';
 import { getBookCategoriesArr } from '../../../constants';
 import { BookHomepage } from '../../../interfaces';
 

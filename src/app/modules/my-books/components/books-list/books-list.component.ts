@@ -17,7 +17,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   editPressed = false;
   subscription = new Subscription();
   books: BookProfile[] = [];
-  displayedColumns: string[] = ['id', 'title', 'category', 'description', 'tradingPreferenceList', 'delete'];
+  displayedColumns: string[] = ['#', 'title', 'category', 'description', 'tradingPreferenceList', 'delete'];
   dataSource;
   filterValue = '';
 
@@ -40,6 +40,10 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
       .subscribe((books: BookProfile[]) => {
        this.books = books;
        console.log('BOOKS = ', books);
+       this.books = this.books.map((book, idx) => {
+         book['lineNumber'] = idx + 1;
+         return book;
+       });
        this.dataSource = new MatTableDataSource<BookProfile>(this.books);
       }));
 
