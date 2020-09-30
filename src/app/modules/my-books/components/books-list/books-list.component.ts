@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { BookProfile } from '../../../../interfaces';
 import { MyBooksService } from '../../my-books.service';
 import { Subscription } from 'rxjs';
+import { areObjectDifferent } from '../../../helpers';
 
 @Component({
   selector: 'app-books-list',
@@ -61,6 +62,9 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
         break;
       case 'save':
         // do save logic
+        this.dataSource._data.subscribe(books => {
+          this.myBooksService.updateBooks(books);
+        });
         this.editPressed = false;
         break;
       case 'cancel':
