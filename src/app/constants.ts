@@ -14,6 +14,10 @@ export const BOOK_CATEGORIES = {
   SCIENCE: 'Science'
 };
 
+export const DIALOG_POPUP_MESSAGES = {
+  DELETE_BOOK: 'Are you sure you want to delete this book?'
+}
+
 
 
 export const getBookCategoriesArr = (): string[] => Object.values(BOOK_CATEGORIES);

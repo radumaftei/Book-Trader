@@ -6,6 +6,9 @@ import { BookProfile } from '../../../../interfaces';
 import { MyBooksService } from '../../my-books.service';
 import { Subscription } from 'rxjs';
 import { areObjectDifferent } from '../../../helpers';
+import { MatDialog } from '@angular/material/dialog';
+import { MaterialDialogComponent } from '../../../../shared/material-dialog/material-dialog.component';
+import { DIALOG_POPUP_MESSAGES } from '../../../../constants';
 
 @Component({
   selector: 'app-books-list',
@@ -33,7 +36,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
     return !this.invalidElements.length;
   }
 
-  constructor(private myBooksService: MyBooksService) { }
+  constructor(private myBooksService: MyBooksService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.myBooksService.getBooks();
@@ -91,7 +94,20 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   deleteRow = id => {
-    this.myBooksService.deleteBook(id);
+    this.openDialog(id);
+  }
+
+  openDialog = id => {
+    const dialogRef = this.dialog.open(MaterialDialogComponent, <any>{
+      width: '400px',
+      data: { message: DIALOG_POPUP_MESSAGES.DELETE_BOOK }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.myBooksService.deleteBook(id);
+      }
+    });
   }
 
   ngOnDestroy(): void {
