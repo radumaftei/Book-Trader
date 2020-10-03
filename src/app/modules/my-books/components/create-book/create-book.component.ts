@@ -44,5 +44,6 @@ export class CreateBookComponent implements OnInit {
       this.form.controls.bookCategory.value
     );
     this.form.reset();
+    this.myBooksService.updateSelectedTab(0);
   }
 }

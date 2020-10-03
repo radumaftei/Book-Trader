@@ -5,7 +5,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { BookProfile } from '../../../../interfaces';
 import { MyBooksService } from '../../my-books.service';
 import { Subscription } from 'rxjs';
-import { areObjectDifferent } from '../../../helpers';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialDialogComponent } from '../../../../shared/material-dialog/material-dialog.component';
 import { DIALOG_POPUP_MESSAGES } from '../../../../constants';
@@ -39,8 +38,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   constructor(private myBooksService: MyBooksService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.myBooksService.getBooks();
-    this.subscription.add(this.myBooksService.booksUpdate
+    this.subscription.add(this.myBooksService.booksUpdate$
       .subscribe((books: BookProfile[]) => {
        this.books = books;
        this.books = this.books.map((book, idx) => {

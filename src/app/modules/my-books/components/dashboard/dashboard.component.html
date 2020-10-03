@@ -1,5 +1,5 @@
 <app-header></app-header>
-<mat-tab-group mat-align-tabs="center">
+<mat-tab-group [selectedIndex]="selectedTabIndex" (selectedIndexChange)="onChangeTab($event)" mat-align-tabs="center">
   <mat-tab label="My books">
     <app-books-list></app-books-list>
   </mat-tab>

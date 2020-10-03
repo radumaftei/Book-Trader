@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BookProfile, BookProfileDTO } from '../../interfaces';
+import { BookProfile } from '../../interfaces';
 import { BehaviorSubject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { ApiService } from '../../core/api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,17 +9,16 @@ import { map } from 'rxjs/operators';
 export class MyBooksService {
   private booksList: BookProfile[] = [];
   private BOOKS_UPDATE = new BehaviorSubject<BookProfile[]>([]);
-  booksUpdate = this.BOOKS_UPDATE.asObservable();
+  booksUpdate$ = this.BOOKS_UPDATE.asObservable();
+  private SELECTED_TAB = new BehaviorSubject<number>(0);
+  selectedTab$ = this.SELECTED_TAB.asObservable();
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private apiService: ApiService) { }
 
   getBooks = () => {
-    this.httpClient.get<{ message: string, books: BookProfileDTO[] }>('http://localhost:3000/api/personal-book-page')
-      .pipe(
-        map(data => data.books.map(book => ({ ...book, id: book._id })))
-      )
+    this.apiService.fetchBookData()
       .subscribe(books => {
-        if (!books || !books.length) { return; }
+        if (!books || !books.length) return;
         this.booksList = books;
         this.BOOKS_UPDATE.next([...this.booksList]);
       });
@@ -28,7 +26,7 @@ export class MyBooksService {
 
   addBook = (title: string, description: string, tradingPreferenceList: string, category: string) => {
     const book: BookProfile = {id: null, title, description, tradingPreferenceList, category};
-    this.httpClient.post<{ message: string, bookId: string }>('http://localhost:3000/api/personal-book-page', book)
+    this.apiService.postBook(book)
       .subscribe(({ bookId }) => {
         if (!bookId) return;
         book['id'] = bookId;
@@ -38,17 +36,20 @@ export class MyBooksService {
   }
 
   updateBooks = books => {
-    this.httpClient.put('http://localhost:3000/api/personal-book-page', books)
+    this.apiService.putBooks(books)
+      .subscribe(() => {
+        this.getBooks();
+      })
+  }
+
+  deleteBook = id => {
+    this.apiService.deleteBooks(id)
       .subscribe(() => {
         this.getBooks();
       });
   }
 
-  deleteBook = id => {
-    this.httpClient.delete(`http://localhost:3000/api/personal-book-page/${id}`)
-      .subscribe(() => {
-        this.booksList = this.booksList.filter(book => book['id'] !== id);
-        this.BOOKS_UPDATE.next([...this.booksList]);
-      });
+  updateSelectedTab = index => {
+    this.SELECTED_TAB.next(index);
   }
 }

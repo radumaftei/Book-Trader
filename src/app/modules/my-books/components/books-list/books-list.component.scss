@@ -36,3 +36,14 @@ table, mat-paginator {
   height: 38px;
   margin-left: 20px;
 }
+
+.no-filtered-data {
+  background-color: #CD4C4C;
+  color: white;
+  width: 50%;
+  margin-left: 23%;
+  padding: 19px;
+  text-align: center;
+  margin-top: 20px;
+  border-radius: 10px;
+}

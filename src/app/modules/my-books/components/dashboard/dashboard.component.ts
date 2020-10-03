@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { MyBooksService } from '../../my-books.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,7 +7,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  selectedTabIndex;
+
+  constructor(private myBooksService: MyBooksService) { }
+
   ngOnInit(): void {
+    this.myBooksService.getBooks();
+    this.myBooksService.selectedTab$.subscribe(index => {
+      this.selectedTabIndex = index;
+      debugger;
+    })
   }
 
+  onChangeTab = index => {
+    debugger
+    this.myBooksService.updateSelectedTab(index);
+  }
 }

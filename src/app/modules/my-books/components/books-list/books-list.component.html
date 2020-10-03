@@ -38,7 +38,7 @@
         <mat-form-field>
           <div *ngIf="editPressed; else inputBox">
             <textarea [style.height.px]="element.description.length ?
-                                        (element.description.length / 18 + 1) * 15 : 18"
+                                        (element.description.length / 18 + 1) * 15 : 20"
                       matInput
                       [disabled]="!editPressed"
                       [(ngModel)]="element.description"
