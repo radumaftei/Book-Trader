@@ -21,6 +21,6 @@ export class HeaderComponent {
   }
 
   onMyBooksClick($event: MouseEvent) {
-    this.router.navigate(['myBooks']);
+    this.router.navigate(['personal-book-page']);
   }
 }

@@ -15,7 +15,7 @@ const routes: Routes = [
     component: HomepageComponent
   },
   {
-    path: 'myBooks',
+    path: 'personal-book-page',
     component: DashboardComponent
   },
   {
