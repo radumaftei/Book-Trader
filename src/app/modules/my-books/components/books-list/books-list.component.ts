@@ -60,27 +60,17 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   topTableButtonClicked = action => {
     switch (action) {
       case 'edit':
-        // do edit logic
         this.editPressed = true;
         break;
       case 'save':
-        // do save logic
         this.dataSource._data.subscribe(books => {
           this.myBooksService.updateBooks(books);
         });
         this.editPressed = false;
         break;
       case 'cancel':
-        // do cancel logic
         this.editPressed = false;
         break;
-    }
-    if (action === 'edit') {
-      this.editPressed = true;
-    }
-    if (action === 'save') {
-      // do save logic
-      this.editPressed = false;
     }
   }
 

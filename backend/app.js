@@ -56,11 +56,10 @@ app.get("/api/personal-book-page", (req, res, next) => {
 
 app.put('/api/personal-book-page/', (req, res, next) => {
   const books = req.body;
-  console.log(books)
   books.forEach(book => {
     Book.updateOne({ _id: book['id'] }, book)
       .then(() => {
-        res.status(201).json({ message: 'update successfull'});
+        res.status(201).json();
       })
   })
 });

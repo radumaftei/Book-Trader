@@ -39,9 +39,8 @@ export class MyBooksService {
 
   updateBooks = books => {
     this.httpClient.put('http://localhost:3000/api/personal-book-page', books)
-      .subscribe(data => {
-        if (!data) return;
-        console.log('data =', data);
+      .subscribe(() => {
+        this.getBooks();
       });
   }
 

@@ -1,9 +1,16 @@
-form mat-form-field {
-  margin-bottom: 20px;
+form  {
+  width: 100%;
+  mat-form-field {
+    margin-bottom: 20px;
+  }
 }
 
 .form-container {
   height: 86vh;
+}
+
+.formular {
+  width: 40%;
 }
 
 .mat-form-field {
