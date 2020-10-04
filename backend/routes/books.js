@@ -33,15 +33,12 @@ router.post('', multer({ storage: storage }).single('image'), (req, res, next) =
     imagePath: `${url}/images/${req.file.filename}`
   }).save()
     .then(addedBook => {
+      addedBook = addedBook.toObject();
       res.status(201).json({
         message: 'Book added successfully',
         newBook: {
-          id: addedBook._id,
-          title: addedBook.title,
-          description: addedBook.description,
-          category: addedBook.category,
-          tradingPreferenceList: addedBook.tradingPreferenceList,
-          imagePath: addedBook.imagePath
+          ...addedBook,
+          id: addedBook._id
         }
       });
     })

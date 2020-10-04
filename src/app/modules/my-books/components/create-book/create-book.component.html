@@ -42,7 +42,7 @@
       <div class="image-preview" *ngIf="imagePreview && form.get('image').valid">
         <img [src]="imagePreview" [alt]="form.value.title">
       </div>
-      <mat-error *ngIf="form.get('image').value && form.get('image').invalid">You must select a valid image format ( *.PNG, *.JPG, *.JPEG) </mat-error>
+      <mat-error *ngIf="form.get('image').value && form.get('image').invalid">Invalid image format ( *.PNG, *.JPG ) </mat-error>
       <button
         class="form-button"
         mat-raised-button

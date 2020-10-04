@@ -18,7 +18,7 @@ export class MyBooksService {
   getBooks = () => {
     this.apiService.fetchBookData()
       .subscribe(books => {
-        if (!books || !books.length) return;
+        if (!books) return;
         this.booksList = books;
         this.BOOKS_UPDATE.next([...this.booksList]);
       });

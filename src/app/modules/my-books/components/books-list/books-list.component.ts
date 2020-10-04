@@ -7,7 +7,7 @@ import { MyBooksService } from '../../my-books.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialDialogComponent } from '../../../../shared/material-dialog/material-dialog.component';
-import { DIALOG_POPUP_MESSAGES } from '../../../../constants';
+import { DIALOG_POPUP_MESSAGES, getBookCategoriesArr } from '../../../../constants';
 
 @Component({
   selector: 'app-books-list',
@@ -15,12 +15,13 @@ import { DIALOG_POPUP_MESSAGES } from '../../../../constants';
   styleUrls: ['./books-list.component.scss']
 })
 export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
+  bookCategories = getBookCategoriesArr();
   pageSizeOptions = [5, 10, 25, 100];
   invalidElements = document.getElementsByClassName('ng-invalid');
   editPressed = false;
   subscription = new Subscription();
   books: BookProfile[] = [];
-  displayedColumns: string[] = ['#', 'title', 'category', 'description', 'tradingPreferenceList', 'delete'];
+  displayedColumns: string[] = ['#', 'image', 'title', 'category', 'description', 'tradingPreferenceList', 'delete'];
   dataSource;
   filterValue = '';
 

@@ -3,10 +3,6 @@ table, mat-paginator {
   margin-left: 5%;
 }
 
-//textarea {
-//  height: 100px;
-//}
-
 .header-text {
   font-size: 16px;
   line-height: 5;
@@ -46,4 +42,8 @@ table, mat-paginator {
   text-align: center;
   margin-top: 20px;
   border-radius: 10px;
+}
+
+.post-image img {
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
 }
