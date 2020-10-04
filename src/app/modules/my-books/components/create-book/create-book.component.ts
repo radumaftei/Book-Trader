@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { getBookCategoriesArr } from '../../../../constants';
 import { MyBooksService } from '../../my-books.service';
+import { mimeType } from './mime-type.validator';
 
 @Component({
   selector: 'app-create-book',
@@ -11,6 +12,7 @@ import { MyBooksService } from '../../my-books.service';
 export class CreateBookComponent implements OnInit {
   form: FormGroup;
   bookCategories = getBookCategoriesArr();
+  imagePreview: string;
 
   get createBookDisabled() {
     return !this.form.valid;
@@ -26,10 +28,14 @@ export class CreateBookComponent implements OnInit {
       description: new FormControl(null, [
         Validators.required
       ]),
-      tradingPreferences: new FormControl(),
+      tradingPreferences: new FormControl(null),
       bookCategory: new FormControl(null, [
         Validators.required
-      ])
+      ]),
+      image: new FormControl(null, {
+        validators: [Validators.required],
+        asyncValidators: [mimeType]
+      })
     });
   }
 
@@ -38,12 +44,23 @@ export class CreateBookComponent implements OnInit {
       return;
     }
     this.myBooksService.addBook(
-      this.form.controls.title.value,
-      this.form.controls.description.value,
-      this.form.controls.tradingPreferences.value,
-      this.form.controls.bookCategory.value
+      this.form.value.title,
+      this.form.value.description,
+      this.form.value.tradingPreferences,
+      this.form.value.bookCategory
     );
     this.form.reset();
     this.myBooksService.updateSelectedTab(0);
+  }
+
+  onImagePicked(event: Event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({ image: file });
+    this.form.get('image').updateValueAndValidity();
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = <string>reader.result;
+    }
+    reader.readAsDataURL(file);
   }
 }

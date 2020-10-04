@@ -1,26 +1,48 @@
-form  {
-  width: 100%;
-  mat-form-field {
-    margin-bottom: 20px;
+
+.form-container {
+  height: 115vh;
+  overflow: hidden;
+
+  .formular {
+    width: 40%;
+
+    form  {
+      width: 100%;
+      mat-form-field {
+        margin-bottom: 20px;
+      }
+
+      .form-button {
+        width: 35%;
+        margin: auto;
+      }
+
+      input[type="file"] {
+        visibility: hidden;
+      }
+
+      .mat-form-field {
+        font-size: 13px;
+      }
+
+      .description-form {
+        height: 180px;
+      }
+
+      .trading-form {
+        height: 130px;
+      }
+
+      .image-preview {
+        height: 10rem;
+        margin: 1rem auto;
+
+        img {
+          height: 100%;
+        }
+      }
+    }
   }
 }
 
-.form-container {
-  height: 86vh;
-}
 
-.formular {
-  width: 40%;
-}
-
-.mat-form-field {
-  font-size: 13px;
-}
-
-.description-form {
-  height: 180px;
-}
-
-.trading-form {
-  height: 130px;
-}

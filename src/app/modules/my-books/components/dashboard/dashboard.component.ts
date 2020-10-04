@@ -15,12 +15,10 @@ export class DashboardComponent implements OnInit {
     this.myBooksService.getBooks();
     this.myBooksService.selectedTab$.subscribe(index => {
       this.selectedTabIndex = index;
-      debugger;
     })
   }
 
   onChangeTab = index => {
-    debugger
     this.myBooksService.updateSelectedTab(index);
   }
 }
