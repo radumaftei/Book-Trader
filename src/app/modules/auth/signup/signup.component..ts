@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../auth.service';
 
 @Component({
-  templateUrl: './login.component.html',
-  styleUrls: ['login.component.scss']
+  templateUrl: './signup.component.html',
+  styleUrls: ['signup.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class SignUpComponent implements OnInit {
   form: FormGroup;
   hide = true;
 
   constructor(private router: Router, private authService: AuthService) {}
 
-  get loginButtonDisabled() {
+  get signUpButtonDisabled() {
     return !this.form.valid;
   }
 
@@ -28,13 +28,12 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onLogin() {
+  onSignUp() {
     if (this.form.invalid) return;
-    this.authService.loginUser({
+    this.authService.createUser({
       email: this.form.value.email,
       password: this.form.value.password
     })
     this.router.navigate(['homepage']);
   }
-
 }

@@ -6,7 +6,6 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-dialog',
   templateUrl: './material-dialog.component.html',
   styleUrls: ['./material-dialog.component.scss']
 })

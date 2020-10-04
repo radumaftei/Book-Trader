@@ -1,10 +1,10 @@
 <div class="form-container">
   <div class="formular">
     <div class="auth-img">
-      <img class="auth-image" src="https://s4827.pcdn.co/wp-content/uploads/2013/08/iBooks-for-Mac-Thumb.png" alt="Login Image">
+      <img class="auth-image" src="https://s4827.pcdn.co/wp-content/uploads/2013/08/iBooks-for-Mac-Thumb.png" alt="SignUp Image">
     </div>
       <form class="inputs" [formGroup]="form">
-        <h1> Login Form </h1>
+        <h1> SignUp Form </h1>
         <mat-form-field class="email-form" appearance="fill">
           <mat-label>Enter your E-mail</mat-label>
           <input
@@ -30,9 +30,8 @@
           mat-raised-button
           color="primary"
           type="submit"
-          (click)="onLogin()"
-          [disabled]="loginButtonDisabled">Login</button>
-        <a class="sign-up-link" mat-button routerLink="/signup" routerLinkActive="mat-accent">Don't have an account?</a>
+          (click)="onSignUp()"
+          [disabled]="signUpButtonDisabled">Sign up</button>
       </form>
   </div>
 </div>

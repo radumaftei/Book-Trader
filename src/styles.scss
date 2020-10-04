@@ -26,6 +26,20 @@ body {
   justify-content: center;
   height: 100vh;
 
+  .auth-img {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-right: 50px;
+  }
+
+  .auth-image {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+  }
+
   .formular {
     background: white;
     padding: 40px;

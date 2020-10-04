@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 const booksRoutes = require('./routes/books')
+const userRoutes = require('./routes/user')
 
 mongoose.connect('mongodb+srv://radu:UnthoeP6JuOec6qe@bachelorscluster.nrvdc.mongodb.net/BookTraderDB?retryWrites=true&w=majority')
   .then(() => {
@@ -33,5 +34,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/personal-book-page', booksRoutes)
+app.use('/api/user', userRoutes)
 
 module.exports = app;

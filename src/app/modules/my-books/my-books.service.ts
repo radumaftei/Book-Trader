@@ -16,7 +16,7 @@ export class MyBooksService {
   constructor(private apiService: ApiService) { }
 
   getBooks = () => {
-    this.apiService.fetchBookData()
+    this.apiService.fetchBookDataHttp()
       .subscribe(books => {
         if (!books) return;
         this.booksList = books;
@@ -31,7 +31,7 @@ export class MyBooksService {
     book.append('tradingPreferences', props['tradingPreferences']);
     book.append('category', props['category']);
     book.append('image', props['image'], props['title']);
-    this.apiService.postBook(book)
+    this.apiService.postBookHttp(book)
       .subscribe(({ newBook }) => {
         if (!newBook) return;
         const bookToAdd: BookProfile = {
@@ -48,14 +48,14 @@ export class MyBooksService {
   }
 
   updateBooks = books => {
-    this.apiService.putBooks(books)
+    this.apiService.putBooksHttp(books)
       .subscribe(() => {
         this.getBooks();
       })
   }
 
   deleteBook = id => {
-    this.apiService.deleteBooks(id)
+    this.apiService.deleteBooksHttp(id)
       .subscribe(() => {
         this.getBooks();
       });

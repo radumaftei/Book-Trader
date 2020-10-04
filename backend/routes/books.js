@@ -1,5 +1,6 @@
 const express = require('express')
 const multer = require('multer')
+const checkAuth = require('../middleware/check-auth')
 const Book = require('../models/book')
 
 const MIME_TYPE_MAP = {
@@ -22,7 +23,10 @@ const storage = multer.diskStorage({
   }
 })
 
-router.post('', multer({ storage: storage }).single('image'), (req, res, next) => {
+router.post('',
+  checkAuth,
+  multer({ storage: storage }).single('image'),
+  (req, res, next) => {
   const url = `${req.protocol}://${req.get('host')}`;
   const { title, category, description, tradingPreferenceList } = req.body;
   new Book({
@@ -44,7 +48,9 @@ router.post('', multer({ storage: storage }).single('image'), (req, res, next) =
     })
 });
 
-router.get('', (req, res, next) => {
+router.get('',
+  checkAuth,
+  (req, res, next) => {
   Book.find().then(books => {
     res.status(200).json({
       message: "Books fetched successfully!",
@@ -53,7 +59,9 @@ router.get('', (req, res, next) => {
   })
 });
 
-router.put('', (req, res, next) => {
+router.put('',
+  checkAuth,
+  (req, res, next) => {
   const books = req.body;
   books.forEach(book => {
     Book.updateOne({ _id: book['id'] }, book)
@@ -64,7 +72,9 @@ router.put('', (req, res, next) => {
 });
 
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id',
+  checkAuth,
+  (req, res, next) => {
   Book.deleteOne({ _id: req.params.id})
     .then(() => {
       res.status(200).json({ message: 'Book deleted !'});
