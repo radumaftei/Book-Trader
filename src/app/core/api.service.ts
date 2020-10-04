@@ -17,7 +17,7 @@ export class ApiService {
   }
 
   postBook = book => {
-    return this.httpClient.post<{ message: string, bookId: string }>('http://localhost:3000/api/personal-book-page', book)
+    return this.httpClient.post<{ message: string, newBook: BookProfileDTO }>('http://localhost:3000/api/personal-book-page', book)
   }
 
   putBooks = books => {

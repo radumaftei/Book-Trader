@@ -43,12 +43,13 @@ export class CreateBookComponent implements OnInit {
     if (this.createBookDisabled) {
       return;
     }
-    this.myBooksService.addBook(
-      this.form.value.title,
-      this.form.value.description,
-      this.form.value.tradingPreferences,
-      this.form.value.bookCategory
-    );
+    this.myBooksService.addBook({
+      'title': this.form.value.title,
+      'description': this.form.value.description,
+      'tradingPreferences': this.form.value.tradingPreferences,
+      'category': this.form.value.bookCategory,
+      'image': this.form.value.image
+    });
     this.form.reset();
     this.myBooksService.updateSelectedTab(0);
   }

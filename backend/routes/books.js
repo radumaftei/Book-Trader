@@ -1,20 +1,48 @@
 const express = require('express')
-const router = express.Router()
-
+const multer = require('multer')
 const Book = require('../models/book')
 
-router.post('', (req, res, next) => {
+const MIME_TYPE_MAP = {
+  'image/png': 'png',
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg'
+}
+
+const router = express.Router()
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const isValid = MIME_TYPE_MAP[file.mimetype]
+    const error = isValid ? null : new Error('Invalid mime type!')
+    cb(error, 'backend/images')
+  },
+  filename: (req, file, cb) => {
+    const name = file.originalname.toLowerCase().split(' ').join('-')
+    const ext = MIME_TYPE_MAP[file.mimetype]
+    cb(null, `${name}-${Date.now()}.${ext}`)
+  }
+})
+
+router.post('', multer({ storage: storage }).single('image'), (req, res, next) => {
+  const url = `${req.protocol}://${req.get('host')}`;
   const { title, category, description, tradingPreferenceList } = req.body;
   new Book({
     title,
     category,
     description,
-    tradingPreferenceList
+    tradingPreferenceList,
+    imagePath: `${url}/images/${req.file.filename}`
   }).save()
-    .then(newBook => {
+    .then(addedBook => {
       res.status(201).json({
         message: 'Book added successfully',
-        bookId: newBook._id
+        newBook: {
+          id: addedBook._id,
+          title: addedBook.title,
+          description: addedBook.description,
+          category: addedBook.category,
+          tradingPreferenceList: addedBook.tradingPreferenceList,
+          imagePath: addedBook.imagePath
+        }
       });
     })
 });
