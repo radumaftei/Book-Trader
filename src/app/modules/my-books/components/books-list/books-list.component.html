@@ -4,9 +4,9 @@
       <mat-label>Filter</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Filter books" #input>
     </mat-form-field>
-    <button [disabled]="editDisabled" *ngIf="!editPressed" class="top-table-buttons" mat-raised-button color="primary" (click)="topTableButtonClicked('edit')"> Edit </button>
-    <button *ngIf="editPressed" class="top-table-buttons" mat-raised-button color="primary" (click)="topTableButtonClicked('save')"> Save </button>
-    <button *ngIf="editPressed" class="top-table-buttons" mat-raised-button color="warn" (click)="topTableButtonClicked('cancel')"> Cancel </button>
+    <button [disabled]="actionButtonsDisabled" *ngIf="!editPressed" class="top-table-buttons" mat-raised-button color="primary" (click)="topTableButtonClicked('edit')"> Edit </button>
+    <button [disabled]="actionButtonsDisabled" *ngIf="editPressed" class="top-table-buttons" mat-raised-button color="primary" (click)="topTableButtonClicked('save')"> Save </button>
+    <button [disabled]="actionButtonsDisabled" *ngIf="editPressed" class="top-table-buttons" mat-raised-button color="warn" (click)="topTableButtonClicked('cancel')"> Cancel </button>
   </div>
   <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="#">

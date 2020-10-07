@@ -49,6 +49,7 @@ router.post('/login', (req, res, next) => {
         'irejvorfrijfoiurejfflkjflkslmvkdsad21eqe3',
         { expiresIn: '1h' }
         )
+
       res.status(200)
         .json({
           token

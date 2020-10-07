@@ -2,17 +2,18 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const chalk = require('chalk');
 
 const app = express();
 const booksRoutes = require('./routes/books')
 const userRoutes = require('./routes/user')
 
-mongoose.connect('mongodb+srv://radu:UnthoeP6JuOec6qe@bachelorscluster.nrvdc.mongodb.net/BookTraderDB?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://radu:UnthoeP6JuOec6qe@bachelorscluster.nrvdc.mongodb.net/BookTraderDB?w=majority')
   .then(() => {
-    console.log('Connected to the DB')
+    console.log(chalk.green('Connected to the DB'))
   })
-  .catch(() => {
-    console.log('Error connecting to DB')
+  .catch((err) => {
+    console.log(chalk.red('Error connecting to DB', err))
   })
 
 
@@ -24,7 +25,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
   res.setHeader(
     "Access-Control-Allow-Methods",

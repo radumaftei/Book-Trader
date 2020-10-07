@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialDialogComponent } from '../../../../shared/material-dialog/material-dialog.component';
 import { DIALOG_POPUP_MESSAGES, getBookCategoriesArr } from '../../../../constants';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-books-list',
@@ -28,15 +29,15 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  get editDisabled() {
-    return !this.books.length;
+  get actionButtonsDisabled() {
+    return !this.books.length || !this.authService.authorized();
   }
 
   get dirtyState() {
     return !this.invalidElements.length;
   }
 
-  constructor(private myBooksService: MyBooksService, private dialog: MatDialog) { }
+  constructor(private myBooksService: MyBooksService, private dialog: MatDialog, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.subscription.add(this.myBooksService.booksUpdate$
@@ -62,9 +63,9 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
         this.editPressed = true;
         break;
       case 'save':
-        this.dataSource._data.subscribe(books => {
+        this.subscription.add(this.dataSource._data.subscribe(books => {
           this.myBooksService.updateBooks(books);
-        });
+        }));
         this.editPressed = false;
         break;
       case 'cancel':

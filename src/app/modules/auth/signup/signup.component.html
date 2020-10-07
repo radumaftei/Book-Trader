@@ -32,6 +32,7 @@
           type="submit"
           (click)="onSignUp()"
           [disabled]="signUpButtonDisabled">Sign up</button>
+        <mat-spinner *ngIf="isLoading"></mat-spinner>
       </form>
   </div>
 </div>

@@ -10,6 +10,7 @@ import { AuthService } from '../auth.service';
 export class SignUpComponent implements OnInit {
   form: FormGroup;
   hide = true;
+  isLoading = false;
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -34,6 +35,6 @@ export class SignUpComponent implements OnInit {
       email: this.form.value.email,
       password: this.form.value.password
     })
-    this.router.navigate(['homepage']);
+    this.isLoading = true;
   }
 }
