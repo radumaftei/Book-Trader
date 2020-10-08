@@ -4,6 +4,7 @@ import { LoginComponent } from './modules/auth/login/components/login.component'
 import { HomepageComponent } from './modules/homepage/components/homepage.component';
 import { DashboardComponent } from './modules/my-books/components/dashboard/dashboard.component';
 import { SignUpComponent } from './modules/auth/signup/signup.component.';
+import { AuthGuard } from './modules/auth/auth.guard';
 
 const routes: Routes = [
   {
@@ -18,11 +19,13 @@ const routes: Routes = [
   },
   {
     path: 'homepage',
-    component: HomepageComponent
+    component: HomepageComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'personal-book-page',
-    component: DashboardComponent
+    component: DashboardComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '',
@@ -37,6 +40,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AuthGuard]
 })
 export class AppRoutingModule {}

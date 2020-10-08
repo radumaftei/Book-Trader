@@ -38,6 +38,6 @@ export class ApiService {
   }
 
   loginUserHttp = (authData: AuthData) => {
-    return this.httpClient.post<{ token: string }>(`${this.USER_API_URL}/${USER_LOGIN_URL}`, authData);
+    return this.httpClient.post<{ token: string, expiresIn: number  }>(`${this.USER_API_URL}/${USER_LOGIN_URL}`, authData);
   }
 }
