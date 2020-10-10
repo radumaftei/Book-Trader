@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BookProfileDTO } from '../interfaces';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { HOME_URL, MY_BOOKS_URL, USER_LOGIN_URL, USER_SIGNUP_URL } from '../constants';
+import { HOME_URL, HOMEPAGE, MY_BOOKS_URL, USER_LOGIN_URL, USER_SIGNUP_URL } from '../constants';
 import { AuthData } from '../modules/auth/auth.model';
 
 @Injectable({
@@ -11,11 +11,19 @@ import { AuthData } from '../modules/auth/auth.model';
 export class ApiService {
   private BOOKS_API_URL = `${HOME_URL}/${MY_BOOKS_URL}`;
   private USER_API_URL = `${HOME_URL}/user`;
+  private HOMEPAGE_URL = `${HOME_URL}/${HOMEPAGE}`;
 
   constructor(private httpClient: HttpClient) { }
 
   fetchBookDataHttp = () => {
-    return this.httpClient.get<{ message: string, books: BookProfileDTO[] }>( this.BOOKS_API_URL)
+    return this.httpClient.get<{ message: string, books: BookProfileDTO[] }>(this.BOOKS_API_URL)
+      .pipe(
+        map(data => data.books.map(book => ({ ...book, id: book._id })))
+      );
+  }
+
+  fetchHomepageDataHttp = () => {
+    return this.httpClient.get<{ message: string, books: BookProfileDTO[] }>(this.HOMEPAGE_URL)
       .pipe(
         map(data => data.books.map(book => ({ ...book, id: book._id })))
       );

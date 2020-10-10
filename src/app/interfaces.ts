@@ -1,8 +1,3 @@
-// FE
-export interface BookHomepage extends BookProfile {
-  username: string;
-}
-
 export interface BookProfile {
   id: string;
   title: string;
@@ -10,6 +5,7 @@ export interface BookProfile {
   description: string;
   tradingPreferenceList: string | null;
   imagePath: string;
+  userId: string;
 }
 
 export interface BookProfileDTO {
@@ -20,5 +16,5 @@ export interface BookProfileDTO {
   description: string;
   tradingPreferenceList: string | null;
   imagePath: string;
-  creator: string;
+  userId: string;
 }

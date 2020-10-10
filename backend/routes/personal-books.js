@@ -35,7 +35,7 @@ router.post('',
     description,
     tradingPreferenceList,
     imagePath: `${url}/images/${req.file.filename}`,
-    creator: req.userData.userId
+    userId: req.userData.userId
   }).save()
     .then(addedBook => {
       addedBook = addedBook.toObject();
@@ -52,9 +52,9 @@ router.post('',
 router.get('',
   checkAuth,
   (req, res, next) => {
-  Book.find({ creator: req.userData.userId }).then(books => {
+  Book.find({ userId: req.userData.userId }).then(books => {
     res.status(200).json({
-      message: "Books fetched successfully!",
+      message: "Your books fetched successfully!",
       books: books
     });
   })

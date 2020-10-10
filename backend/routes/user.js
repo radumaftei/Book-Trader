@@ -60,7 +60,6 @@ router.post('/login', (req, res, next) => {
         })
     })
     .catch(error => {
-      console.log('catch REACHED IN USER.JS')
       return res.status(401).json({
         message: error
       })

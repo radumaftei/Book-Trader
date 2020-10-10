@@ -5,7 +5,8 @@ const mongoose = require('mongoose');
 const chalk = require('chalk');
 
 const app = express();
-const booksRoutes = require('./routes/books')
+const personalBooksRoutes = require('./routes/personal-books')
+const homepageBooksRoutes = require('./routes/homepage-books')
 const userRoutes = require('./routes/user')
 
 mongoose.connect('mongodb+srv://radu:UnthoeP6JuOec6qe@bachelorscluster.nrvdc.mongodb.net/BookTraderDB?w=majority')
@@ -34,7 +35,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/personal-book-page', booksRoutes)
+app.use('/api/personal-book-page', personalBooksRoutes)
 app.use('/api/user', userRoutes)
+app.use('/api/homepage', homepageBooksRoutes)
 
 module.exports = app;

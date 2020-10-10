@@ -19,7 +19,6 @@ export class MyBooksService {
     this.apiService.fetchBookDataHttp()
       .subscribe(books => {
         if (!books) return;
-        debugger;
         this.booksList = books;
         this.BOOKS_UPDATE.next([...this.booksList]);
       });
@@ -41,7 +40,8 @@ export class MyBooksService {
           description: newBook.description,
           tradingPreferenceList: newBook.tradingPreferenceList,
           category: newBook.category,
-          imagePath: newBook.imagePath
+          imagePath: newBook.imagePath,
+          userId: newBook.userId
         };
         this.booksList.push(bookToAdd);
         this.BOOKS_UPDATE.next([...this.booksList]);
