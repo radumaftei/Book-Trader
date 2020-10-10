@@ -1,5 +1,6 @@
 <div class="form-container">
-  <div class="formular">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <div *ngIf="!isLoading" class="formular">
     <div class="auth-img">
       <img class="auth-image" src="https://s4827.pcdn.co/wp-content/uploads/2013/08/iBooks-for-Mac-Thumb.png" alt="Login Image">
     </div>
@@ -32,7 +33,6 @@
           type="submit"
           (click)="onLogin()"
           [disabled]="loginButtonDisabled">Login</button>
-        <mat-spinner *ngIf="isLoading"></mat-spinner>
         <a class="sign-up-link" mat-button routerLink="/signup" routerLinkActive="mat-accent">Don't have an account?</a>
       </form>
   </div>

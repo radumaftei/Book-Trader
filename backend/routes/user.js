@@ -29,6 +29,7 @@ router.post('/signup', (req, res, next) => {
 })
 
 router.post('/login', (req, res, next) => {
+  let fetchedUser;
   User.findOne({ email: req.body.email })
     .then(user => {
       if (!user) {
@@ -36,6 +37,7 @@ router.post('/login', (req, res, next) => {
           message: `Auth Failed. No user found with email ${req.body.email}`
         })
       }
+      fetchedUser = user;
       return bcrypt.compare(req.body.password, user.password)
     })
     .then(result => {
@@ -44,8 +46,9 @@ router.post('/login', (req, res, next) => {
           message: 'Auth failed. Incorrect password'
         })
       }
+
       const token = jwt.sign(
-        { email: result.email, userId: result._id },
+        { email: fetchedUser.email, userId: fetchedUser._id },
         'irejvorfrijfoiurejfflkjflkslmvkdsad21eqe3',
         { expiresIn: '1h' }
         )
@@ -57,6 +60,7 @@ router.post('/login', (req, res, next) => {
         })
     })
     .catch(error => {
+      console.log('catch REACHED IN USER.JS')
       return res.status(401).json({
         message: error
       })

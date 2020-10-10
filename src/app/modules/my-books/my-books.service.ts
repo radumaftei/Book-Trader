@@ -19,6 +19,7 @@ export class MyBooksService {
     this.apiService.fetchBookDataHttp()
       .subscribe(books => {
         if (!books) return;
+        debugger;
         this.booksList = books;
         this.BOOKS_UPDATE.next([...this.booksList]);
       });

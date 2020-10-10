@@ -20,4 +20,5 @@ export interface BookProfileDTO {
   description: string;
   tradingPreferenceList: string | null;
   imagePath: string;
+  creator: string;
 }

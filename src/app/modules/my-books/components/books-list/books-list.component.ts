@@ -42,6 +42,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription.add(this.myBooksService.booksUpdate$
       .subscribe((books: BookProfile[]) => {
+        debugger;
        this.books = books;
        this.books = this.books.map((book, idx) => {
          book['lineNumber'] = idx + 1;
