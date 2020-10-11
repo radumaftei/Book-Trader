@@ -41,7 +41,8 @@ export class MyBooksService {
           tradingPreferenceList: newBook.tradingPreferenceList,
           category: newBook.category,
           imagePath: newBook.imagePath,
-          userId: newBook.userId
+          userId: newBook.userId,
+          username: newBook.username
         };
         this.booksList.push(bookToAdd);
         this.BOOKS_UPDATE.next([...this.booksList]);

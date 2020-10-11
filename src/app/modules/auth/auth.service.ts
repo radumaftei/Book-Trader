@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../../core/api.service';
-import { AuthData } from './auth.model';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { AuthData } from './auth.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private token: string;
+  private userInfo: AuthData;
   private expiresInTimeOutID: any;
   private authStatusListener = new BehaviorSubject<boolean>(false);
 
@@ -26,17 +27,23 @@ export class AuthService {
     return this.token;
   }
 
+  getUserInfo = () => {
+    return this.userInfo;
+  }
+
   createUser = (authData: AuthData) => {
     this.apiService.createUserHttp(authData)
-      .subscribe(() => {
+      .subscribe(({ user }) => {
+        this.userInfo = user;
         this.router.navigate(['homepage']);
       })
   }
 
   loginUser = (authData: AuthData) => {
     this.apiService.loginUserHttp(authData)
-      .subscribe(({ token, expiresIn }) => {
+      .subscribe(({ token, expiresIn, user }) => {
         this.token = token;
+        this.userInfo = user;
         if (token) {
           this.setAuthTimer(expiresIn);
           this.authStatusListener.next(true);

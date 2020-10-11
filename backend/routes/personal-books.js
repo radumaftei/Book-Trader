@@ -35,7 +35,8 @@ router.post('',
     description,
     tradingPreferenceList,
     imagePath: `${url}/images/${req.file.filename}`,
-    userId: req.userData.userId
+    userId: req.userData.userId,
+    username: req.userData.email.split('@')[0]
   }).save()
     .then(addedBook => {
       addedBook = addedBook.toObject();

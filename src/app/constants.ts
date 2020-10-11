@@ -21,7 +21,8 @@ export const BOOK_CATEGORIES = {
 };
 
 export const DIALOG_POPUP_MESSAGES = {
-  DELETE_BOOK: 'Are you sure you want to delete this book?'
+  DELETE_BOOK: 'Are you sure you want to delete this book?',
+  TRADE_BOOK: 'Trading details'
 }
 
 

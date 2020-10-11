@@ -27,10 +27,19 @@
             </button>
             <mat-error *ngIf="form.get('password').invalid">Please enter your password</mat-error>
         </mat-form-field>
+        <mat-form-field class="location-form" appearance="fill">
+          <mat-label>Enter your Location</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="location"
+            placeholder="Location">
+          <mat-error *ngIf="form.get('location').invalid">Please enter your location</mat-error>
+        </mat-form-field>
         <button
           mat-raised-button
           color="primary"
-          type="submit"
+          type="button"
           (click)="onSignUp()"
           [disabled]="signUpButtonDisabled">Sign up</button>
       </form>

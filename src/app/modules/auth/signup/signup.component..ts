@@ -24,8 +24,11 @@ export class SignUpComponent implements OnInit {
         Validators.required, Validators.email
       ]),
       password: new FormControl(null, [
-        Validators.required, Validators.minLength(5)]
-      )
+        Validators.required, Validators.minLength(5)
+      ]),
+      location: new FormControl(null, [
+        Validators.required, Validators.minLength(2)
+      ])
     });
   }
 
@@ -33,7 +36,8 @@ export class SignUpComponent implements OnInit {
     if (this.form.invalid) return;
     this.authService.createUser({
       email: this.form.value.email,
-      password: this.form.value.password
+      password: this.form.value.password,
+      location: this.form.value.location
     })
     this.isLoading = true;
   }

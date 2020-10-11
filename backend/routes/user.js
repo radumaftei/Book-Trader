@@ -11,13 +11,17 @@ router.post('/signup', (req, res, next) => {
     .then(hash => {
       const user = new User({
         email: req.body.email,
-        password: hash
+        password: hash,
+        location: req.body.location
       })
       user.save()
         .then(result => {
           res.status(201).json({
             message: 'User created !',
-            result
+            user: {
+              location: result.location,
+              email: result.email
+            }
           })
         })
         .catch(error => {
@@ -48,7 +52,7 @@ router.post('/login', (req, res, next) => {
       }
 
       const token = jwt.sign(
-        { email: fetchedUser.email, userId: fetchedUser._id },
+        { email: fetchedUser.email, userId: fetchedUser._id, location: fetchedUser.location },
         'irejvorfrijfoiurejfflkjflkslmvkdsad21eqe3',
         { expiresIn: '1h' }
         )
@@ -56,7 +60,11 @@ router.post('/login', (req, res, next) => {
       res.status(200)
         .json({
           token,
-          expiresIn: 3600
+          expiresIn: 3600,
+          user: {
+            email: fetchedUser.email,
+            location: fetchedUser.location
+          }
         })
     })
     .catch(error => {

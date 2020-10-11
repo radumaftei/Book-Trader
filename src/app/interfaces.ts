@@ -6,6 +6,7 @@ export interface BookProfile {
   tradingPreferenceList: string | null;
   imagePath: string;
   userId: string;
+  username: string;
 }
 
 export interface BookProfileDTO {
@@ -17,4 +18,5 @@ export interface BookProfileDTO {
   tradingPreferenceList: string | null;
   imagePath: string;
   userId: string;
+  username: string;
 }

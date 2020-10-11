@@ -1,8 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { getBookCategoriesArr } from '../../../constants';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { DIALOG_POPUP_MESSAGES, getBookCategoriesArr } from '../../../constants';
 import { BookProfile } from '../../../interfaces';
 import { HomepageService } from '../homepage.service';
 import { Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { MaterialDialogComponent } from '../../../shared/material-dialog/material-dialog.component';
+import { AuthService } from '../../auth/auth.service';
+import { AuthData } from '../../auth/auth.model';
 
 @Component({
   templateUrl: './homepage.component.html',
@@ -10,6 +14,7 @@ import { Subscription } from 'rxjs';
 })
 export class HomepageComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
+  userInfo: AuthData;
   isLoading = false;
   bookCards: BookProfile[];
   bookCategories = getBookCategoriesArr();
@@ -18,13 +23,15 @@ export class HomepageComponent implements OnInit, OnDestroy {
   bodyHeight = '852';
   navigationButtonsStatuses = {};
 
-  constructor(private homepageService: HomepageService) {}
+  constructor(private homepageService: HomepageService, private dialog: MatDialog) {}
 
   ngOnInit() {
     // this.isLoading = true;
     this.homepageService.getHomepageBooks();
     this.subscription.add(this.homepageService.homepageBooksUpdate$.subscribe(books => {
       if (!books) return;
+      this.userInfo = this.homepageService.userInfo;
+      console.log(this.userInfo)
       this.bookCards = books;
       this.bodyHeight = (Number(this.bodyHeight) + (this.bookCategories.length - 1) * 450).toString();
       this.bookCategories.forEach(category => {
@@ -36,6 +43,19 @@ export class HomepageComponent implements OnInit, OnDestroy {
         this.navigationButtonsStatuses[category].next = this.offsetBookNumberMapper[category].bookNumber <= 8;
       });
     }));
+  }
+
+  onTrade = (book: BookProfile) => {
+    const dialogRef = this.dialog.open(MaterialDialogComponent, <any>{
+      width: '800px',
+      data: { message: DIALOG_POPUP_MESSAGES.TRADE_BOOK, actionButton: 'Send Trade offer', isHomepage: true, book, user: this.userInfo }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('trade pressed');
+      }
+    });
   }
 
   booksByCategory = (category: string): BookProfile[] => {

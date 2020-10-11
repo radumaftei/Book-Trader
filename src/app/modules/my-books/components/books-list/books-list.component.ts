@@ -90,7 +90,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   openDialog = id => {
     const dialogRef = this.dialog.open(MaterialDialogComponent, <any>{
       width: '400px',
-      data: { message: DIALOG_POPUP_MESSAGES.DELETE_BOOK }
+      data: { message: DIALOG_POPUP_MESSAGES.DELETE_BOOK, actionButton: 'Delete' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
