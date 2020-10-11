@@ -7,6 +7,7 @@ export interface BookProfile {
   imagePath: string;
   userId: string;
   username: string;
+  location: string;
 }
 
 export interface BookProfileDTO {
@@ -19,4 +20,5 @@ export interface BookProfileDTO {
   imagePath: string;
   userId: string;
   username: string;
+  location: string;
 }

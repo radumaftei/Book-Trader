@@ -5,7 +5,6 @@ import { HomepageService } from '../homepage.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialDialogComponent } from '../../../shared/material-dialog/material-dialog.component';
-import { AuthService } from '../../auth/auth.service';
 import { AuthData } from '../../auth/auth.model';
 
 @Component({
@@ -14,7 +13,6 @@ import { AuthData } from '../../auth/auth.model';
 })
 export class HomepageComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
-  userInfo: AuthData;
   isLoading = false;
   bookCards: BookProfile[];
   bookCategories = getBookCategoriesArr();
@@ -30,8 +28,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
     this.homepageService.getHomepageBooks();
     this.subscription.add(this.homepageService.homepageBooksUpdate$.subscribe(books => {
       if (!books) return;
-      this.userInfo = this.homepageService.userInfo;
-      console.log(this.userInfo)
       this.bookCards = books;
       this.bodyHeight = (Number(this.bodyHeight) + (this.bookCategories.length - 1) * 450).toString();
       this.bookCategories.forEach(category => {
@@ -48,7 +44,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   onTrade = (book: BookProfile) => {
     const dialogRef = this.dialog.open(MaterialDialogComponent, <any>{
       width: '800px',
-      data: { message: DIALOG_POPUP_MESSAGES.TRADE_BOOK, actionButton: 'Send Trade offer', isHomepage: true, book, user: this.userInfo }
+      data: { message: DIALOG_POPUP_MESSAGES.TRADE_BOOK, actionButton: 'Send Trade offer', isHomepage: true, book }
     });
 
     dialogRef.afterClosed().subscribe(result => {

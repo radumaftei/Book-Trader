@@ -23,11 +23,9 @@ export class ApiService {
   }
 
   fetchHomepageDataHttp = () => {
-    return this.httpClient.get<{ message: string, books: BookProfileDTO[], userData: AuthData }>(this.HOMEPAGE_URL)
+    return this.httpClient.get<{ message: string, books: BookProfileDTO[] }>(this.HOMEPAGE_URL)
       .pipe(
-        map(data =>
-          ({ ...data, ...data.books.map(book => ({ ...book, id: book._id }))})
-        )
+        map(data => data.books.map(book => ({ ...book, id: book._id })))
       );
   }
 
@@ -44,10 +42,10 @@ export class ApiService {
   }
 
   createUserHttp = (authData: AuthData) => {
-    return this.httpClient.post< { user: AuthData }>(`${this.USER_API_URL}/${USER_SIGNUP_URL}`, authData);
+    return this.httpClient.post(`${this.USER_API_URL}/${USER_SIGNUP_URL}`, authData);
   }
 
   loginUserHttp = (authData: AuthData) => {
-    return this.httpClient.post<{ token: string, expiresIn: number, user: AuthData }>(`${this.USER_API_URL}/${USER_LOGIN_URL}`, authData);
+    return this.httpClient.post<{ token: string, expiresIn: number }>(`${this.USER_API_URL}/${USER_LOGIN_URL}`, authData);
   }
 }

@@ -16,6 +16,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatRadioModule } from '@angular/material/radio';
 
 export const MATERIAL_MODULES = [
   MatInputModule,
@@ -28,6 +29,7 @@ export const MATERIAL_MODULES = [
   MatPaginatorModule,
   MatSortModule,
   MatTabsModule,
+  MatRadioModule,
   MatFormFieldModule,
   MatSelectModule,
   MatCardModule,

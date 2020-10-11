@@ -42,7 +42,8 @@ export class MyBooksService {
           category: newBook.category,
           imagePath: newBook.imagePath,
           userId: newBook.userId,
-          username: newBook.username
+          username: newBook.username,
+          location: newBook.location
         };
         this.booksList.push(bookToAdd);
         this.BOOKS_UPDATE.next([...this.booksList]);

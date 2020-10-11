@@ -7,7 +7,8 @@ const bookSchema = mongoose.Schema({
   tradingPreferenceList: { type: String },
   imagePath: { type: String, required: true},
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  username: { type: String, required: true }
+  username: { type: String, required: true },
+  location: { type: String, required: true }
 })
 
 module.exports = mongoose.model('Book', bookSchema)

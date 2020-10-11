@@ -7,16 +7,23 @@
     <div class="card-text">
       <div class="portada"></div>
       <div class="title-total">
-        <div class="title">{{ book.username }} from {{ userInfo.location }}</div>
+        <div class="title"><span class="user-data">{{ book.username }}</span> from <span class="user-data">{{ book.location }}</span></div>
         <h2>{{ book.title }}</h2>
         <div class="desc">{{ book.description }}</div>
+        <div class="actions">
+          <label>Select delivery method</label>
+          <mat-radio-group [(ngModel)]="deliveryMethod">
+            <mat-radio-button class="example-margin" value="courier">Courier</mat-radio-button>
+            <mat-radio-button class="example-margin" value="foot">On Foot</mat-radio-button>
+          </mat-radio-group>
+        </div>
       </div>
     </div>
   </div>
 </mat-dialog-content>
 <div mat-dialog-actions>
   <div class="buttons-wrapper">
-    <button mat-button (click)="onCancelClick()">Cancel</button>
-    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>{{ data.actionButton }}</button>
+    <button mat-flat-button color="warn" (click)="onCancelClick()">Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>{{ data.actionButton }}</button>
   </div>
 </div>

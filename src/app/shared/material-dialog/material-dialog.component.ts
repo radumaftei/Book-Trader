@@ -8,23 +8,20 @@ export interface DialogData {
   actionButton: string;
   isHomepage: boolean | null;
   book: BookProfile | null;
-  user: AuthData | null;
 }
 
 @Component({
   templateUrl: './material-dialog.component.html',
-  styleUrls: ['./material-dialog.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./material-dialog.component.scss']
 })
 export class MaterialDialogComponent {
   book: BookProfile;
-  userInfo: AuthData;
+  deliveryMethod: 'courier' | 'foot';
 
   constructor(
     public dialogRef: MatDialogRef<MaterialDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
     this.book = data.book;
-    this.userInfo = data.user;
   }
 
   onCancelClick(): void {

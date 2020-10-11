@@ -9,7 +9,6 @@ import { AuthData } from './auth.model';
 })
 export class AuthService {
   private token: string;
-  private userInfo: AuthData;
   private expiresInTimeOutID: any;
   private authStatusListener = new BehaviorSubject<boolean>(false);
 
@@ -27,23 +26,17 @@ export class AuthService {
     return this.token;
   }
 
-  getUserInfo = () => {
-    return this.userInfo;
-  }
-
   createUser = (authData: AuthData) => {
     this.apiService.createUserHttp(authData)
-      .subscribe(({ user }) => {
-        this.userInfo = user;
+      .subscribe(() => {
         this.router.navigate(['homepage']);
       })
   }
 
   loginUser = (authData: AuthData) => {
     this.apiService.loginUserHttp(authData)
-      .subscribe(({ token, expiresIn, user }) => {
+      .subscribe(({ token, expiresIn  }) => {
         this.token = token;
-        this.userInfo = user;
         if (token) {
           this.setAuthTimer(expiresIn);
           this.authStatusListener.next(true);
