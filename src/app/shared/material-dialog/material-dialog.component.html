@@ -14,7 +14,7 @@
           <label>Select delivery method</label>
           <mat-radio-group [(ngModel)]="deliveryMethod">
             <mat-radio-button class="example-margin" value="courier">Courier</mat-radio-button>
-            <mat-radio-button class="example-margin" value="foot">On Foot</mat-radio-button>
+            <mat-radio-button *ngIf="loggedInUser.location === book.location" class="example-margin" value="foot">On Foot</mat-radio-button>
           </mat-radio-group>
         </div>
       </div>

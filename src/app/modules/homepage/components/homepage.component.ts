@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DIALOG_POPUP_MESSAGES, getBookCategoriesArr } from '../../../constants';
 import { BookProfile } from '../../../interfaces';
 import { HomepageService } from '../homepage.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialDialogComponent } from '../../../shared/material-dialog/material-dialog.component';
-import { AuthData } from '../../auth/auth.model';
+import { LoginSignUpUser } from '../../auth/auth.model';
 
 @Component({
   templateUrl: './homepage.component.html',
@@ -13,6 +13,7 @@ import { AuthData } from '../../auth/auth.model';
 })
 export class HomepageComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
+  loggedInUser: LoginSignUpUser;
   isLoading = false;
   bookCards: BookProfile[];
   bookCategories = getBookCategoriesArr();
@@ -25,6 +26,10 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // this.isLoading = true;
+    this.loggedInUser = {
+      email: localStorage.getItem('loggedInUserEmail'),
+      location: localStorage.getItem('loggedInUserLocation')
+    };
     this.homepageService.getHomepageBooks();
     this.subscription.add(this.homepageService.homepageBooksUpdate$.subscribe(books => {
       if (!books) return;
@@ -44,7 +49,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   onTrade = (book: BookProfile) => {
     const dialogRef = this.dialog.open(MaterialDialogComponent, <any>{
       width: '800px',
-      data: { message: DIALOG_POPUP_MESSAGES.TRADE_BOOK, actionButton: 'Send Trade offer', isHomepage: true, book }
+      data: { message: DIALOG_POPUP_MESSAGES.TRADE_BOOK, actionButton: 'Send Trade offer', isHomepage: true, book, loggedInUser: this.loggedInUser }
     });
 
     dialogRef.afterClosed().subscribe(result => {
