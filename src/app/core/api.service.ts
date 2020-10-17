@@ -42,10 +42,10 @@ export class ApiService {
   }
 
   createUserHttp = (authData: AuthData) => {
-    return this.httpClient.post(`${this.USER_API_URL}/${USER_SIGNUP_URL}`, authData);
+    return this.httpClient.post<{ user: { email: string, location: string} }>(`${this.USER_API_URL}/${USER_SIGNUP_URL}`, authData);
   }
 
   loginUserHttp = (authData: AuthData) => {
-    return this.httpClient.post<{ token: string, expiresIn: number }>(`${this.USER_API_URL}/${USER_LOGIN_URL}`, authData);
+    return this.httpClient.post<{ token: string, expiresIn: number, user: { email: string, location: string} }>(`${this.USER_API_URL}/${USER_LOGIN_URL}`, authData);
   }
 }
