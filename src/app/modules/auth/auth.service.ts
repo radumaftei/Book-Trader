@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '../../core/api.service';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
-import { AuthData, LoginSignUpUser } from './auth.model';
+import { AuthData } from './auth.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,10 +28,8 @@ export class AuthService {
 
   createUser = (authData: AuthData) => {
     this.apiService.createUserHttp(authData)
-      .subscribe(({ user}) => {
+      .subscribe(({user}) => {
         this.saveLoggedInUserToLs(user);
-        this.saveToLs('loggedInUserEmail', user.email);
-        this.saveToLs('loggedInUserLocation', user.location);
         this.router.navigate(['homepage']);
       })
   }
@@ -60,6 +58,11 @@ export class AuthService {
     this.router.navigate(['login']);
   }
 
+  private saveLoggedInUserToLs = user => {
+    this.saveToLs('loggedInUserEmail', user.email);
+    this.saveToLs('loggedInUserLocation', user.location);
+  }
+
   private saveAuthDataToLS = (token: string, expirationDate: Date) => {
     this.saveToLs('token', token);
     this.saveToLs('expirationDate', expirationDate.toISOString());
@@ -68,11 +71,8 @@ export class AuthService {
   private clearAuthDataFromLS = () => {
     this.removeFromLs('token');
     this.removeFromLs('expirationDate');
-  }
-
-  private saveLoggedInUserToLs = user => {
-    this.saveToLs('loggedInUserEmail', user.email);
-    this.saveToLs('loggedInUserLocation', user.location);
+    this.removeFromLs('loggedInUserEmail');
+    this.removeFromLs('loggedInUserLocation');
   }
 
   private saveToLs = (key: string, value: any): void => {
@@ -81,10 +81,6 @@ export class AuthService {
 
   private removeFromLs = (key: string): void => {
     localStorage.removeItem(key);
-  }
-
-  private getFromLs = (key: string): any => {
-    localStorage.getItem(key);
   }
 
   autoAuthUser = () => {
@@ -106,8 +102,8 @@ export class AuthService {
   }
 
   private getAuthData = () => {
-    const token = this.getFromLs('token');
-    const expirationDate = this.getFromLs('expirationDate');
+    const token = localStorage.getItem('token');
+    const expirationDate = localStorage.getItem('expirationDate');
     if (!token || !expirationDate) {
       return;
     }

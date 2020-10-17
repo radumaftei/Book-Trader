@@ -19,7 +19,7 @@ export class MaterialDialogComponent {
   book: BookProfile;
   loggedInUser;
   deliveryMethod: 'courier' | 'foot';
-  
+
 
   constructor(
     public dialogRef: MatDialogRef<MaterialDialogComponent>,
