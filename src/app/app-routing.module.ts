@@ -10,37 +10,37 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    children: []
+    children: [],
   },
   {
     path: 'signup',
     component: SignUpComponent,
-    children: []
+    children: [],
   },
   {
     path: 'homepage',
     component: HomepageComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: 'personal-book-page',
     component: DashboardComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'login'
+    redirectTo: 'login',
   },
   {
     path: '**',
-    redirectTo: '/login'
-  }
+    redirectTo: '/login',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [AuthGuard]
+  providers: [AuthGuard],
 })
 export class AppRoutingModule {}

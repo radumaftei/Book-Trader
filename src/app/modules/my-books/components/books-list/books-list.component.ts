@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -7,13 +13,16 @@ import { MyBooksService } from '../../my-books.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialDialogComponent } from '../../../../shared/material-dialog/material-dialog.component';
-import { DIALOG_POPUP_MESSAGES, getBookCategoriesArr } from '../../../../constants';
+import {
+  DIALOG_POPUP_MESSAGES,
+  getBookCategoriesArr,
+} from '../../../../constants';
 import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-books-list',
   templateUrl: './books-list.component.html',
-  styleUrls: ['./books-list.component.scss']
+  styleUrls: ['./books-list.component.scss'],
 })
 export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   bookCategories = getBookCategoriesArr();
@@ -22,7 +31,15 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   editPressed = false;
   subscription = new Subscription();
   books: BookProfile[] = [];
-  displayedColumns: string[] = ['#', 'image', 'title', 'category', 'description', 'tradingPreferenceList', 'delete'];
+  displayedColumns: string[] = [
+    '#',
+    'image',
+    'title',
+    'category',
+    'description',
+    'tradingPreferenceList',
+    'delete',
+  ];
   dataSource;
   filterValue = '';
 
@@ -37,19 +54,23 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
     return !this.invalidElements.length;
   }
 
-  constructor(private myBooksService: MyBooksService, private dialog: MatDialog, private authService: AuthService) { }
+  constructor(
+    private myBooksService: MyBooksService,
+    private dialog: MatDialog,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.subscription.add(this.myBooksService.booksUpdate$
-      .subscribe((books: BookProfile[]) => {
-       this.books = books;
-       this.books = this.books.map((book, idx) => {
-         book['lineNumber'] = idx + 1;
-         return book;
-       });
-       this.dataSource = new MatTableDataSource<BookProfile>(this.books);
-      }));
-
+    this.subscription.add(
+      this.myBooksService.booksUpdate$.subscribe((books: BookProfile[]) => {
+        this.books = books;
+        this.books = this.books.map((book, idx) => {
+          book['lineNumber'] = idx + 1;
+          return book;
+        });
+        this.dataSource = new MatTableDataSource<BookProfile>(this.books);
+      })
+    );
   }
 
   ngAfterViewInit() {
@@ -57,22 +78,24 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
     this.dataSource.sort = this.sort;
   }
 
-  topTableButtonClicked = action => {
+  topTableButtonClicked = (action) => {
     switch (action) {
       case 'edit':
         this.editPressed = true;
         break;
       case 'save':
-        this.subscription.add(this.dataSource._data.subscribe(books => {
-          this.myBooksService.updateBooks(books);
-        }));
+        this.subscription.add(
+          this.dataSource._data.subscribe((books) => {
+            this.myBooksService.updateBooks(books);
+          })
+        );
         this.editPressed = false;
         break;
       case 'cancel':
         this.editPressed = false;
         break;
     }
-  }
+  };
 
   applyFilter = (event: Event) => {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -81,24 +104,27 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }
+  };
 
-  deleteRow = id => {
+  deleteRow = (id) => {
     this.openDialog(id);
-  }
+  };
 
-  openDialog = id => {
+  openDialog = (id) => {
     const dialogRef = this.dialog.open(MaterialDialogComponent, <any>{
       width: '400px',
-      data: { message: DIALOG_POPUP_MESSAGES.DELETE_BOOK, actionButton: 'Delete' }
+      data: {
+        message: DIALOG_POPUP_MESSAGES.DELETE_BOOK,
+        actionButton: 'Delete',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.myBooksService.deleteBook(id);
       }
     });
-  }
+  };
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

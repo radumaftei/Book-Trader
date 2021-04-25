@@ -1,4 +1,5 @@
-table, mat-paginator {
+table,
+mat-paginator {
   width: 90%;
   margin-left: 5%;
 }
@@ -9,7 +10,7 @@ table, mat-paginator {
 }
 
 .mat-header-row {
-  background-color: #D4B5A5;
+  background-color: #d4b5a5;
 }
 
 .filter {
@@ -34,7 +35,7 @@ table, mat-paginator {
 }
 
 .no-filtered-data {
-  background-color: #CD4C4C;
+  background-color: #cd4c4c;
   color: white;
   width: 50%;
   margin-left: 23%;
@@ -45,5 +46,5 @@ table, mat-paginator {
 }
 
 .post-image img {
-  box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }

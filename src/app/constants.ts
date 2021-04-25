@@ -11,20 +11,19 @@ export const HOMEPAGE = 'homepage';
 export const TRADING_PREFERENCES_STATUS = {
   NO_PREFERENCE,
   FEW_MATCH,
-  NO_MATCH
+  NO_MATCH,
 };
 
 export const BOOK_CATEGORIES = {
   ADVENTURE: 'Adventure',
   ACTION: 'Action',
-  SCIENCE: 'Science'
+  SCIENCE: 'Science',
 };
 
 export const DIALOG_POPUP_MESSAGES = {
   DELETE_BOOK: 'Are you sure you want to delete this book?',
-  TRADE_BOOK: 'Trading details'
-}
+  TRADE_BOOK: 'Trading details',
+};
 
-
-
-export const getBookCategoriesArr = (): string[] => Object.values(BOOK_CATEGORIES);
+export const getBookCategoriesArr = (): string[] =>
+  Object.values(BOOK_CATEGORIES);

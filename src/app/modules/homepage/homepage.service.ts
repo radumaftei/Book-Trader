@@ -4,7 +4,7 @@ import { BookProfile } from '../../interfaces';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HomepageService {
   private books: BookProfile[] = [];
@@ -14,11 +14,10 @@ export class HomepageService {
   constructor(private apiService: ApiService) {}
 
   getHomepageBooks = () => {
-    this.apiService.fetchHomepageDataHttp()
-      .subscribe((books) => {
-        if (!books) return;
-        this.books = books;
-        this.HOMEPAGE_BOOKS_UPDATE.next([...this.books]);
-      })
-  }
+    this.apiService.fetchHomepageDataHttp().subscribe((books) => {
+      if (!books) return;
+      this.books = books;
+      this.HOMEPAGE_BOOKS_UPDATE.next([...this.books]);
+    });
+  };
 }

@@ -7,7 +7,7 @@ import { mimeType } from './mime-type.validator';
 @Component({
   selector: 'app-create-book',
   templateUrl: './create-book.component.html',
-  styleUrls: ['./create-book.component.scss']
+  styleUrls: ['./create-book.component.scss'],
 })
 export class CreateBookComponent implements OnInit {
   form: FormGroup;
@@ -18,24 +18,18 @@ export class CreateBookComponent implements OnInit {
     return !this.form.valid;
   }
 
-  constructor(private myBooksService: MyBooksService) { }
+  constructor(private myBooksService: MyBooksService) {}
 
   ngOnInit() {
     this.form = new FormGroup({
-      title: new FormControl(null, [
-        Validators.required
-      ]),
-      description: new FormControl(null, [
-        Validators.required
-      ]),
+      title: new FormControl(null, [Validators.required]),
+      description: new FormControl(null, [Validators.required]),
       tradingPreferences: new FormControl(null),
-      bookCategory: new FormControl(null, [
-        Validators.required
-      ]),
+      bookCategory: new FormControl(null, [Validators.required]),
       image: new FormControl(null, {
         validators: [Validators.required],
-        asyncValidators: [mimeType]
-      })
+        asyncValidators: [mimeType],
+      }),
     });
   }
 
@@ -44,15 +38,15 @@ export class CreateBookComponent implements OnInit {
       return;
     }
     this.myBooksService.addBook({
-      'title': this.form.value.title,
-      'description': this.form.value.description,
-      'tradingPreferences': this.form.value.tradingPreferences,
-      'category': this.form.value.bookCategory,
-      'image': this.form.value.image
+      title: this.form.value.title,
+      description: this.form.value.description,
+      tradingPreferences: this.form.value.tradingPreferences,
+      category: this.form.value.bookCategory,
+      image: this.form.value.image,
     });
     this.form.reset();
     this.myBooksService.updateSelectedTab(0);
-  }
+  };
 
   onImagePicked(event: Event) {
     const file = (event.target as HTMLInputElement).files[0];
@@ -61,7 +55,7 @@ export class CreateBookComponent implements OnInit {
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreview = <string>reader.result;
-    }
+    };
     reader.readAsDataURL(file);
   }
 }

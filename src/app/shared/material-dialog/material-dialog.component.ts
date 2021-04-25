@@ -13,17 +13,17 @@ export interface DialogData {
 
 @Component({
   templateUrl: './material-dialog.component.html',
-  styleUrls: ['./material-dialog.component.scss']
+  styleUrls: ['./material-dialog.component.scss'],
 })
 export class MaterialDialogComponent {
   book: BookProfile;
   loggedInUser;
   deliveryMethod: 'courier' | 'foot';
 
-
   constructor(
     public dialogRef: MatDialogRef<MaterialDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {
     this.book = data.book;
     this.loggedInUser = data.loggedInUser;
   }
@@ -32,4 +32,3 @@ export class MaterialDialogComponent {
     this.dialogRef.close();
   }
 }
-

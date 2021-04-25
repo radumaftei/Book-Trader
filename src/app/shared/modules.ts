@@ -37,5 +37,5 @@ export const MATERIAL_MODULES = [
   MatToolbarModule,
   MatExpansionModule,
   MatProgressSpinnerModule,
-  MatIconModule
+  MatIconModule,
 ];

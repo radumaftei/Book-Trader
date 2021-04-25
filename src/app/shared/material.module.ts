@@ -5,17 +5,10 @@ import { MaterialDialogComponent } from './material-dialog/material-dialog.compo
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-
 @NgModule({
-  imports: [
-    ...MATERIAL_MODULES,
-    CommonModule,
-    FormsModule
-  ],
+  imports: [...MATERIAL_MODULES, CommonModule, FormsModule],
   declarations: [MaterialDialogComponent],
   providers: [MatIconRegistry],
-  exports: [
-    ...MATERIAL_MODULES
-  ]
+  exports: [...MATERIAL_MODULES],
 })
 export class MaterialModule {}

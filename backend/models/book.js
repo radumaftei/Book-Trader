@@ -1,14 +1,15 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-const bookSchema = mongoose.Schema({
+const bookSchema = Schema({
   title: { type: String, required: true },
   category: { type: String, required: true },
   description: { type: String, required: true },
   tradingPreferenceList: { type: String },
-  imagePath: { type: String, required: true},
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  imagePath: { type: String, required: true },
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   username: { type: String, required: true },
-  location: { type: String, required: true }
-})
+  location: { type: String, required: true },
+});
 
-module.exports = mongoose.model('Book', bookSchema)
+module.exports = mongoose.model("Book", bookSchema);

@@ -8,10 +8,16 @@ import { BooksListComponent } from './components/books-list/books-list.component
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RouterModule } from '@angular/router';
 
-
 @NgModule({
-  imports: [HeaderModule, MaterialModule, CommonModule, ReactiveFormsModule, FormsModule, RouterModule],
+  imports: [
+    HeaderModule,
+    MaterialModule,
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    RouterModule,
+  ],
   declarations: [CreateBookComponent, BooksListComponent, DashboardComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MyBooksModule {}

@@ -1,26 +1,28 @@
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const chalk = require('chalk');
+const express = require("express");
+const path = require("path");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const chalk = require("chalk");
 
 const app = express();
-const personalBooksRoutes = require('./routes/personal-books')
-const homepageBooksRoutes = require('./routes/homepage-books')
-const userRoutes = require('./routes/user')
+const personalBooksRoutes = require("./routes/personal-books");
+const homepageBooksRoutes = require("./routes/homepage-books");
+const userRoutes = require("./routes/user");
 
-mongoose.connect('mongodb+srv://radu:UnthoeP6JuOec6qe@bachelorscluster.nrvdc.mongodb.net/BookTraderDB?w=majority')
+mongoose
+  .connect(
+    "mongodb+srv://radu:UnthoeP6JuOec6qe@bachelorscluster.nrvdc.mongodb.net/BookTraderDB?w=majority"
+  )
   .then(() => {
-    console.log(chalk.green('Connected to the DB'))
+    console.log(chalk.green("Connected to the DB"));
   })
   .catch((err) => {
-    console.log(chalk.red('Error connecting to DB', err))
-  })
-
+    console.log(chalk.red("Error connecting to DB", err));
+  });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use('/images', express.static(path.join('backend/images')));
+app.use("/images", express.static(path.join("backend/images")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -35,8 +37,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/personal-book-page', personalBooksRoutes)
-app.use('/api/user', userRoutes)
-app.use('/api/homepage', homepageBooksRoutes)
+app.use("/api/personal-book-page", personalBooksRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/homepage", homepageBooksRoutes);
 
 module.exports = app;

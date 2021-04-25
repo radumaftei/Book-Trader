@@ -7,6 +7,6 @@ import { CommonModule } from '@angular/common';
 @NgModule({
   imports: [HeaderModule, MaterialModule, CommonModule],
   declarations: [HomepageComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HomepageModule {}
