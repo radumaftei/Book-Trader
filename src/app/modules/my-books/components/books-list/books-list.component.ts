@@ -12,7 +12,7 @@ import { BookProfile } from '../../../../interfaces';
 import { MyBooksService } from '../../my-books.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { MaterialDialogComponent } from '../../../../shared/material-dialog/material-dialog.component';
+import { TradeDialogComponent } from '../../../homepage/components/trade-dialog/trade-dialog.component';
 import {
   DIALOG_POPUP_MESSAGES,
   getBookCategoriesArr,
@@ -111,7 +111,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   };
 
   openDialog = (id) => {
-    const dialogRef = this.dialog.open(MaterialDialogComponent, <any>{
+    const dialogRef = this.dialog.open(TradeDialogComponent, <any>{
       width: '400px',
       data: {
         message: DIALOG_POPUP_MESSAGES.DELETE_BOOK,
