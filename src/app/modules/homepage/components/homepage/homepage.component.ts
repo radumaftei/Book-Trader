@@ -1,14 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  DIALOG_POPUP_MESSAGES,
-  getBookCategoriesArr,
-} from '../../../constants';
-import { BookProfile } from '../../../interfaces';
-import { HomepageService } from '../homepage.service';
-import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { MaterialDialogComponent } from '../../../shared/material-dialog/material-dialog.component';
-import { LoginSignUpUser } from '../../auth/auth.model';
+import { Subscription } from 'rxjs';
+import { DIALOG_POPUP_MESSAGES, getBookCategoriesArr } from 'src/app/constants';
+import { BookProfile } from 'src/app/interfaces';
+import { LoginSignUpUser } from 'src/app/modules/auth/auth.model';
+import { HomepageService } from '../../homepage.service';
+import { TradeDialogComponent } from '../trade-dialog/trade-dialog.component';
 
 @Component({
   templateUrl: './homepage.component.html',
@@ -61,7 +58,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   }
 
   onTrade = (book: BookProfile) => {
-    const dialogRef = this.dialog.open(MaterialDialogComponent, <any>{
+    const dialogRef = this.dialog.open(TradeDialogComponent, <any>{
       width: '800px',
       data: {
         message: DIALOG_POPUP_MESSAGES.TRADE_BOOK,
