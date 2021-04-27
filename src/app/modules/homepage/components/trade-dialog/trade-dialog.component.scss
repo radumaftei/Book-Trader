@@ -1,3 +1,16 @@
+.trade-modal-header {
+  display: flex;
+  flex-direction: column;
+
+  .trade-cancel-icon {
+    cursor: pointer;
+    align-self: flex-end;
+    position: relative;
+    bottom: 60px;
+    left: 1vh;
+  }
+}
+
 .buttons-wrapper {
   display: flex;
   flex-direction: row;

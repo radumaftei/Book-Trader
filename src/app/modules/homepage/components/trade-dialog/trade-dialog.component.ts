@@ -27,8 +27,4 @@ export class TradeDialogComponent {
     this.book = data.book;
     this.loggedInUser = data.loggedInUser;
   }
-
-  onCancelClick(): void {
-    this.dialogRef.close();
-  }
 }

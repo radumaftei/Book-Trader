@@ -1,33 +1,42 @@
 <mat-toolbar>
-  <button mat-raised-button
-          class="homepage_icon header_icon"
-          (click)="onHomepageClick($event)"
-  >Home Page</button>
+  <button
+    mat-raised-button
+    class="homepage_icon header_icon"
+    (click)="onHomepageClick($event)"
+  >
+    Home Page
+  </button>
   <span class="spacer"></span>
 
-  <button mat-icon-button
-          class="header_icon"
-          aria-label="My account icon"
-          matTooltip="My account"
-          [matTooltipPosition]="'below'">
+  <button
+    mat-icon-button
+    class="header_icon"
+    aria-label="My account icon"
+    matTooltip="My account"
+    [matTooltipPosition]="'below'"
+  >
     <mat-icon>account_circle</mat-icon>
   </button>
 
-  <button mat-icon-button
-          class="header_icon"
-          aria-label="My books icon"
-          matTooltip="My books"
-          (click)="onMyBooksClick($event)"
-          [matTooltipPosition]="'below'">
+  <button
+    mat-icon-button
+    class="header_icon"
+    aria-label="My books icon"
+    matTooltip="My books"
+    (click)="onMyBooksClick($event)"
+    [matTooltipPosition]="'below'"
+  >
     <mat-icon>book</mat-icon>
   </button>
 
-  <button mat-icon-button
-          class="header_icon"
-          aria-label="Logout icon"
-          (click)="onLogoutClick()"
-          matTooltip="Logout"
-          [matTooltipPosition]="'below'">
+  <button
+    mat-icon-button
+    class="header_icon"
+    aria-label="Logout icon"
+    (click)="onLogoutClick()"
+    matTooltip="Logout"
+    [matTooltipPosition]="'below'"
+  >
     <mat-icon>exit_to_app</mat-icon>
   </button>
 </mat-toolbar>

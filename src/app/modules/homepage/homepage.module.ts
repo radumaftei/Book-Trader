@@ -8,8 +8,10 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { TradeDialogComponent } from './components/trade-dialog/trade-dialog.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const MATERIAL_MODULES = [
+  MatProgressSpinnerModule,
   MatTooltipModule,
   MatCardModule,
   MatButtonModule,
