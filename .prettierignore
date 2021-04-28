@@ -1,0 +1,15 @@
+node_modules
+dist
+e2e
+package.json
+package-lock.json
+src/main.ts
+src/polyfills.ts
+src/test.ts
+tsconfig.app.json
+tsconfig.spec.json
+tslint.json
+karma.conf.json
+angular.json
+karma.conf.js
+tsconfig.json

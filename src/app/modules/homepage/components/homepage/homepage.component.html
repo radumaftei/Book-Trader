@@ -1,42 +1,55 @@
-<div class="wrapper" [style.height.px]="bodyHeight">
+<div class="wrapper">
   <app-header></app-header>
+  <div class="backdrop" *ngIf="isLoading"></div>
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <ng-container *ngIf="bookCategories?.length && !isLoading">
     <ng-container *ngFor="let category of bookCategories">
-      <div class="mat-title">{{ category }}</div>
-      <div class="card-row-wrapper" #bookCategory>
-        <mat-card *ngFor="let book of booksByCategory(category)">
-          <mat-card-header>
-            <div mat-card-avatar class="example-header-image"></div>
-            <mat-card-title>{{ book.title }}</mat-card-title>
-            <mat-card-subtitle>{{ book.username }} </mat-card-subtitle>
-          </mat-card-header>
-          <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-          <mat-card-content>
-            <p>{{ book.description }}</p>
-          </mat-card-content>
-          <mat-card-actions>
-            <button mat-button (click)="onTrade(book)">Trade</button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
-      <button mat-button
-              (click)="onPrevious(bookCategory, category)"
-              [disabled]="this.navigationButtonsStatuses[category]['previous']">
-              Previous
-      </button>
-      <button mat-button
-              (click)="onNext(bookCategory, category)"
-              [disabled]="this.navigationButtonsStatuses[category]['next']">
-              Next
-      </button>
+      <section>
+        <div class="mat-title">{{ category }}</div>
+        <div class="card-row-wrapper" #bookCategory>
+          <mat-card *ngFor="let book of booksByCategory(category)">
+            <mat-card-header>
+              <div mat-card-avatar class="example-header-image"></div>
+              <mat-card-title>{{ book.title }}</mat-card-title>
+              <mat-card-subtitle>{{ book.username }} </mat-card-subtitle>
+            </mat-card-header>
+            <img
+              mat-card-image
+              src="https://material.angular.io/assets/img/examples/shiba2.jpg"
+              alt="Photo of a Shiba Inu"
+            />
+            <mat-card-content>
+              <p>{{ book.description }}</p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-button (click)="onTrade(book)">Trade</button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+        <button
+          mat-button
+          (click)="onPrevious(bookCategory, category)"
+          [disabled]="this.navigationButtonsStatuses[category]['previous']"
+        >
+          Previous
+        </button>
+        <button
+          mat-button
+          (click)="onNext(bookCategory, category)"
+          [disabled]="this.navigationButtonsStatuses[category]['next']"
+        >
+          Next
+        </button>
+      </section>
     </ng-container>
   </ng-container>
 
-  <button mat-icon-button
-          aria-label="Notifications icon"
-          matTooltip="Check notifications"
-          [matTooltipPosition]="'before'">
+  <!-- <button
+    mat-icon-button
+    aria-label="Notifications icon"
+    matTooltip="Check notifications"
+    [matTooltipPosition]="'before'"
+  >
     <mat-icon>notification_important</mat-icon>
-  </button>
+  </button> -->
 </div>

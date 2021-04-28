@@ -5,38 +5,38 @@ import { Router } from '@angular/router';
 import { AuthData } from './auth.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private token: string;
   private expiresInTimeOutID: any;
   private authStatusListener = new BehaviorSubject<boolean>(false);
 
-  constructor(private apiService: ApiService, private router: Router) { }
+  constructor(private apiService: ApiService, private router: Router) {}
 
   getAuthStatusListener = () => {
     return this.authStatusListener.asObservable();
-  }
+  };
 
   authorized = () => {
     return this.authStatusListener.getValue();
-  }
+  };
 
   getToken = () => {
     return this.token;
-  }
+  };
 
   createUser = (authData: AuthData) => {
-    this.apiService.createUserHttp(authData)
-      .subscribe(({user}) => {
-        this.saveLoggedInUserToLs(user);
-        this.router.navigate(['homepage']);
-      })
-  }
+    this.apiService.createUserHttp(authData).subscribe(({ user }) => {
+      this.saveLoggedInUserToLs(user);
+      this.router.navigate(['homepage']);
+    });
+  };
 
   loginUser = (authData: AuthData) => {
-    this.apiService.loginUserHttp(authData)
-      .subscribe(({ token, expiresIn, user  }) => {
+    this.apiService
+      .loginUserHttp(authData)
+      .subscribe(({ token, expiresIn, user }) => {
         this.token = token;
         if (token) {
           this.saveLoggedInUserToLs(user);
@@ -47,8 +47,8 @@ export class AuthService {
           this.saveAuthDataToLS(token, expirationDate);
           this.router.navigate(['homepage']);
         }
-      })
-  }
+      });
+  };
 
   logout = () => {
     this.token = null;
@@ -56,32 +56,32 @@ export class AuthService {
     this.clearAuthDataFromLS();
     clearTimeout(this.expiresInTimeOutID);
     this.router.navigate(['login']);
-  }
+  };
 
-  private saveLoggedInUserToLs = user => {
+  private saveLoggedInUserToLs = (user) => {
     this.saveToLs('loggedInUserEmail', user.email);
     this.saveToLs('loggedInUserLocation', user.location);
-  }
+  };
 
   private saveAuthDataToLS = (token: string, expirationDate: Date) => {
     this.saveToLs('token', token);
     this.saveToLs('expirationDate', expirationDate.toISOString());
-  }
+  };
 
   private clearAuthDataFromLS = () => {
     this.removeFromLs('token');
     this.removeFromLs('expirationDate');
     this.removeFromLs('loggedInUserEmail');
     this.removeFromLs('loggedInUserLocation');
-  }
+  };
 
   private saveToLs = (key: string, value: any): void => {
     localStorage.setItem(key, value);
-  }
+  };
 
   private removeFromLs = (key: string): void => {
     localStorage.removeItem(key);
-  }
+  };
 
   autoAuthUser = () => {
     const authInformation = this.getAuthData();
@@ -93,13 +93,13 @@ export class AuthService {
       this.authStatusListener.next(true);
       this.setAuthTimer(expiresIn / 1000);
     }
-  }
+  };
 
   private setAuthTimer = (duration: number) => {
     this.expiresInTimeOutID = setTimeout(() => {
       this.logout();
     }, duration * 1000);
-  }
+  };
 
   private getAuthData = () => {
     const token = localStorage.getItem('token');
@@ -109,7 +109,7 @@ export class AuthService {
     }
     return {
       token,
-      expirationDate: new Date(expirationDate)
-    }
-  }
+      expirationDate: new Date(expirationDate),
+    };
+  };
 }

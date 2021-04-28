@@ -5,7 +5,7 @@ import { AuthService } from '../auth.service';
 
 @Component({
   templateUrl: './signup.component.html',
-  styleUrls: ['signup.component.scss']
+  styleUrls: ['signup.component.scss'],
 })
 export class SignUpComponent implements OnInit {
   form: FormGroup;
@@ -20,15 +20,15 @@ export class SignUpComponent implements OnInit {
 
   ngOnInit() {
     this.form = new FormGroup({
-      email: new FormControl(null, [
-        Validators.required, Validators.email
-      ]),
+      email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [
-        Validators.required, Validators.minLength(5)
+        Validators.required,
+        Validators.minLength(5),
       ]),
       location: new FormControl(null, [
-        Validators.required, Validators.minLength(2)
-      ])
+        Validators.required,
+        Validators.minLength(2),
+      ]),
     });
   }
 
@@ -37,8 +37,8 @@ export class SignUpComponent implements OnInit {
     this.authService.createUser({
       email: this.form.value.email,
       password: this.form.value.password,
-      location: this.form.value.location
-    })
+      location: this.form.value.location,
+    });
     this.isLoading = true;
   }
 }

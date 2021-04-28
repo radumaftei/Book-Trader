@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
-import { DIALOG_POPUP_MESSAGES, getBookCategoriesArr } from 'src/app/constants';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { delay, takeWhile } from 'rxjs/operators';
+import { DIALOG_POPUP_MESSAGES } from 'src/app/constants';
 import { BookProfile } from 'src/app/interfaces';
 import { LoginSignUpUser } from 'src/app/modules/auth/auth.model';
 import { HomepageService } from '../../homepage.service';
@@ -12,14 +12,13 @@ import { TradeDialogComponent } from '../trade-dialog/trade-dialog.component';
   styleUrls: ['./homepage.component.scss'],
 })
 export class HomepageComponent implements OnInit, OnDestroy {
-  private subscription = new Subscription();
+  alive = true;
+
   loggedInUser: LoginSignUpUser;
   isLoading = false;
   bookCards: BookProfile[];
-  bookCategories = getBookCategoriesArr();
+  bookCategories = [];
   offsetBookNumberMapper = {};
-  // 852px + rows.length - 1
-  bodyHeight = '852';
   navigationButtonsStatuses = {};
 
   constructor(
@@ -28,20 +27,18 @@ export class HomepageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // this.isLoading = true;
+    this.isLoading = true;
     this.loggedInUser = {
       email: localStorage.getItem('loggedInUserEmail'),
       location: localStorage.getItem('loggedInUserLocation'),
     };
     this.homepageService.getHomepageBooks();
-    this.subscription.add(
-      this.homepageService.homepageBooksUpdate$.subscribe((books) => {
-        if (!books) return;
+    this.homepageService.homepageBooksUpdate$
+      .pipe(takeWhile(() => this.alive))
+      .subscribe((books) => {
+        if (!books || !books.length) return;
         this.bookCards = books;
-        this.bodyHeight = (
-          Number(this.bodyHeight) +
-          (this.bookCategories.length - 1) * 450
-        ).toString();
+        this.bookCategories = books.map((b) => b.category);
         this.bookCategories.forEach((category) => {
           this.offsetBookNumberMapper[category] = {};
           this.navigationButtonsStatuses[category] = {};
@@ -53,21 +50,22 @@ export class HomepageComponent implements OnInit, OnDestroy {
           this.navigationButtonsStatuses[category].next =
             this.offsetBookNumberMapper[category].bookNumber <= 8;
         });
-      })
-    );
+        this.isLoading = false;
+      });
   }
 
   onTrade = (book: BookProfile) => {
-    const dialogRef = this.dialog.open(TradeDialogComponent, <any>{
-      width: '800px',
-      data: {
-        message: DIALOG_POPUP_MESSAGES.TRADE_BOOK,
-        actionButton: 'Send Trade offer',
-        isHomepage: true,
-        book,
-        loggedInUser: this.loggedInUser,
-      },
-    });
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      message: DIALOG_POPUP_MESSAGES.TRADE_BOOK,
+      actionButton: 'Send Trade offer',
+      isHomepage: true,
+      book,
+      loggedInUser: this.loggedInUser,
+    };
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '800px';
+    const dialogRef = this.dialog.open(TradeDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -124,6 +122,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
   };
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.alive = false;
   }
 }

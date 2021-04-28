@@ -7,18 +7,13 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  selectedTabIndex;
   private subscription = new Subscription();
+  selectedTab$ = this.myBooksService.selectedTab$;
 
   constructor(private myBooksService: MyBooksService) {}
 
   ngOnInit(): void {
     this.myBooksService.getBooks();
-    this.subscription.add(
-      this.myBooksService.selectedTab$.subscribe((index) => {
-        this.selectedTabIndex = index;
-      })
-    );
   }
 
   onChangeTab = (index) => {
@@ -26,6 +21,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   };
 
   ngOnDestroy(): void {
+    this.myBooksService.updateSelectedTab(0);
     this.subscription.unsubscribe();
   }
 }
