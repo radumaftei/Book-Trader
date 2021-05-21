@@ -36,6 +36,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
     this.homepageService.homepageBooksUpdate$
       .pipe(takeWhile(() => this.alive))
       .subscribe((books) => {
+        this.isLoading = false;
         if (!books || !books.length) return;
         this.bookCards = books;
         this.bookCategories = books.map((b) => b.category);
@@ -50,7 +51,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
           this.navigationButtonsStatuses[category].next =
             this.offsetBookNumberMapper[category].bookNumber <= 8;
         });
-        this.isLoading = false;
       });
   }
 

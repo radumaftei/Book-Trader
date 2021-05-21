@@ -29,14 +29,14 @@ export class AuthService {
   createUser = (authData: AuthData) => {
     this.apiService.createUserHttp(authData).subscribe(({ user }) => {
       this.saveLoggedInUserToLs(user);
+      this.authStatusListener.next(true);
       this.router.navigate(['homepage']);
     });
   };
 
   loginUser = (authData: AuthData) => {
-    this.apiService
-      .loginUserHttp(authData)
-      .subscribe(({ token, expiresIn, user }) => {
+    this.apiService.loginUserHttp(authData).subscribe(
+      ({ token, expiresIn, user }) => {
         this.token = token;
         if (token) {
           this.saveLoggedInUserToLs(user);
@@ -47,7 +47,11 @@ export class AuthService {
           this.saveAuthDataToLS(token, expirationDate);
           this.router.navigate(['homepage']);
         }
-      });
+      },
+      () => {
+        this.authStatusListener.next(false);
+      }
+    );
   };
 
   logout = () => {

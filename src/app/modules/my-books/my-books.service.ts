@@ -26,8 +26,15 @@ export class MyBooksService {
   addBook = (props) => {
     const book = new FormData();
     book.append('title', props['title']);
+    book.append('author', props['author']);
     book.append('description', props['description']);
-    book.append('tradingPreferences', props['tradingPreferences']);
+    book.append('tradingPreferenceAuthor', props['tradingPreferenceAuthor']);
+    book.append('tradingPreferenceBook', props['tradingPreferenceBook']);
+    book.append('tradingPreferenceGenre', props['tradingPreferenceGenre']);
+    book.append(
+      'tradingPreferenceDescription',
+      props['tradingPreferenceDescription']
+    );
     book.append('category', props['category']);
     book.append('image', props['image'], props['title']);
     this.apiService.postBookHttp(book).subscribe(({ newBook }) => {

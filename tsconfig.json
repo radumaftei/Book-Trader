@@ -2,22 +2,26 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "es2015",
-    "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom"
-    ]
+   "resolveJsonModule": true,
+   "allowSyntheticDefaultImports": true,
+   "baseUrl": "./",
+   "outDir": "./dist/out-tsc",
+   "forceConsistentCasingInFileNames": true,
+   "sourceMap": true,
+   "declaration": false,
+   "downlevelIteration": true,
+   "experimentalDecorators": true,
+   "moduleResolution": "node",
+   "importHelpers": true,
+   "target": "es2015",
+   "module": "es2020",
+   "lib": ["es2018", "dom"],
   },
   "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false
-  }
-}
+   "strictInjectionParameters": false,
+   "strictInputAccessModifiers": false,
+   "strictTemplates": false
+  },
+  "exclude": ["node_modules", "src/assets", "src/styles"],
+  "include": ["src/app/"]
+ }

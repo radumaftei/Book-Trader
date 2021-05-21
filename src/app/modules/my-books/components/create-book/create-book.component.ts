@@ -23,9 +23,13 @@ export class CreateBookComponent implements OnInit {
   ngOnInit() {
     this.form = new FormGroup({
       title: new FormControl(null, [Validators.required]),
+      author: new FormControl(null, [Validators.required]),
+      tradingPreferenceAuthor: new FormControl(null),
+      tradingPreferenceBook: new FormControl(null),
+      tradingPreferenceGenre: new FormControl(null),
+      tradingPreferenceDescription: new FormControl(null),
       description: new FormControl(null, [Validators.required]),
-      tradingPreferences: new FormControl(null),
-      bookCategory: new FormControl(null, [Validators.required]),
+      category: new FormControl(null, [Validators.required]),
       image: new FormControl(null, {
         validators: [Validators.required],
         asyncValidators: [mimeType],
@@ -37,12 +41,27 @@ export class CreateBookComponent implements OnInit {
     if (this.createBookDisabled) {
       return;
     }
+    const {
+      title,
+      author,
+      tradingPreferenceAuthor,
+      tradingPreferenceBook,
+      tradingPreferenceGenre,
+      tradingPreferenceDescription,
+      description,
+      category,
+      image,
+    } = this.form.value;
     this.myBooksService.addBook({
-      title: this.form.value.title,
-      description: this.form.value.description,
-      tradingPreferences: this.form.value.tradingPreferences,
-      category: this.form.value.bookCategory,
-      image: this.form.value.image,
+      title,
+      author,
+      tradingPreferenceAuthor,
+      tradingPreferenceBook,
+      tradingPreferenceGenre,
+      tradingPreferenceDescription,
+      description,
+      category: category,
+      image,
     });
     this.form.reset();
     this.myBooksService.updateSelectedTab(0);
