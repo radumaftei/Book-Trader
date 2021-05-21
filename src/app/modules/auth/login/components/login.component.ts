@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../auth.service';
 
@@ -6,7 +7,8 @@ import { AuthService } from '../../auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+  private subscription = new Subscription();
   form: FormGroup;
   hide = true;
   isLoading = false;
@@ -14,7 +16,7 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   get loginButtonDisabled() {
-    return !this.form.valid;
+    return this.form.invalid || this.form.untouched;
   }
 
   ngOnInit() {
@@ -35,5 +37,16 @@ export class LoginComponent implements OnInit {
       location: null,
     });
     this.isLoading = true;
+    this.subscription = this.authService
+      .getAuthStatusListener()
+      .subscribe((data) => {
+        if (!data) {
+          this.isLoading = false;
+        }
+      });
+  }
+
+  ngOnDestroy() {
+    this.subscription && this.subscription.unsubscribe();
   }
 }

@@ -42,3 +42,4 @@ Thumbs.db
 /.vscode/
 package-lock.json
 *.orig
+backend/images/

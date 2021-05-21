@@ -29,12 +29,25 @@ router.post(
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     const url = `${req.protocol}://${req.get("host")}`;
-    const { title, category, description, tradingPreferenceList } = req.body;
-    new Book({
+    const {
       title,
+      author,
       category,
       description,
-      tradingPreferenceList,
+      tradingPreferenceDescription,
+      tradingPreferenceAuthor,
+      tradingPreferenceBook,
+      tradingPreferenceGenre,
+    } = req.body;
+    new Book({
+      title,
+      author,
+      category,
+      description,
+      tradingPreferenceDescription,
+      tradingPreferenceAuthor,
+      tradingPreferenceBook,
+      tradingPreferenceGenre,
       imagePath: `${url}/images/${req.file.filename}`,
       userId: req.userData.userId,
       username: req.userData.email.split("@")[0],

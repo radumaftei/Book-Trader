@@ -11,7 +11,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { BookProfile } from '../../../../interfaces';
 import { MyBooksService } from '../../my-books.service';
 import { Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TradeDialogComponent } from '../../../homepage/components/trade-dialog/trade-dialog.component';
 import {
   DIALOG_POPUP_MESSAGES,
@@ -111,13 +111,14 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   };
 
   openDialog = (id) => {
-    const dialogRef = this.dialog.open(TradeDialogComponent, <any>{
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.data = {
+      message: DIALOG_POPUP_MESSAGES.DELETE_BOOK,
+      actionButton: 'Delete',
       width: '400px',
-      data: {
-        message: DIALOG_POPUP_MESSAGES.DELETE_BOOK,
-        actionButton: 'Delete',
-      },
-    });
+    };
+    const dialogRef = this.dialog.open(TradeDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

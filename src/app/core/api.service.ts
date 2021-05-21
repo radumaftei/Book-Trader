@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BookProfileDTO } from '../interfaces';
-import { map } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { catchError, map } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
   HOME_URL,
   HOMEPAGE,
@@ -10,6 +10,7 @@ import {
   USER_SIGNUP_URL,
 } from '../constants';
 import { AuthData } from '../modules/auth/auth.model';
+import { Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -60,10 +61,26 @@ export class ApiService {
   };
 
   loginUserHttp = (authData: AuthData) => {
-    return this.httpClient.post<{
-      token: string;
-      expiresIn: number;
-      user: { email: string; location: string };
-    }>(`${this.USER_API_URL}/${USER_LOGIN_URL}`, authData);
+    return this.httpClient
+      .post<{
+        token: string;
+        expiresIn: number;
+        user: { email: string; location: string };
+      }>(`${this.USER_API_URL}/${USER_LOGIN_URL}`, authData)
+      .pipe(catchError(this.handleError));
+  };
+
+  handleError = (error: HttpErrorResponse): Observable<never> => {
+    let errorMessage = 'Unknown error!';
+    if (error.error instanceof ErrorEvent) {
+      // Client side errors
+      errorMessage = `Client errored with ${error.error.message}`;
+    } else {
+      // Server side
+      errorMessage = `Server error with ${error.message} with status ${error.status}`;
+    }
+
+    console.error(errorMessage);
+    return throwError(errorMessage);
   };
 }
