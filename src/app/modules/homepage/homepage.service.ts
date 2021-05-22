@@ -20,4 +20,8 @@ export class HomepageService {
       this.HOMEPAGE_BOOKS_UPDATE.next([...this.books]);
     });
   };
+
+  cleanUp = () => {
+    this.HOMEPAGE_BOOKS_UPDATE.next([]);
+  };
 }

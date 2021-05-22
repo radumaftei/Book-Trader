@@ -35,9 +35,13 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
     '#',
     'image',
     'title',
+    'author',
     'category',
     'description',
-    'tradingPreferenceList',
+    'tradingPreferenceAuthor',
+    'tradingPreferenceBook',
+    'tradingPreferenceGenre',
+    'tradingPreferenceDescription',
     'delete',
   ];
   dataSource;
@@ -106,11 +110,11 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   };
 
-  deleteRow = (id) => {
-    this.openDialog(id);
+  deleteRow = (bookId) => {
+    this.openDialog(bookId);
   };
 
-  openDialog = (id) => {
+  openDialog = (bookId) => {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.data = {
@@ -122,7 +126,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.myBooksService.deleteBook(id);
+        this.myBooksService.deleteBook(bookId);
       }
     });
   };
