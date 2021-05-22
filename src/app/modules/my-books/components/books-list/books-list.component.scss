@@ -1,50 +1,202 @@
-table,
-mat-paginator {
-  width: 90%;
-  margin-left: 5%;
-}
+.table-content {
+  height: 85vh;
+  padding: 15px;
 
-.header-text {
-  font-size: 16px;
-  line-height: 5;
-}
+  .spacer {
+    flex: 1;
+  }
 
-.mat-header-row {
-  background-color: #d4b5a5;
-}
+  .table-title-wrapper {
+    background: #e5e5e5;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    padding: 10px 10px 0;
+    margin-bottom: 15px;
 
-.filter {
-  font-size: 14px;
-  width: 20%;
-}
+    .table-title {
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      line-height: 24px;
+    }
+  }
 
-.book-list-wrapper {
-  height: 84vh;
-  margin-top: 20px;
-}
+  .table-container {
+    border-radius: 17px;
+  }
 
-.top-table-wrapper {
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-}
+  .spinner-wrapper,
+  .no-data-wrapper {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    justify-content: center;
+    background: #efefefb0;
+    z-index: 999;
+    .text {
+      font-size: 32px;
+    }
+  }
 
-.top-table-buttons {
-  height: 38px;
-  margin-left: 20px;
-}
+  .spinner-wrapper {
+    height: stretch;
+  }
 
-.no-filtered-data {
-  background-color: #cd4c4c;
-  color: white;
-  width: 50%;
-  margin-left: 23%;
-  padding: 19px;
-  text-align: center;
-  margin-top: 20px;
-  border-radius: 10px;
-}
+  .no-data-wrapper {
+    height: calc(100vh - 189px);
+  }
 
-.post-image img {
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  ::ng-deep {
+    .mat-paginator.paginator-wrapper {
+      display: flex;
+      align-items: center;
+      height: 38px;
+      justify-content: center;
+      width: 100%;
+      min-width: 500px;
+      .mat-icon-button {
+        padding: 0;
+        min-width: 0;
+        width: 26px;
+        height: 26px;
+        flex-shrink: 0;
+        line-height: 26px;
+        border-radius: 50%;
+      }
+
+      .mat-paginator-icon {
+        width: 18px;
+        fill: currentColor;
+      }
+    }
+
+    .mat-sort-header-container {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      word-break: break-word;
+
+      .mat-sort-header-content {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        word-break: break-word;
+
+        span {
+          text-align: center;
+          display: block;
+          align-items: center;
+          box-sizing: border-box;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+          height: 100%;
+          word-break: break-word;
+        }
+      }
+
+      .mat-sort-header-arrow {
+        color: #efefefb0;
+      }
+    }
+  }
+
+  .mat-table {
+    width: 100%;
+    max-height: calc(100vh - 185px);
+    min-height: 70vh;
+    overflow: auto;
+    border-bottom: 1px solid #e5e5e5;
+    border-radius: 10px;
+  }
+
+  .mat-header-cell,
+  .mat-footer-cell,
+  .mat-cell {
+    width: 165px;
+    word-break: break-word;
+    flex: none;
+    padding: 0 8px;
+    min-width: 80px;
+    box-sizing: border-box;
+
+    p {
+      font-size: 13px;
+      text-align: center;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      font-weight: 500;
+      margin: 0;
+      width: 100%;
+      line-height: 14px;
+    }
+
+    input {
+      font-size: 10px;
+
+      &::visited {
+        color: red;
+      }
+    }
+  }
+
+  .mat-header-cell {
+    font-size: 15px;
+  }
+
+  .mat-column-filler {
+    padding: 0 8px;
+    font-size: 10px;
+    text-align: center;
+  }
+
+  .mat-table-sticky {
+    opacity: 1;
+    font-weight: bold;
+    background: #eaf9fb;
+
+    p {
+      font-weight: bold;
+      color: #007a91;
+    }
+
+    .mat-header-cell {
+      color: #252525;
+      background: #e5e5e5;
+      border-right: 1px solid #fff;
+    }
+  }
+
+  .mat-row,
+  .mat-header-row,
+  .mat-footer-row {
+    display: inline-flex;
+    min-width: 96vw;
+  }
+
+  .mat-header-row,
+  .mat-footer-row {
+    height: 80px;
+  }
+
+  .mat-row {
+    cursor: pointer;
+    height: 50px;
+
+    &:nth-child(odd) {
+      background: #efefefb0;
+    }
+
+    &:hover {
+      background: #e0f3f7;
+    }
+  }
+
+  .align-center {
+    text-align: center;
+    justify-content: center;
+  }
 }

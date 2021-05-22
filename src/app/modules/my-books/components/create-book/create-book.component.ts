@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { getBookCategoriesArr } from '../../../../constants';
 import { MyBooksService } from '../../my-books.service';
+import { BooksListDatasource } from '../books-list/books-list.datasource';
 import { mimeType } from './mime-type.validator';
 
 @Component({
@@ -18,7 +19,10 @@ export class CreateBookComponent implements OnInit {
     return !this.form.valid;
   }
 
-  constructor(private myBooksService: MyBooksService) {}
+  constructor(
+    private myBooksService: MyBooksService,
+    private dataSource: BooksListDatasource
+  ) {}
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -52,7 +56,7 @@ export class CreateBookComponent implements OnInit {
       category,
       image,
     } = this.form.value;
-    this.myBooksService.addBook({
+    this.dataSource.addBook({
       title,
       author,
       tradingPreferenceAuthor,
