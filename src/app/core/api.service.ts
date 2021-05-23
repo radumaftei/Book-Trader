@@ -57,9 +57,10 @@ export class ApiService {
   };
 
   deleteBooksHttp = (id) => {
-    return this.httpClient
-      .delete(`${this.BOOKS_API_URL}/${id}`)
-      .pipe(catchError(this.handleError("Couldn't delete book")));
+    return this.httpClient.delete(`${this.BOOKS_API_URL}/${id}`).pipe(
+      tap(() => this.handleSuccess('Book deleted successfully')),
+      catchError(this.handleError("Couldn't delete book"))
+    );
   };
 
   createUserHttp = (authData: AuthData) => {
