@@ -25,7 +25,6 @@ export class BooksListDatasource implements DataSource<any> {
   constructor(private apiService: ApiService) {}
 
   getBooksForTable() {
-    debugger;
     this.loadingSubject.next(true);
     this.noDataSubject.next(false);
     this.apiService
@@ -36,7 +35,6 @@ export class BooksListDatasource implements DataSource<any> {
         finalize(() => this.loadingSubject.next(false))
       )
       .subscribe((books) => {
-        debugger;
         if (!books) return;
         !books.length && this.noDataSubject.next(true);
         this.dataSubject.next(books);
