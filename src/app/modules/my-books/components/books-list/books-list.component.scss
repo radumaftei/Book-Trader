@@ -135,22 +135,26 @@
     }
 
     input {
-      font-size: 10px;
+      font-size: 14px;
 
       &::visited {
         color: red;
       }
     }
+
+    .book-image {
+      position: relative;
+      left: 50px;
+    }
+
+    .mat-form-field {
+      width: 100%;
+    }
   }
 
   .mat-header-cell {
-    font-size: 15px;
-  }
-
-  .mat-column-filler {
-    padding: 0 8px;
-    font-size: 10px;
-    text-align: center;
+    font-size: 17px;
+    font-weight: 900;
   }
 
   .mat-table-sticky {

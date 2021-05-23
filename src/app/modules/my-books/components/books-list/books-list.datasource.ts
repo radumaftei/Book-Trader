@@ -29,7 +29,7 @@ export class BooksListDatasource implements DataSource<any> {
     this.loadingSubject.next(true);
     this.noDataSubject.next(false);
     this.apiService
-      .fetchBookDataHttp()
+      .fetchBooks(false)
       .pipe(
         takeUntil(this.unsubscribe),
         catchError(() => of([])),

@@ -6,6 +6,16 @@
     <mat-form-field class="filter">
       <mat-label>Filter</mat-label>
       <input matInput placeholder="Filter books" #searchInput />
+      <button
+        mat-button
+        *ngIf="searchInput.value"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="searchInput.value = ''"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
     </mat-form-field>
     <button
       [disabled]="actionButtonsDisabled"
@@ -66,7 +76,7 @@
             matTooltipHideDelay="100"
           >
             <ng-container *ngIf="column.type === COLUMN_TYPES.INDEX">
-              <p>{{ row[column.column_name] }}</p>
+              <p>{{ row.lineNumber }}</p>
             </ng-container>
 
             <ng-contianer *ngIf="column.type === COLUMN_TYPES.IMAGE">
@@ -82,11 +92,13 @@
 
             <ng-container *ngIf="column.type === COLUMN_TYPES.STRING">
               <ng-container *ngIf="editPressed">
-                <input
-                  matInput
-                  value="{{ row[column.column_name] }}"
-                  required
-                />
+                <mat-form-field>
+                  <input
+                    matInput
+                    value="{{ row[column.column_name] }}"
+                    required
+                  />
+                </mat-form-field>
               </ng-container>
               <p *ngIf="!editPressed">
                 {{ row[column.column_name] }}
@@ -103,10 +115,10 @@
                     {{ bookCat }}</mat-option
                   >
                 </mat-select>
-                <p *ngIf="!editPressed">
-                  {{ row[column.column_name] }}
-                </p>
               </ng-container>
+              <p *ngIf="!editPressed">
+                {{ row[column.column_name] }}
+              </p>
             </ng-container>
 
             <ng-container *ngIf="column.type === COLUMN_TYPES.BUTTON">

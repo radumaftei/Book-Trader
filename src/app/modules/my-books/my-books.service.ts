@@ -7,7 +7,7 @@ export class MyBooksService {
   private SELECTED_TAB = new BehaviorSubject<number>(0);
   selectedTab$ = this.SELECTED_TAB.asObservable();
 
-  updateSelectedTab = (index) => {
+  updateSelectedTab = (index: number) => {
     this.SELECTED_TAB.next(index);
   };
 }

@@ -93,13 +93,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
     private authService: AuthService
   ) {}
 
-  testShit(row) {
-    console.log('ROW', row.imagePath);
-    return JSON.stringify(row);
-  }
-
   ngOnInit(): void {
-    debugger;
     this.dataSource.getBooksForTable();
 
     this.dataSource.data$.subscribe((books: BookProfile[]) => {
