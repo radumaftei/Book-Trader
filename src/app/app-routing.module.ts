@@ -11,21 +11,33 @@ const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     children: [],
+    data: {
+      animation: 'Login',
+    },
   },
   {
     path: 'signup',
     component: SignUpComponent,
     children: [],
+    data: {
+      animation: 'Signup',
+    },
   },
   {
     path: 'homepage',
     component: HomepageComponent,
     canActivate: [AuthGuard],
+    data: {
+      animation: 'Homepage',
+    },
   },
   {
     path: 'personal-book-page',
     component: DashboardComponent,
     canActivate: [AuthGuard],
+    data: {
+      animation: 'PersonalBookPage',
+    },
   },
   {
     path: '',
