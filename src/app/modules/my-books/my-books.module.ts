@@ -13,6 +13,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RouterModule } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 const MATERIAL_MODULES = [
   MatFormFieldModule,
@@ -22,6 +24,8 @@ const MATERIAL_MODULES = [
   MatIconModule,
   MatButtonModule,
   MatSelectModule,
+  MatTooltipModule,
+  MatPaginatorModule,
 ];
 
 @NgModule({

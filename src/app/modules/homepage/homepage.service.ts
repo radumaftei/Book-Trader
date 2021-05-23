@@ -14,10 +14,14 @@ export class HomepageService {
   constructor(private apiService: ApiService) {}
 
   getHomepageBooks = () => {
-    this.apiService.fetchHomepageDataHttp().subscribe((books) => {
+    this.apiService.fetchBooks().subscribe((books) => {
       if (!books) return;
       this.books = books;
       this.HOMEPAGE_BOOKS_UPDATE.next([...this.books]);
     });
+  };
+
+  cleanUp = () => {
+    this.HOMEPAGE_BOOKS_UPDATE.next([]);
   };
 }

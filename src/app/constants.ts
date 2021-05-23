@@ -27,3 +27,11 @@ export const DIALOG_POPUP_MESSAGES = {
 
 export const getBookCategoriesArr = (): string[] =>
   Object.values(BOOK_CATEGORIES);
+
+export enum COLUMN_TYPES {
+  INDEX = 'INDEX',
+  STRING = 'STRING',
+  IMAGE = 'IMAGE',
+  DROPDOWN = 'DROPDOWN',
+  BUTTON = 'BUTTON',
+}
