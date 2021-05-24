@@ -6,6 +6,6 @@ export const slideInAnimation = trigger('routeAnimations', [
     style({ opacity: 0 }),
 
     // animation and styles at end of transition
-    animate('1s', style({ opacity: 1 })),
+    animate('0.5s', style({ opacity: 1 })),
   ]),
 ]);

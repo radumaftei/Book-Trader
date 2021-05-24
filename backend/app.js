@@ -1,6 +1,5 @@
 const express = require("express");
 const path = require("path");
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const chalk = require("chalk");
 
@@ -11,7 +10,8 @@ const userRoutes = require("./routes/user");
 
 mongoose
   .connect(
-    "mongodb+srv://radu:UnthoeP6JuOec6qe@bachelorscluster.nrvdc.mongodb.net/BookTraderDB?w=majority"
+    "mongodb+srv://radu:UnthoeP6JuOec6qe@bachelorscluster.nrvdc.mongodb.net/BookTraderDB?w=majority",
+    { useNewUrlParser: true }
   )
   .then(() => {
     console.log(chalk.green("Connected to the DB"));
@@ -20,8 +20,8 @@ mongoose
     console.log(chalk.red("Error connecting to DB", err));
   });
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use("/images", express.static(path.join("backend/images")));
 
 app.use((req, res, next) => {
