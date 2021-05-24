@@ -33,7 +33,9 @@ export class ApiService {
         homepage ? this.HOMEPAGE_URL : this.BOOKS_API_URL
       )
       .pipe(
-        map((data) => data.books.map((book) => ({ ...book, id: book._id }))),
+        map((data: { message: string; books: BookProfileDTO[] }) =>
+          data.books.map((book) => ({ ...book, id: book._id }))
+        ),
         catchError(this.handleError("Couldn't fetch books"))
       );
   };
@@ -51,9 +53,10 @@ export class ApiService {
   };
 
   putBooksHttp = (books) => {
-    return this.httpClient
-      .put(this.BOOKS_API_URL, books)
-      .pipe(catchError(this.handleError("Couldn't save books/book")));
+    return this.httpClient.put(this.BOOKS_API_URL, books).pipe(
+      tap(() => this.handleSuccess('Books saved successfully')),
+      catchError(this.handleError("Couldn't save books/book"))
+    );
   };
 
   deleteBooksHttp = (id) => {

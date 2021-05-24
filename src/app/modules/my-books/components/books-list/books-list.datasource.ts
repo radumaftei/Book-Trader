@@ -2,7 +2,7 @@ import { catchError, finalize, takeUntil } from 'rxjs/operators';
 import { ApiService } from './../../../../core/api.service';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { BookProfile } from 'src/app/interfaces';
+import { BookProfile, BookProfileDTO } from 'src/app/interfaces';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -10,6 +10,9 @@ import { Injectable } from '@angular/core';
 })
 export class BooksListDatasource implements DataSource<any> {
   private unsubscribe = new Subject<void>();
+  private readonly initialDataSubject = new BehaviorSubject<BookProfile[]>([]);
+  readonly initialData$ = this.initialDataSubject.asObservable();
+
   private dataSubject = new BehaviorSubject<BookProfile[]>([]);
   data$ = this.dataSubject.asObservable();
 
@@ -24,6 +27,14 @@ export class BooksListDatasource implements DataSource<any> {
 
   constructor(private apiService: ApiService) {}
 
+  get books() {
+    return this.dataSubject.getValue();
+  }
+
+  get initialBooks() {
+    return this.initialDataSubject.getValue();
+  }
+
   getBooksForTable() {
     this.loadingSubject.next(true);
     this.noDataSubject.next(false);
@@ -34,10 +45,20 @@ export class BooksListDatasource implements DataSource<any> {
         catchError(() => of([])),
         finalize(() => this.loadingSubject.next(false))
       )
-      .subscribe((books) => {
+      .subscribe((books: BookProfileDTO[]) => {
         if (!books) return;
         !books.length && this.noDataSubject.next(true);
-        this.dataSubject.next(books);
+        let lineNumber = 0;
+        const bookData = books.map((book) => {
+          lineNumber = lineNumber + 1;
+          return {
+            ...book,
+            changed: false,
+            lineNumber,
+          };
+        });
+        this.initialDataSubject.next(JSON.parse(JSON.stringify(bookData)));
+        this.dataSubject.next(JSON.parse(JSON.stringify(bookData)));
       });
   }
 
@@ -60,13 +81,20 @@ export class BooksListDatasource implements DataSource<any> {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(({ newBook }) => {
         if (!newBook) return;
-        this.dataSubject.next([...this.dataSubject.getValue(), newBook]);
+        this.dataSubject.next([
+          ...this.books,
+          <BookProfile>{
+            ...newBook,
+            changed: false,
+          },
+        ]);
       });
   };
 
-  updateBooks = (books) => {
+  updateBooks = () => {
+    const booksToUpdate = this.books.filter((book) => book.changed);
     this.apiService
-      .putBooksHttp(books)
+      .putBooksHttp(booksToUpdate)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(() => {
         this.getBooksForTable();
@@ -80,6 +108,10 @@ export class BooksListDatasource implements DataSource<any> {
       .subscribe(() => {
         this.getBooksForTable();
       });
+  };
+
+  resetChangedStatus = () => {
+    this.dataSubject.next(JSON.parse(JSON.stringify(this.initialBooks)));
   };
 
   connect(

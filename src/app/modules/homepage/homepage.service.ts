@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../../core/api.service';
-import { BookProfile } from '../../interfaces';
+import { BookProfile, BookProfileDTO } from '../../interfaces';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -14,9 +14,12 @@ export class HomepageService {
   constructor(private apiService: ApiService) {}
 
   getHomepageBooks = () => {
-    this.apiService.fetchBooks().subscribe((books) => {
+    this.apiService.fetchBooks().subscribe((books: BookProfileDTO[]) => {
       if (!books) return;
-      this.books = books;
+      this.books = books.map((book) => ({
+        ...book,
+        changed: false,
+      }));
       this.HOMEPAGE_BOOKS_UPDATE.next([...this.books]);
     });
   };

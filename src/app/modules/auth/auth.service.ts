@@ -102,7 +102,7 @@ export class AuthService {
   private setAuthTimer = (duration: number) => {
     this.expiresInTimeOutID = setTimeout(() => {
       this.logout();
-    }, duration * 1000);
+    }, duration * 2000);
   };
 
   private getAuthData = () => {

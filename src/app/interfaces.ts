@@ -8,6 +8,8 @@ export interface BookProfile {
   userId: string;
   username: string;
   location: string;
+  changed: boolean;
+  lineNumber?: number;
 }
 
 export interface BookProfileDTO {
