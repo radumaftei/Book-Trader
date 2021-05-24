@@ -65,7 +65,6 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   COLUMN_TYPES = COLUMN_TYPES;
   pageSizeOptions = [5, 10, 15, 20];
   editPressed = false;
-  books: BookProfile[] = [];
   displayedColumns: string[] = [
     '#',
     'image',
@@ -84,7 +83,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('searchInput') searchInput: ElementRef;
 
   get actionButtonsDisabled() {
-    return !this.books.length || !this.authService.authorized();
+    return !this.dataSource.books.length || !this.authService.authorized();
   }
 
   constructor(
@@ -95,14 +94,6 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.dataSource.getBooksForTable();
-
-    this.dataSource.data$.subscribe((books: BookProfile[]) => {
-      this.books = books;
-      this.books = this.books.map((book, idx) => {
-        book['lineNumber'] = idx + 1;
-        return book;
-      });
-    });
   }
 
   ngAfterViewInit() {
@@ -130,14 +121,11 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
         this.editPressed = true;
         break;
       case 'save':
-        this.dataSource.data$
-          .pipe(takeUntil(this.unsubscribe))
-          .subscribe((books) => {
-            this.dataSource.updateBooks(books);
-          });
+        this.dataSource.updateBooks();
         this.editPressed = false;
         break;
       case 'cancel':
+        this.dataSource.resetChangedStatus();
         this.editPressed = false;
         break;
     }
@@ -145,6 +133,10 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
 
   deleteRow = (bookId) => {
     this.openDialog(bookId);
+  };
+
+  editRow = (row) => {
+    console.log('row', row);
   };
 
   openDialog = (bookId) => {

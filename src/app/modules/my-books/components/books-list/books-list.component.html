@@ -96,6 +96,8 @@
                   <input
                     matInput
                     value="{{ row[column.column_name] }}"
+                    [(ngModel)]="row[column.column_name]"
+                    (change)="row.changed = true"
                     required
                   />
                 </mat-form-field>
@@ -107,7 +109,10 @@
 
             <ng-container *ngIf="column.type === COLUMN_TYPES.DROPDOWN">
               <ng-container *ngIf="editPressed">
-                <mat-select [(value)]="row[column.column_name]">
+                <mat-select
+                  [(value)]="row[column.column_name]"
+                  (change)="row.changed = true"
+                >
                   <mat-option
                     *ngFor="let bookCat of bookCategories"
                     [value]="bookCat"
@@ -129,7 +134,7 @@
                 [matTooltipPosition]="'right'"
                 (click)="deleteRow(row.id)"
               >
-                <mat-icon>delete</mat-icon>
+                <span class="material-icons"> delete </span>
               </button>
             </ng-container>
           </mat-cell></ng-container
