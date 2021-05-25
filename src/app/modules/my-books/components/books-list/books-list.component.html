@@ -79,7 +79,7 @@
               <p>{{ row.lineNumber }}</p>
             </ng-container>
 
-            <ng-contianer *ngIf="column.type === COLUMN_TYPES.IMAGE">
+            <ng-container *ngIf="column.type === COLUMN_TYPES.IMAGE">
               <div class="book-image">
                 <img
                   width="50"
@@ -88,14 +88,14 @@
                   [alt]="row.title"
                 />
               </div>
-            </ng-contianer>
+            </ng-container>
 
             <ng-container *ngIf="column.type === COLUMN_TYPES.STRING">
               <ng-container *ngIf="editPressed">
                 <mat-form-field>
                   <input
                     matInput
-                    value="{{ row[column.column_name] }}"
+                    value="{{ row[column.column_name] === null }}"
                     [(ngModel)]="row[column.column_name]"
                     (change)="row.changed = true"
                     required
@@ -103,7 +103,7 @@
                 </mat-form-field>
               </ng-container>
               <p *ngIf="!editPressed">
-                {{ row[column.column_name] }}
+                {{ row[column.column_name] || "" }}
               </p>
             </ng-container>
 
