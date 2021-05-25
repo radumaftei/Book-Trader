@@ -53,7 +53,6 @@ export class BooksListDatasource implements DataSource<any> {
           lineNumber = lineNumber + 1;
           return {
             ...book,
-            changed: false,
             lineNumber,
           };
         });

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../../core/api.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthData } from './auth.model';
 
@@ -9,20 +9,20 @@ import { AuthData } from './auth.model';
 })
 export class AuthService {
   private token: string;
-  private expiresInTimeOutID: any;
+  private expiresInTimeOutID: ReturnType<typeof setTimeout>;
   private authStatusListener = new BehaviorSubject<boolean>(false);
 
   constructor(private apiService: ApiService, private router: Router) {}
 
-  getAuthStatusListener = () => {
+  getAuthStatusListener = (): Observable<boolean> => {
     return this.authStatusListener.asObservable();
   };
 
-  authorized = () => {
+  authorized = (): boolean => {
     return this.authStatusListener.getValue();
   };
 
-  getToken = () => {
+  getToken = (): string => {
     return this.token;
   };
 
@@ -54,13 +54,13 @@ export class AuthService {
     );
   };
 
-  logout = () => {
+  async logout(): Promise<void> {
     this.token = null;
     this.authStatusListener.next(false);
     this.clearAuthDataFromLS();
     clearTimeout(this.expiresInTimeOutID);
-    this.router.navigate(['login']);
-  };
+    await this.router.navigate(['login']);
+  }
 
   private saveLoggedInUserToLs = (user) => {
     this.saveToLs('loggedInUserEmail', user.email);

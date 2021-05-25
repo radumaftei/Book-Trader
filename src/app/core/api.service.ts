@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BookProfileDTO } from '../interfaces';
+import { BookProfile, BookProfileDTO } from '../interfaces';
 import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
@@ -13,6 +13,7 @@ import { AuthData } from '../modules/auth/auth.model';
 import { Observable, throwError } from 'rxjs';
 import { NotificationService } from '../shared/notification/notification.service';
 import { NotificationType } from '../shared/notification/notification-type.enum';
+import { transformDTOBooks } from '../modules/helpers';
 
 @Injectable({
   providedIn: 'root',
@@ -27,14 +28,14 @@ export class ApiService {
     private notificationService: NotificationService
   ) {}
 
-  fetchBooks = (homepage = true) => {
+  fetchBooks = (homepage = true): Observable<BookProfile[]> => {
     return this.httpClient
       .get<{ message: string; books: BookProfileDTO[] }>(
         homepage ? this.HOMEPAGE_URL : this.BOOKS_API_URL
       )
       .pipe(
         map((data: { message: string; books: BookProfileDTO[] }) =>
-          data.books.map((book) => ({ ...book, id: book._id }))
+          transformDTOBooks(data.books)
         ),
         catchError(this.handleError("Couldn't fetch books"))
       );

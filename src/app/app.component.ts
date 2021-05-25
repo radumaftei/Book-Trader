@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
     this.authService.autoAuthUser();
   }
 
-  prepareRoute(outlet: RouterOutlet) {
+  prepareRoute(outlet: RouterOutlet): string {
     return (
       outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation
     );
