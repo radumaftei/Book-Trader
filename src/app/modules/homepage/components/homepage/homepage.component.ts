@@ -47,9 +47,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
           this.offsetBookNumberMapper[category] = {};
           this.navigationButtonsStatuses[category] = {};
           this.offsetBookNumberMapper[category].offset = 0;
-          this.offsetBookNumberMapper[
-            category
-          ].bookNumber = this.booksByCategory(category).length;
+          this.offsetBookNumberMapper[category].bookNumber =
+            this.booksByCategory(category).length;
           this.navigationButtonsStatuses[category].previous = true;
           this.navigationButtonsStatuses[category].next =
             this.offsetBookNumberMapper[category].bookNumber <= 8;

@@ -27,7 +27,7 @@ export class ApiService {
     private notificationService: NotificationService
   ) {}
 
-  fetchBooks = (homepage: boolean = true) => {
+  fetchBooks = (homepage = true) => {
     return this.httpClient
       .get<{ message: string; books: BookProfileDTO[] }>(
         homepage ? this.HOMEPAGE_URL : this.BOOKS_API_URL
@@ -97,25 +97,25 @@ export class ApiService {
       );
   };
 
-  handleError = (notificationMessage: string) => (
-    error: HttpErrorResponse
-  ): Observable<never> => {
-    let errorMessage = 'Unknown error!';
-    if (error.error instanceof ErrorEvent) {
-      // Client side errors
-      errorMessage = `Client errored with ${error.error.message}`;
-    } else {
-      // Server side
-      errorMessage = `Server error with ${error.message} with status ${error.status}`;
-    }
+  handleError =
+    (notificationMessage: string) =>
+    (error: HttpErrorResponse): Observable<never> => {
+      let errorMessage = 'Unknown error!';
+      if (error.error instanceof ErrorEvent) {
+        // Client side errors
+        errorMessage = `Client errored with ${error.error.message}`;
+      } else {
+        // Server side
+        errorMessage = `Server error with ${error.message} with status ${error.status}`;
+      }
 
-    this.notificationService.showNotification(
-      notificationMessage,
-      NotificationType.ERROR
-    );
-    console.error(errorMessage);
-    return throwError(errorMessage);
-  };
+      this.notificationService.showNotification(
+        notificationMessage,
+        NotificationType.ERROR
+      );
+      console.error(errorMessage);
+      return throwError(errorMessage);
+    };
 
   handleSuccess = (notificationMessage: string) => {
     this.notificationService.showNotification(
