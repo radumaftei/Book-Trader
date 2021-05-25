@@ -56,19 +56,21 @@ export class CreateBookComponent implements OnInit {
       category,
       image,
     } = this.form.value;
-    this.dataSource.addBook({
-      title,
-      author,
-      tradingPreferenceAuthor,
-      tradingPreferenceBook,
-      tradingPreferenceGenre,
-      tradingPreferenceDescription,
-      description,
-      category: category,
-      image,
-    });
-    this.form.reset();
-    this.myBooksService.updateSelectedTab(0);
+    setInterval(() => {
+      this.dataSource.addBook({
+        title,
+        author,
+        tradingPreferenceAuthor,
+        tradingPreferenceBook,
+        tradingPreferenceGenre,
+        tradingPreferenceDescription,
+        description,
+        category: category,
+        image,
+      });
+    }, 1000);
+    // this.form.reset();
+    // this.myBooksService.updateSelectedTab(0);
   };
 
   onImagePicked(event: Event) {
