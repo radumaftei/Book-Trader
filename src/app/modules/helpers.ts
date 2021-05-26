@@ -1,6 +1,9 @@
 import { BookProfile, BookProfileDTO } from '../interfaces';
 
-export const areObjectDifferent = (obj1, obj2) => {
+export const areObjectDifferent = (
+  obj1: Record<string, unknown>,
+  obj2: Record<string, unknown>
+): boolean => {
   if (!obj1 || !obj2) return;
   if (Object.keys(obj1).length !== Object.keys(obj2).length) return;
   let objectsDifferent = false;

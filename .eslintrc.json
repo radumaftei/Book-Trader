@@ -1,7 +1,7 @@
 {
   "root": true,
   "ignorePatterns": [
-    "dist", "coverage"
+    "dist", "coverage", "report.html", "index.html"
   ],
   "parserOptions": {
     "ecmaVersion": 2020

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { Subject, Subscription } from 'rxjs';
-import { delay, takeUntil, takeWhile } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { DIALOG_POPUP_MESSAGES } from 'src/app/constants';
 import { BookProfile } from 'src/app/interfaces';
 import { LoginSignUpUser } from 'src/app/modules/auth/auth.model';
@@ -28,7 +28,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
     private dialog: MatDialog
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.isLoading = true;
     this.loggedInUser = {
       email: localStorage.getItem('loggedInUserEmail'),
@@ -56,7 +56,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
       });
   }
 
-  onTrade = (book: BookProfile) => {
+  onTrade = (book: BookProfile): void => {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       message: DIALOG_POPUP_MESSAGES.TRADE_BOOK,

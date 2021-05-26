@@ -26,15 +26,15 @@ export class AuthService {
     return this.token;
   };
 
-  createUser = (authData: AuthData) => {
+  createUser(authData: AuthData): void {
     this.apiService.createUserHttp(authData).subscribe(({ user }) => {
       this.saveLoggedInUserToLs(user);
       this.authStatusListener.next(true);
-      this.router.navigate(['homepage']);
+      this.router.navigate(['homepage']).then().catch();
     });
-  };
+  }
 
-  loginUser = (authData: AuthData) => {
+  loginUser = (authData: AuthData): void => {
     this.apiService.loginUserHttp(authData).subscribe(
       ({ token, expiresIn, user }) => {
         this.token = token;
@@ -45,7 +45,7 @@ export class AuthService {
           const now = new Date();
           const expirationDate = new Date(now.getTime() + expiresIn * 1000);
           this.saveAuthDataToLS(token, expirationDate);
-          this.router.navigate(['homepage']);
+          this.router.navigate(['homepage']).then().catch();
         }
       },
       () => {
@@ -79,7 +79,7 @@ export class AuthService {
     this.removeFromLs('loggedInUserLocation');
   };
 
-  private saveToLs = (key: string, value: any): void => {
+  private saveToLs = (key: string, value: string): void => {
     localStorage.setItem(key, value);
   };
 
@@ -87,7 +87,7 @@ export class AuthService {
     localStorage.removeItem(key);
   };
 
-  autoAuthUser = () => {
+  autoAuthUser = (): void => {
     const authInformation = this.getAuthData();
     if (!authInformation) return;
     const now = new Date();
@@ -101,7 +101,7 @@ export class AuthService {
 
   private setAuthTimer = (duration: number) => {
     this.expiresInTimeOutID = setTimeout(() => {
-      this.logout();
+      this.logout().then().catch();
     }, duration * 2000);
   };
 

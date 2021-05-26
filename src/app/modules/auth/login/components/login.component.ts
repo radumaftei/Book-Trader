@@ -15,11 +15,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService) {}
 
-  get loginButtonDisabled() {
+  get loginButtonDisabled(): boolean {
     return this.form.invalid || this.form.untouched;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.form = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [
@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
-  onLogin() {
+  onLogin(): void {
     if (this.form.invalid) return;
     this.authService.loginUser({
       email: this.form.value.email,
@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription && this.subscription.unsubscribe();
   }
 }
