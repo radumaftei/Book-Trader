@@ -105,6 +105,35 @@
           >You must select a category</mat-error
         >
       </mat-form-field>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Delivery methods by location</mat-panel-title>
+          <mat-panel-description>
+            <mat-icon>local_shipping</mat-icon></mat-panel-description
+          >
+        </mat-expansion-panel-header>
+        <mat-radio-group
+          aria-label="Select type of destination"
+          [(ngModel)]="destinationType"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <mat-radio-button color="primary" value="sameLocation"
+            >Only deliver to the same town</mat-radio-button
+          >
+          <mat-radio-button color="accent" value="otherLocation"
+            >Only deliver to different towns</mat-radio-button
+          >
+          <mat-radio-button color="warn" value="0">
+            Location doesn't matter
+          </mat-radio-button>
+        </mat-radio-group>
+        <mat-slide-toggle color="primary" formControlName="courier"
+          >Courier</mat-slide-toggle
+        >
+        <mat-slide-toggle color="warn" formControlName="onFoot"
+          >On foot</mat-slide-toggle
+        >
+      </mat-expansion-panel>
       <button
         class="form-button"
         mat-stroked-button
@@ -123,6 +152,13 @@
       <mat-error *ngIf="form.get('image').value && form.get('image').invalid"
         >Invalid image format ( *.PNG, *.JPG )
       </mat-error>
+      <mat-checkbox
+        color="primary"
+        [(ngModel)]="addMultipleBooks"
+        [ngModelOptions]="{ standalone: true }"
+      >
+        Add multiple books</mat-checkbox
+      >
       <button
         class="form-button"
         mat-raised-button

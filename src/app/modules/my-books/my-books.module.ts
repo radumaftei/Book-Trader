@@ -15,8 +15,18 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 const MATERIAL_MODULES = [
+  MatCheckboxModule,
+  MatRadioModule,
+  MatExpansionModule,
+  MatSlideToggleModule,
+  MatProgressSpinnerModule,
   MatFormFieldModule,
   MatInputModule,
   MatTableModule,
@@ -32,11 +42,11 @@ const MATERIAL_MODULES = [
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule,
     RouterModule,
     SharedModule,
 
     ...MATERIAL_MODULES,
+    FormsModule,
   ],
   declarations: [CreateBookComponent, BooksListComponent, DashboardComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

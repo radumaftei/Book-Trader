@@ -80,14 +80,13 @@
             </ng-container>
 
             <ng-container *ngIf="column.type === COLUMN_TYPES.IMAGE">
-              <div class="book-image">
-                <img
-                  width="50"
-                  height="50"
-                  [src]="row.imagePath"
-                  [alt]="row.title"
-                />
-              </div>
+              <img
+                class="book-image"
+                width="50"
+                height="50"
+                [src]="row.imagePath"
+                [alt]="row.title"
+              />
             </ng-container>
 
             <ng-container *ngIf="column.type === COLUMN_TYPES.STRING">

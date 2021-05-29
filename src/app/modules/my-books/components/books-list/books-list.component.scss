@@ -47,10 +47,6 @@
     }
   }
 
-  .spinner-wrapper {
-    height: stretch;
-  }
-
   .no-data-wrapper {
     height: calc(100vh - 189px);
   }
@@ -150,6 +146,7 @@
     }
 
     .book-image {
+      object-fit: cover;
       position: relative;
       left: 50px;
     }

@@ -10,7 +10,7 @@
       <!--     round img -->
     </div>
     <div class="card-text">
-      <div class="portada"></div>
+      <img class="book-image" [src]="book.imagePath" [alt]="book.title" />
       <div class="title-total">
         <div class="title">
           <span class="user-data">{{ book.username }}</span> from
@@ -21,17 +21,17 @@
         <div class="actions">
           <label>Select delivery method</label>
           <ng-container *ngIf="loggedInUser.location !== book.location">
-            <mat-radio-group [(ngModel)]="deliveryMethod">
-              <mat-radio-button class="example-margin" value="courier"
-                >Courier</mat-radio-button
-              >
-              <mat-radio-button class="example-margin" value="foot"
-                >On Foot</mat-radio-button
-              >
-            </mat-radio-group>
+            <!--            <mat-radio-group [(ngModel)]="deliveryMethod">-->
+            <!--              <mat-radio-button class="example-margin" value="courier"-->
+            <!--                >Courier</mat-radio-button-->
+            <!--              >-->
+            <!--              <mat-radio-button class="example-margin" value="foot"-->
+            <!--                >On Foot</mat-radio-button-->
+            <!--              >-->
+            <!--            </mat-radio-group>-->
           </ng-container>
           <ng-container *ngIf="loggedInUser.location === book.location">
-            <mat-checkbox [checked]="true"> Courier </mat-checkbox>
+            <!--            <mat-checkbox [checked]="true"> Courier </mat-checkbox>-->
           </ng-container>
         </div>
       </div>
@@ -40,12 +40,7 @@
 </mat-dialog-content>
 <div mat-dialog-actions>
   <div class="buttons-wrapper">
-    <button
-      mat-raised-button
-      color="primary"
-      [mat-dialog-close]="true"
-      cdkFocusInitial
-    >
+    <button mat-raised-button color="primary" [mat-dialog-close]="true">
       {{ data.actionButton }}
     </button>
   </div>
