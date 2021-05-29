@@ -11,6 +11,8 @@ const bookSchema = Schema({
   tradingPreferenceGenre: { type: String },
   tradingPreferenceDescription: { type: String },
   imagePath: { type: String, required: true },
+  courier: { type: Boolean, required: true },
+  onFoot: { type: Boolean, required: true },
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   username: { type: String, required: true },
   location: { type: String, required: true },

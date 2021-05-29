@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { getBookCategoriesArr } from '../../../../constants';
 import { MyBooksService } from '../../my-books.service';
@@ -15,6 +20,8 @@ export class CreateBookComponent implements OnInit {
   form: FormGroup;
   bookCategories = getBookCategoriesArr();
   imagePreview: string;
+  destinationType: string;
+  addMultipleBooks = false;
 
   get createBookDisabled(): boolean {
     return !this.form.valid;
@@ -23,7 +30,8 @@ export class CreateBookComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private myBooksService: MyBooksService,
-    private dataSource: BooksListDatasource
+    private dataSource: BooksListDatasource,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -36,6 +44,8 @@ export class CreateBookComponent implements OnInit {
       tradingPreferenceDescription: [null],
       description: [null, [Validators.required]],
       category: [null, [Validators.required]],
+      courier: [false],
+      onFoot: [false],
       image: [
         null,
         {
@@ -46,9 +56,15 @@ export class CreateBookComponent implements OnInit {
     });
   }
 
-  onCreateBook = (): void => {
+  async onCreateBook(): Promise<void> {
     if (this.createBookDisabled) {
       return;
+    }
+    if (!this.form.get('courier').value && !this.form.get('onFoot').value) {
+      this.form.patchValue({
+        courier: true,
+        onFoot: true,
+      });
     }
     const {
       title,
@@ -59,10 +75,12 @@ export class CreateBookComponent implements OnInit {
       tradingPreferenceDescription,
       description,
       category,
+      courier,
+      onFoot,
       image,
     } = this.form.value;
     // setInterval(() => {
-    this.dataSource.addBook({
+    await this.dataSource.addBook({
       title,
       author,
       tradingPreferenceAuthor,
@@ -70,13 +88,15 @@ export class CreateBookComponent implements OnInit {
       tradingPreferenceGenre,
       tradingPreferenceDescription,
       description,
-      category: category,
+      category,
+      courier,
+      onFoot,
       image,
     });
     // }, 1000);
     this.form.reset();
-    this.myBooksService.updateSelectedTab(0);
-  };
+    !this.addMultipleBooks && this.myBooksService.updateSelectedTab(0);
+  }
 
   onImagePicked(event: Event): void {
     const file = (event.target as HTMLInputElement).files[0];
@@ -85,6 +105,7 @@ export class CreateBookComponent implements OnInit {
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreview = <string>reader.result;
+      this.cdr.detectChanges();
     };
     reader.readAsDataURL(file);
   }

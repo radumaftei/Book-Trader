@@ -54,6 +54,7 @@ h1 {
   }
 
   .book-image {
+    object-fit: cover;
     width: 100%;
     height: 100%;
     border-top-left-radius: 20px;

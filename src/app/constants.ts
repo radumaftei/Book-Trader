@@ -36,7 +36,7 @@ export const BOOK_CATEGORIES = {
   HISTORY: 'History',
   TRAVEL: 'Travel',
   GUIDE_HOW_TO: 'Guide / How to',
-  FAMILIES_RELATIONSHIPS: 'Families & Relantionships',
+  FAMILIES_RELATIONSHIPS: 'Families & Relationships',
   HUMOR: 'Humor',
   CHILDREN: 'Children',
 };

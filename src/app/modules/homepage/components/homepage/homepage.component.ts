@@ -42,7 +42,13 @@ export class HomepageComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         if (!books.length) return;
         this.bookCards = books;
-        this.bookCategories = books.map((b) => b.category);
+        this.bookCategories = books
+          .reduce(
+            (acc, b) =>
+              acc.indexOf(b.category) === -1 ? [...acc, b.category] : acc,
+            []
+          )
+          .sort();
         this.bookCategories.forEach((category) => {
           this.offsetBookNumberMapper[category] = {};
           this.navigationButtonsStatuses[category] = {};

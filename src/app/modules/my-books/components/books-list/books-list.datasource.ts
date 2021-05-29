@@ -14,6 +14,8 @@ interface BookProps {
   tradingPreferenceBook: string | null;
   tradingPreferenceDescription: string | null;
   tradingPreferenceGenre: string | null;
+  courier: boolean;
+  onFoot: boolean;
   image: File;
 }
 
@@ -58,7 +60,7 @@ export class BooksListDatasource implements DataSource<any> {
       )
       .subscribe((books: BookProfileDTO[]) => {
         if (!books) return;
-        !books.length && this.noDataSubject.next(true);
+        this.noDataSubject.next(!books.length);
         let lineNumber = 0;
         const bookData = books.map((book) => {
           lineNumber = lineNumber + 1;
@@ -72,34 +74,28 @@ export class BooksListDatasource implements DataSource<any> {
       });
   }
 
-  addBook = (props: BookProps): void => {
-    const book = new FormData();
-    book.append('title', props['title']);
-    book.append('author', props['author']);
-    book.append('description', props['description']);
-    book.append('tradingPreferenceAuthor', props['tradingPreferenceAuthor']);
-    book.append('tradingPreferenceBook', props['tradingPreferenceBook']);
-    book.append('tradingPreferenceGenre', props['tradingPreferenceGenre']);
-    book.append(
-      'tradingPreferenceDescription',
-      props['tradingPreferenceDescription']
-    );
-    book.append('category', props['category']);
-    book.append('image', props['image'], props['title']);
-    this.apiService
-      .postBookHttp(book)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(({ newBook }) => {
-        if (!newBook) return;
-        this.dataSubject.next([
-          ...this.books,
-          <BookProfile>{
-            ...newBook,
-            changed: false,
-          },
-        ]);
+  async addBook(props: BookProps): Promise<boolean> {
+    return new Promise((resolve) => {
+      const book = new FormData();
+      Object.keys(props).forEach((key: string) => {
+        book.append(key, props[key]);
       });
-  };
+      this.apiService
+        .postBookHttp(book)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(({ newBook }) => {
+          if (!newBook) return;
+          this.dataSubject.next([
+            ...this.books,
+            <BookProfile>{
+              ...newBook,
+              changed: false,
+            },
+          ]);
+          resolve(true);
+        });
+    });
+  }
 
   updateBooks = (): void => {
     const booksToUpdate = this.books.filter((book) => book.changed);
