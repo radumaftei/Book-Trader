@@ -7,7 +7,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { BookProfile } from '../../../../interfaces';
 import { fromEvent, Subject } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TradeDialogComponent } from '../../../homepage/components/trade-dialog/trade-dialog.component';
@@ -82,7 +81,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
 
   @ViewChild('searchInput') searchInput: ElementRef;
 
-  get actionButtonsDisabled() {
+  get actionButtonsDisabled(): boolean {
     return !this.dataSource.books.length || !this.authService.authorized();
   }
 
@@ -96,7 +95,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
     this.dataSource.getBooksForTable();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     // this.dataSource.counter$
     //   .pipe(takeUntil(this.unsubscribe))
     //   .subscribe((count) => {
@@ -115,7 +114,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
         });
   }
 
-  topTableButtonClicked = (action) => {
+  topTableButtonClicked = (action: string): void => {
     switch (action) {
       case 'edit':
         this.editPressed = true;
@@ -131,15 +130,11 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   };
 
-  deleteRow = (bookId) => {
+  deleteRow = (bookId: string): void => {
     this.openDialog(bookId);
   };
 
-  editRow = (row) => {
-    console.log('row', row);
-  };
-
-  openDialog = (bookId) => {
+  openDialog = (bookId: string): void => {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.data = {

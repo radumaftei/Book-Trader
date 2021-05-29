@@ -14,11 +14,11 @@ export class SignUpComponent implements OnInit {
 
   constructor(private router: Router, private authService: AuthService) {}
 
-  get signUpButtonDisabled() {
+  get signUpButtonDisabled(): boolean {
     return !this.form.valid;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.form = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [
@@ -32,7 +32,7 @@ export class SignUpComponent implements OnInit {
     });
   }
 
-  onSignUp() {
+  onSignUp(): void {
     if (this.form.invalid) return;
     this.authService.createUser({
       email: this.form.value.email,

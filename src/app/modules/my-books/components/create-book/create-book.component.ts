@@ -15,7 +15,7 @@ export class CreateBookComponent implements OnInit {
   bookCategories = getBookCategoriesArr();
   imagePreview: string;
 
-  get createBookDisabled() {
+  get createBookDisabled(): boolean {
     return !this.form.valid;
   }
 
@@ -24,7 +24,7 @@ export class CreateBookComponent implements OnInit {
     private dataSource: BooksListDatasource
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.form = new FormGroup({
       title: new FormControl(null, [Validators.required]),
       author: new FormControl(null, [Validators.required]),
@@ -41,7 +41,7 @@ export class CreateBookComponent implements OnInit {
     });
   }
 
-  onCreateBook = () => {
+  onCreateBook = (): void => {
     if (this.createBookDisabled) {
       return;
     }
@@ -56,24 +56,24 @@ export class CreateBookComponent implements OnInit {
       category,
       image,
     } = this.form.value;
-    setInterval(() => {
-      this.dataSource.addBook({
-        title,
-        author,
-        tradingPreferenceAuthor,
-        tradingPreferenceBook,
-        tradingPreferenceGenre,
-        tradingPreferenceDescription,
-        description,
-        category: category,
-        image,
-      });
-    }, 1000);
-    // this.form.reset();
-    // this.myBooksService.updateSelectedTab(0);
+    // setInterval(() => {
+    this.dataSource.addBook({
+      title,
+      author,
+      tradingPreferenceAuthor,
+      tradingPreferenceBook,
+      tradingPreferenceGenre,
+      tradingPreferenceDescription,
+      description,
+      category: category,
+      image,
+    });
+    // }, 1000);
+    this.form.reset();
+    this.myBooksService.updateSelectedTab(0);
   };
 
-  onImagePicked(event: Event) {
+  onImagePicked(event: Event): void {
     const file = (event.target as HTMLInputElement).files[0];
     this.form.patchValue({ image: file });
     this.form.get('image').updateValueAndValidity();

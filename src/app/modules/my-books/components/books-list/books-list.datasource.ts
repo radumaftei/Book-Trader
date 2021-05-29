@@ -1,9 +1,21 @@
 import { catchError, finalize, takeUntil } from 'rxjs/operators';
-import { ApiService } from './../../../../core/api.service';
-import { CollectionViewer, DataSource } from '@angular/cdk/collections';
+import { ApiService } from '../../../../core/api.service';
+import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { BookProfile, BookProfileDTO } from 'src/app/interfaces';
 import { Injectable } from '@angular/core';
+
+interface BookProps {
+  author: string;
+  category: string;
+  description: string;
+  title: string;
+  tradingPreferenceAuthor: string | null;
+  tradingPreferenceBook: string | null;
+  tradingPreferenceDescription: string | null;
+  tradingPreferenceGenre: string | null;
+  image: File;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +23,6 @@ import { Injectable } from '@angular/core';
 export class BooksListDatasource implements DataSource<any> {
   private unsubscribe = new Subject<void>();
   private readonly initialDataSubject = new BehaviorSubject<BookProfile[]>([]);
-  readonly initialData$ = this.initialDataSubject.asObservable();
 
   private dataSubject = new BehaviorSubject<BookProfile[]>([]);
   data$ = this.dataSubject.asObservable();
@@ -27,15 +38,15 @@ export class BooksListDatasource implements DataSource<any> {
 
   constructor(private apiService: ApiService) {}
 
-  get books() {
+  get books(): BookProfile[] {
     return this.dataSubject.getValue();
   }
 
-  get initialBooks() {
+  get initialBooks(): BookProfile[] {
     return this.initialDataSubject.getValue();
   }
 
-  getBooksForTable() {
+  getBooksForTable(): void {
     this.loadingSubject.next(true);
     this.noDataSubject.next(false);
     this.apiService
@@ -53,7 +64,6 @@ export class BooksListDatasource implements DataSource<any> {
           lineNumber = lineNumber + 1;
           return {
             ...book,
-            changed: false,
             lineNumber,
           };
         });
@@ -62,7 +72,7 @@ export class BooksListDatasource implements DataSource<any> {
       });
   }
 
-  addBook = (props) => {
+  addBook = (props: BookProps): void => {
     const book = new FormData();
     book.append('title', props['title']);
     book.append('author', props['author']);
@@ -91,7 +101,7 @@ export class BooksListDatasource implements DataSource<any> {
       });
   };
 
-  updateBooks = () => {
+  updateBooks = (): void => {
     const booksToUpdate = this.books.filter((book) => book.changed);
     this.apiService
       .putBooksHttp(booksToUpdate)
@@ -101,7 +111,7 @@ export class BooksListDatasource implements DataSource<any> {
       });
   };
 
-  deleteBook = (id) => {
+  deleteBook = (id: string): void => {
     this.apiService
       .deleteBooksHttp(id)
       .pipe(takeUntil(this.unsubscribe))
@@ -114,13 +124,11 @@ export class BooksListDatasource implements DataSource<any> {
     this.dataSubject.next(JSON.parse(JSON.stringify(this.initialBooks)));
   };
 
-  connect(
-    collectionViewer: CollectionViewer
-  ): Observable<any[] | readonly any[]> {
+  connect(): Observable<BookProfile[] | readonly BookProfile[]> {
     return this.dataSubject.asObservable();
   }
 
-  disconnect(collectionViewer: CollectionViewer): void {
+  disconnect(): void {
     this.unsubscribe.next();
     this.unsubscribe.complete();
   }

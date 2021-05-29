@@ -10,7 +10,7 @@ export class DashboardComponent implements OnDestroy {
 
   constructor(private myBooksService: MyBooksService) {}
 
-  onChangeTab = (index) => {
+  onChangeTab = (index: number): void => {
     this.myBooksService.updateSelectedTab(index);
   };
 
