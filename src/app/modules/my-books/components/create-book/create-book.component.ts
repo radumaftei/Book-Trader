@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { getBookCategoriesArr } from '../../../../constants';
 import { MyBooksService } from '../../my-books.service';
 import { BooksListDatasource } from '../books-list/books-list.datasource';
@@ -9,6 +9,7 @@ import { mimeType } from './mime-type.validator';
   selector: 'app-create-book',
   templateUrl: './create-book.component.html',
   styleUrls: ['./create-book.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateBookComponent implements OnInit {
   form: FormGroup;
@@ -20,24 +21,28 @@ export class CreateBookComponent implements OnInit {
   }
 
   constructor(
+    private formBuilder: FormBuilder,
     private myBooksService: MyBooksService,
     private dataSource: BooksListDatasource
   ) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      title: new FormControl(null, [Validators.required]),
-      author: new FormControl(null, [Validators.required]),
-      tradingPreferenceAuthor: new FormControl(null),
-      tradingPreferenceBook: new FormControl(null),
-      tradingPreferenceGenre: new FormControl(null),
-      tradingPreferenceDescription: new FormControl(null),
-      description: new FormControl(null, [Validators.required]),
-      category: new FormControl(null, [Validators.required]),
-      image: new FormControl(null, {
-        validators: [Validators.required],
-        asyncValidators: [mimeType],
-      }),
+    this.form = this.formBuilder.group({
+      title: [null, [Validators.required]],
+      author: [null, [Validators.required]],
+      tradingPreferenceAuthor: [null],
+      tradingPreferenceBook: [null],
+      tradingPreferenceGenre: [null],
+      tradingPreferenceDescription: [null],
+      description: [null, [Validators.required]],
+      category: [null, [Validators.required]],
+      image: [
+        null,
+        {
+          validators: [Validators.required],
+          asyncValidators: [mimeType],
+        },
+      ],
     });
   }
 

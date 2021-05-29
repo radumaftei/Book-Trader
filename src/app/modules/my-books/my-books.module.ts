@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CreateBookComponent } from './components/create-book/create-book.component';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BooksListComponent } from './components/books-list/books-list.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RouterModule } from '@angular/router';
@@ -34,7 +34,6 @@ const MATERIAL_MODULES = [
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule,
     RouterModule,
     SharedModule,
 

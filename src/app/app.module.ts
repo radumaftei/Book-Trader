@@ -12,7 +12,7 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { AuthInterceptor } from './modules/auth/auth-interceptor';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
@@ -24,7 +24,6 @@ import { RouterModule } from '@angular/router';
     BrowserModule,
     ReactiveFormsModule,
     RouterModule,
-    FormsModule,
     HttpClientModule,
     // My stuff
     AppRoutingModule,
