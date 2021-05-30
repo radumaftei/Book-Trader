@@ -12,13 +12,18 @@ type CommonBook = {
   title: string;
   author: string;
   category: string;
+  courier: string;
+  onFoot: string;
+  destinationType: DestinationType;
   description: string;
   imagePath: string;
   username: string;
   location: string;
-  tradingPreferenceAuthor: string | null;
-  tradingPreferenceBook: string | null;
-  tradingPreferenceGenre: string | null;
-  tradingPreferenceDescription: string | null;
+  tradingPreferenceAuthor: string;
+  tradingPreferenceBook: string;
+  tradingPreferenceGenre: string;
+  tradingPreferenceDescription: string;
   userId: string;
 };
+
+export type DestinationType = 'sameLocation' | 'otherLocation' | '0';

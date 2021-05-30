@@ -13,6 +13,7 @@ const bookSchema = Schema({
   imagePath: { type: String, required: true },
   courier: { type: Boolean, required: true },
   onFoot: { type: Boolean, required: true },
+  destinationType: { type: String, required: true },
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   username: { type: String, required: true },
   location: { type: String, required: true },

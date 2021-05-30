@@ -2,7 +2,11 @@ import { catchError, finalize, takeUntil } from 'rxjs/operators';
 import { ApiService } from '../../../../core/api.service';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { BookProfile, BookProfileDTO } from 'src/app/interfaces';
+import {
+  BookProfile,
+  BookProfileDTO,
+  DestinationType,
+} from 'src/app/interfaces';
 import { Injectable } from '@angular/core';
 
 interface BookProps {
@@ -10,10 +14,11 @@ interface BookProps {
   category: string;
   description: string;
   title: string;
-  tradingPreferenceAuthor: string | null;
-  tradingPreferenceBook: string | null;
-  tradingPreferenceDescription: string | null;
-  tradingPreferenceGenre: string | null;
+  destinationType: DestinationType;
+  tradingPreferenceAuthor: string;
+  tradingPreferenceBook: string;
+  tradingPreferenceDescription: string;
+  tradingPreferenceGenre: string;
   courier: boolean;
   onFoot: boolean;
   image: File;
@@ -99,12 +104,13 @@ export class BooksListDatasource implements DataSource<any> {
 
   updateBooks = (): void => {
     const booksToUpdate = this.books.filter((book) => book.changed);
-    this.apiService
-      .putBooksHttp(booksToUpdate)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(() => {
-        this.getBooksForTable();
-      });
+    booksToUpdate.length &&
+      this.apiService
+        .putBooksHttp(booksToUpdate)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(() => {
+          this.getBooksForTable();
+        });
   };
 
   deleteBook = (id: string): void => {

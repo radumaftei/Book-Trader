@@ -9,6 +9,7 @@ import { getBookCategoriesArr } from '../../../../constants';
 import { MyBooksService } from '../../my-books.service';
 import { BooksListDatasource } from '../books-list/books-list.datasource';
 import { mimeType } from './mime-type.validator';
+import { DestinationType } from '../../../../interfaces';
 
 @Component({
   selector: 'app-create-book',
@@ -20,8 +21,9 @@ export class CreateBookComponent implements OnInit {
   form: FormGroup;
   bookCategories = getBookCategoriesArr();
   imagePreview: string;
-  destinationType: string;
+  destinationType: DestinationType = '0';
   addMultipleBooks = false;
+  resetForm = false;
 
   get createBookDisabled(): boolean {
     return !this.form.valid;
@@ -36,14 +38,14 @@ export class CreateBookComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      title: [null, [Validators.required]],
-      author: [null, [Validators.required]],
-      tradingPreferenceAuthor: [null],
-      tradingPreferenceBook: [null],
-      tradingPreferenceGenre: [null],
-      tradingPreferenceDescription: [null],
-      description: [null, [Validators.required]],
-      category: [null, [Validators.required]],
+      title: ['', [Validators.required]],
+      author: ['', [Validators.required]],
+      tradingPreferenceAuthor: [''],
+      tradingPreferenceBook: [''],
+      tradingPreferenceGenre: [''],
+      tradingPreferenceDescription: [''],
+      description: ['', [Validators.required]],
+      category: ['', [Validators.required]],
       courier: [false],
       onFoot: [false],
       image: [
@@ -89,13 +91,17 @@ export class CreateBookComponent implements OnInit {
       tradingPreferenceDescription,
       description,
       category,
+      destinationType: this.destinationType,
       courier,
       onFoot,
       image,
     });
     // }, 1000);
-    this.form.reset();
-    !this.addMultipleBooks && this.myBooksService.updateSelectedTab(0);
+    if (!this.addMultipleBooks) {
+      this.myBooksService.updateSelectedTab(0);
+    } else {
+      this.resetForm && this.form.reset();
+    }
   }
 
   onImagePicked(event: Event): void {
