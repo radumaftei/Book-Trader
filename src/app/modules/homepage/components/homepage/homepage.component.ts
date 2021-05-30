@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { delay, takeWhile } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { DIALOG_POPUP_MESSAGES } from 'src/app/constants';
 import { BookProfile } from 'src/app/interfaces';
 import { LoginSignUpUser } from 'src/app/modules/auth/auth.model';
@@ -12,6 +13,7 @@ import { TradeDialogComponent } from '../trade-dialog/trade-dialog.component';
   styleUrls: ['./homepage.component.scss'],
 })
 export class HomepageComponent implements OnInit, OnDestroy {
+  private unsubscribe = new Subject<void>();
   alive = true;
 
   loggedInUser: LoginSignUpUser;
@@ -26,7 +28,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
     private dialog: MatDialog
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.isLoading = true;
     this.loggedInUser = {
       email: localStorage.getItem('loggedInUserEmail'),
@@ -34,27 +36,33 @@ export class HomepageComponent implements OnInit, OnDestroy {
     };
     this.homepageService.getHomepageBooks();
     this.homepageService.homepageBooksUpdate$
-      .pipe(takeWhile(() => this.alive))
+      .pipe(takeUntil(this.unsubscribe))
       .subscribe((books) => {
-        if (!books || !books.length) return;
+        if (!books) return;
+        this.isLoading = false;
+        if (!books.length) return;
         this.bookCards = books;
-        this.bookCategories = books.map((b) => b.category);
+        this.bookCategories = books
+          .reduce(
+            (acc, b) =>
+              acc.indexOf(b.category) === -1 ? [...acc, b.category] : acc,
+            []
+          )
+          .sort();
         this.bookCategories.forEach((category) => {
           this.offsetBookNumberMapper[category] = {};
           this.navigationButtonsStatuses[category] = {};
           this.offsetBookNumberMapper[category].offset = 0;
-          this.offsetBookNumberMapper[
-            category
-          ].bookNumber = this.booksByCategory(category).length;
+          this.offsetBookNumberMapper[category].bookNumber =
+            this.booksByCategory(category).length;
           this.navigationButtonsStatuses[category].previous = true;
           this.navigationButtonsStatuses[category].next =
             this.offsetBookNumberMapper[category].bookNumber <= 8;
         });
-        this.isLoading = false;
       });
   }
 
-  onTrade = (book: BookProfile) => {
+  onTrade = (book: BookProfile): void => {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       message: DIALOG_POPUP_MESSAGES.TRADE_BOOK,
@@ -122,6 +130,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
   };
 
   ngOnDestroy(): void {
-    this.alive = false;
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+    this.homepageService.cleanUp();
   }
 }

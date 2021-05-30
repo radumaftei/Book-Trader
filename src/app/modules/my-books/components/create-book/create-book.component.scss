@@ -1,18 +1,19 @@
 .form-container {
-  height: 115vh;
-  overflow: hidden;
-
   .formular {
     width: 40%;
 
     form {
       width: 100%;
+
       mat-form-field {
-        margin-bottom: 20px;
+        margin-bottom: 5px;
+
+        &.trading-preferences-details {
+          margin-bottom: 30px;
+        }
       }
 
       .form-button {
-        width: 35%;
         margin: auto;
       }
 
@@ -24,12 +25,8 @@
         font-size: 16px;
       }
 
-      .description-form {
-        height: 180px;
-      }
-
-      .trading-form {
-        height: 130px;
+      .description-trading-form {
+        height: 60px;
       }
 
       .image-preview {
@@ -39,6 +36,11 @@
         img {
           height: 100%;
         }
+      }
+
+      .mat-expansion-panel-header-description {
+        display: flex;
+        justify-content: flex-end;
       }
     }
   }

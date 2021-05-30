@@ -18,6 +18,27 @@ export const BOOK_CATEGORIES = {
   ADVENTURE: 'Adventure',
   ACTION: 'Action',
   SCIENCE: 'Science',
+  FANTASY: 'Fantasy',
+  ROMANCE: 'Romance',
+  CONTEMPORARY: 'Contemporary',
+  DYSTOPIAN: 'Dystopian',
+  MYSTERY: 'Mystery',
+  HORROR: 'Horror',
+  THRILLER: 'Thriller',
+  PARANORMAL: 'Paranormal',
+  SF: 'SF',
+  MEMOIR: 'Memoir',
+  COOKING: 'Cooking',
+  ART: 'Art',
+  DEVELOPMENT: 'Development',
+  MOTIVATIONAL: 'Motivational',
+  HEALTH: 'Health',
+  HISTORY: 'History',
+  TRAVEL: 'Travel',
+  GUIDE_HOW_TO: 'Guide / How to',
+  FAMILIES_RELATIONSHIPS: 'Families & Relationships',
+  HUMOR: 'Humor',
+  CHILDREN: 'Children',
 };
 
 export const DIALOG_POPUP_MESSAGES = {
@@ -27,3 +48,11 @@ export const DIALOG_POPUP_MESSAGES = {
 
 export const getBookCategoriesArr = (): string[] =>
   Object.values(BOOK_CATEGORIES);
+
+export enum COLUMN_TYPES {
+  INDEX = 'INDEX',
+  STRING = 'STRING',
+  IMAGE = 'IMAGE',
+  DROPDOWN = 'DROPDOWN',
+  BUTTON = 'BUTTON',
+}

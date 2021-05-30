@@ -26,15 +26,34 @@ const storage = multer.diskStorage({
 router.post(
   "",
   checkAuth,
-  multer({ storage: storage }).single("image"),
+  multer({ storage }).single("image"),
   (req, res, next) => {
     const url = `${req.protocol}://${req.get("host")}`;
-    const { title, category, description, tradingPreferenceList } = req.body;
+    const {
+      title,
+      author,
+      category,
+      courier,
+      onFoot,
+      destinationType,
+      description,
+      tradingPreferenceDescription,
+      tradingPreferenceAuthor,
+      tradingPreferenceBook,
+      tradingPreferenceGenre,
+    } = req.body;
     new Book({
       title,
+      author,
       category,
+      courier,
+      destinationType,
+      onFoot,
       description,
-      tradingPreferenceList,
+      tradingPreferenceDescription,
+      tradingPreferenceAuthor,
+      tradingPreferenceBook,
+      tradingPreferenceGenre,
       imagePath: `${url}/images/${req.file.filename}`,
       userId: req.userData.userId,
       username: req.userData.email.split("@")[0],

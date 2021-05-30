@@ -1,16 +1,21 @@
 mat-toolbar {
-  background: linear-gradient(-135deg, #c850c0, #4158d0);
-}
+  //background: linear-gradient(-135deg, #c850c0, #4158d0);
+  background:  #041738;
 
-.spacer {
-  flex: 1 1 auto;
-}
+  .spacer {
+    flex: 1;
+  }
 
-.header_icon {
-  margin-right: 10px;
-}
+  .header_icon {
+    margin-right: 10px;
+  }
 
-.homepage_icon {
-  flex: 0.15;
-  margin-left: 20px;
+  .header_icon:not(.homepage_icon) {
+    color: #fff;
+  }
+
+  .homepage_icon {
+    flex: 0.15;
+    margin-left: 20px;
+  }
 }

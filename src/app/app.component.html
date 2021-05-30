@@ -1,1 +1,4 @@
-<router-outlet></router-outlet>
+<notifier-container></notifier-container>
+<div [@routeAnimations]="prepareRoute(outlet)">
+  <router-outlet #outlet="outlet"></router-outlet>
+</div>

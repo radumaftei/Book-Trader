@@ -10,15 +10,15 @@ import { AuthService } from '../../modules/auth/auth.service';
 export class HeaderComponent {
   constructor(private router: Router, private authService: AuthService) {}
 
-  onLogoutClick = () => {
-    this.authService.logout();
-  };
+  async onLogoutClick(): Promise<void> {
+    await this.authService.logout();
+  }
 
-  onHomepageClick = ($event: MouseEvent) => {
-    this.router.navigate(['homepage']);
-  };
+  async onHomepageClick(): Promise<void> {
+    await this.router.navigate(['homepage']);
+  }
 
-  onMyBooksClick = ($event: MouseEvent) => {
-    this.router.navigate(['personal-book-page']);
-  };
+  async onMyBooksClick(): Promise<void> {
+    await this.router.navigate(['personal-book-page']);
+  }
 }

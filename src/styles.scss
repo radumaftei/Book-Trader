@@ -1,6 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~angular-notifier/styles";
+@import "~@angular/material/theming";
+
 * {
   padding: 0;
   box-sizing: border-box;
@@ -23,20 +26,19 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  height: 100vh;
 
   .auth-img {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding-right: 50px;
+    margin-right: 50px;
   }
 
   .auth-image {
-    width: 180px;
+    width: 300px;
     height: 180px;
-    border-radius: 50%;
+    border-radius: 10%;
   }
 
   .formular {
@@ -71,16 +73,17 @@ body {
 }
 
 .auth-form-container {
-  background: linear-gradient(
-    164deg,
-    rgba(255, 255, 255, 1) 25%,
-    rgba(195, 196, 139, 1) 69%,
-    rgba(128, 128, 128, 1) 81%,
-    rgba(101, 101, 101, 1) 96%,
-    rgba(94, 94, 94, 1) 100%,
-    rgba(0, 0, 0, 1) 100%,
-    rgba(0, 0, 0, 1) 100%
-  );
+  //background: linear-gradient(
+  //  164deg,
+  //  rgba(255, 255, 255, 1) 25%,
+  //  rgba(195, 196, 139, 1) 69%,
+  //  rgba(128, 128, 128, 1) 81%,
+  //  rgba(101, 101, 101, 1) 96%,
+  //  rgba(94, 94, 94, 1) 100%,
+  //  rgba(0, 0, 0, 1) 100%,
+  //  rgba(0, 0, 0, 1) 100%
+  //);
+  background: #041738;
 }
 
 .backdrop {

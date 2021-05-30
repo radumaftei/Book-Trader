@@ -1,4 +1,9 @@
-export const areObjectDifferent = (obj1, obj2) => {
+import { BookProfile, BookProfileDTO } from '../interfaces';
+
+export const areObjectDifferent = (
+  obj1: Record<string, unknown>,
+  obj2: Record<string, unknown>
+): boolean => {
   if (!obj1 || !obj2) return;
   if (Object.keys(obj1).length !== Object.keys(obj2).length) return;
   let objectsDifferent = false;
@@ -9,3 +14,43 @@ export const areObjectDifferent = (obj1, obj2) => {
   });
   return objectsDifferent;
 };
+
+export const transformDTOBooks = (books: BookProfileDTO[]): BookProfile[] =>
+  books.map(
+    ({
+      _id,
+      title,
+      category,
+      description,
+      imagePath,
+      location,
+      courier,
+      onFoot,
+      destinationType,
+      author,
+      tradingPreferenceAuthor,
+      tradingPreferenceBook,
+      tradingPreferenceDescription,
+      tradingPreferenceGenre,
+      userId,
+      username,
+    }) => ({
+      id: _id,
+      title,
+      author,
+      category,
+      description,
+      courier,
+      onFoot,
+      destinationType,
+      imagePath,
+      location,
+      tradingPreferenceGenre,
+      tradingPreferenceDescription,
+      tradingPreferenceBook,
+      tradingPreferenceAuthor,
+      username,
+      userId,
+      changed: false,
+    })
+  );

@@ -8,7 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const MATERIAL_MODULES = [
   MatProgressSpinnerModule,
@@ -24,7 +24,6 @@ const MATERIAL_MODULES = [
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
-    FormsModule,
     ...MATERIAL_MODULES,
   ],
   exports: [],

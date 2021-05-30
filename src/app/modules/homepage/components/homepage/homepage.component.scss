@@ -1,37 +1,75 @@
-.wrapper {
-  height: 100%;
+:host {
+  ::ng-deep {
+    .wrapper {
+      height: 100%;
+      background: #d4e5eb;
 
-  section {
-    margin-inline: 55px;
-    overflow-x: auto;
+      .empty-wrapper {
+        background: inherit;
+        height: 100vh;
+      }
 
-    .mat-title {
-      margin: 20px;
-    }
+      section {
+        margin-inline: 55px;
+        overflow-x: auto;
 
-    .card-row-wrapper {
-      display: flex;
-      flex-wrap: nowrap;
-      flex-direction: row;
-      overflow: hidden;
-
-      mat-card {
-        max-width: 248px;
-        margin: 20px;
-
-        .example-header-image {
-          background-image: url("https://material.angular.io/assets/img/examples/shiba1.jpg");
-          background-size: cover;
+        .mat-title {
+          margin: 20px;
         }
 
-        mat-card-title {
-          font-size: 15px;
-        }
+        .card-row-wrapper {
+          display: flex;
+          flex-wrap: nowrap;
+          flex-direction: row;
+          overflow: hidden;
 
-        mat-card-subtitle {
-          font-size: 10px;
+          mat-card {
+            max-width: 248px;
+            margin: 20px;
+
+            .example-header-image {
+              background-image: url("https://material.angular.io/assets/img/examples/shiba1.jpg");
+              background-size: cover;
+            }
+
+            .mat-card-header-text {
+              max-width: 170px;
+            }
+
+            mat-card-title {
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              font-size: 15px;
+            }
+
+            mat-card-subtitle {
+              font-size: 10px;
+            }
+
+            mat-card-content {
+              overflow: hidden;
+
+              p {
+                position: relative;
+                height: 3.6em;
+
+                &:after {
+                  content: "";
+                  text-align: right;
+                  position: absolute;
+                  bottom: 0;
+                  right: 0;
+                  width: 70%;
+                  height: 1.2em;
+                  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
+                }
+              }
+            }
+          }
         }
       }
     }
+
   }
 }

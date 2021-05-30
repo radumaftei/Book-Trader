@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../../core/api.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthData } from './auth.model';
 
@@ -9,34 +9,34 @@ import { AuthData } from './auth.model';
 })
 export class AuthService {
   private token: string;
-  private expiresInTimeOutID: any;
+  private expiresInTimeOutID: ReturnType<typeof setTimeout>;
   private authStatusListener = new BehaviorSubject<boolean>(false);
 
   constructor(private apiService: ApiService, private router: Router) {}
 
-  getAuthStatusListener = () => {
+  getAuthStatusListener = (): Observable<boolean> => {
     return this.authStatusListener.asObservable();
   };
 
-  authorized = () => {
+  authorized = (): boolean => {
     return this.authStatusListener.getValue();
   };
 
-  getToken = () => {
+  getToken = (): string => {
     return this.token;
   };
 
-  createUser = (authData: AuthData) => {
+  createUser(authData: AuthData): void {
     this.apiService.createUserHttp(authData).subscribe(({ user }) => {
       this.saveLoggedInUserToLs(user);
-      this.router.navigate(['homepage']);
+      this.authStatusListener.next(true);
+      this.router.navigate(['homepage']).then().catch();
     });
-  };
+  }
 
-  loginUser = (authData: AuthData) => {
-    this.apiService
-      .loginUserHttp(authData)
-      .subscribe(({ token, expiresIn, user }) => {
+  loginUser = (authData: AuthData): void => {
+    this.apiService.loginUserHttp(authData).subscribe(
+      ({ token, expiresIn, user }) => {
         this.token = token;
         if (token) {
           this.saveLoggedInUserToLs(user);
@@ -45,18 +45,22 @@ export class AuthService {
           const now = new Date();
           const expirationDate = new Date(now.getTime() + expiresIn * 1000);
           this.saveAuthDataToLS(token, expirationDate);
-          this.router.navigate(['homepage']);
+          this.router.navigate(['homepage']).then().catch();
         }
-      });
+      },
+      () => {
+        this.authStatusListener.next(false);
+      }
+    );
   };
 
-  logout = () => {
+  async logout(): Promise<void> {
     this.token = null;
     this.authStatusListener.next(false);
     this.clearAuthDataFromLS();
     clearTimeout(this.expiresInTimeOutID);
-    this.router.navigate(['login']);
-  };
+    await this.router.navigate(['login']);
+  }
 
   private saveLoggedInUserToLs = (user) => {
     this.saveToLs('loggedInUserEmail', user.email);
@@ -75,7 +79,7 @@ export class AuthService {
     this.removeFromLs('loggedInUserLocation');
   };
 
-  private saveToLs = (key: string, value: any): void => {
+  private saveToLs = (key: string, value: string): void => {
     localStorage.setItem(key, value);
   };
 
@@ -83,7 +87,7 @@ export class AuthService {
     localStorage.removeItem(key);
   };
 
-  autoAuthUser = () => {
+  autoAuthUser = (): void => {
     const authInformation = this.getAuthData();
     if (!authInformation) return;
     const now = new Date();
@@ -97,8 +101,8 @@ export class AuthService {
 
   private setAuthTimer = (duration: number) => {
     this.expiresInTimeOutID = setTimeout(() => {
-      this.logout();
-    }, duration * 1000);
+      this.logout().then().catch();
+    }, duration * 2000);
   };
 
   private getAuthData = () => {
