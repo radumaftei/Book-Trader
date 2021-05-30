@@ -94,7 +94,7 @@
                 <mat-form-field>
                   <input
                     matInput
-                    value="{{ row[column.column_name] === null }}"
+                    value="{{ row[column.column_name] }}"
                     [(ngModel)]="row[column.column_name]"
                     (change)="row.changed = true"
                     required
@@ -102,7 +102,7 @@
                 </mat-form-field>
               </ng-container>
               <p *ngIf="!editPressed">
-                {{ row[column.column_name] || "" }}
+                {{ row[column.column_name] }}
               </p>
             </ng-container>
 

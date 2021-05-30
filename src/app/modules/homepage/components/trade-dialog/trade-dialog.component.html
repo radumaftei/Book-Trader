@@ -13,11 +13,14 @@
       <img class="book-image" [src]="book.imagePath" [alt]="book.title" />
       <div class="title-total">
         <div class="title">
-          <span class="user-data">{{ book.username }}</span> from
-          <span class="user-data">{{ book.location }}</span>
+          <p>
+            Book added by
+            <span class="user-data">{{ book.username }}</span> from
+            <span class="user-data">{{ book.location }}</span>
+          </p>
         </div>
         <h2>{{ book.title }}</h2>
-        <div class="desc">{{ book.description }}</div>
+        <p class="desc">{{ book.description }}</p>
         <div class="actions">
           <label>Select delivery method</label>
           <ng-container *ngIf="loggedInUser.location !== book.location">

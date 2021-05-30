@@ -18,7 +18,6 @@ export interface DialogData {
 export class TradeDialogComponent {
   book: BookProfile;
   loggedInUser;
-  deliveryMethod: 'courier' | 'foot';
 
   constructor(
     public dialogRef: MatDialogRef<TradeDialogComponent>,
