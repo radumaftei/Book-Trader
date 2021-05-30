@@ -6,7 +6,7 @@
         <input
           matInput
           #bookTitle
-          maxlength="50"
+          maxlength="30"
           type="text"
           formControlName="title"
           placeholder="Book Title"
@@ -14,14 +14,14 @@
         <mat-error *ngIf="form.get('title').invalid"
           >Please enter a title</mat-error
         >
-        <mat-hint align="end">{{ bookTitle.value.length }} / 50</mat-hint>
+        <mat-hint align="end">{{ bookTitle.value.length }} / 30</mat-hint>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Book author</mat-label>
         <input
           matInput
           #bookAuthor
-          maxlength="50"
+          maxlength="30"
           type="text"
           formControlName="author"
           placeholder="Book Author"
@@ -29,14 +29,14 @@
         <mat-error *ngIf="form.get('author').invalid"
           >Please enter an author</mat-error
         >
-        <mat-hint align="end">{{ bookAuthor.value.length }} / 50</mat-hint>
+        <mat-hint align="end">{{ bookAuthor.value.length }} / 30</mat-hint>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Book description</mat-label>
         <textarea
           matInput
           #bookDescription
-          maxlength="256"
+          maxlength="100"
           class="description-trading-form"
           formControlName="description"
           placeholder="Book Description"
@@ -45,7 +45,7 @@
           >Please enter a description</mat-error
         >
         <mat-hint align="end"
-          >{{ bookDescription.value.length }} / 256</mat-hint
+          >{{ bookDescription.value.length }} / 100</mat-hint
         >
       </mat-form-field>
       <mat-form-field appearance="outline">
@@ -89,7 +89,7 @@
         <mat-hint
           >* This will be included in your book details in the homepage of other
           users. You can specify things like: e.g. I don't want a specific book
-          to get in return</mat-hint
+          to get in return or simply leave it empty</mat-hint
         >
       </mat-form-field>
       <mat-form-field appearance="outline">
