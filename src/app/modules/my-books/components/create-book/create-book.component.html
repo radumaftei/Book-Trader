@@ -176,9 +176,20 @@
             </li>
           </ul>
         </section>
+        <mat-hint>Changing this will apply at user level</mat-hint>
         <mat-error *ngIf="deliveryMethodsEmpty"
           >Please select at least one delivery method !
         </mat-error>
+        <div class="delivery-settings">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="changeSettings()"
+            type="button"
+          >
+            Change delivery settings
+          </button>
+        </div>
       </mat-expansion-panel>
       <button
         class="form-button"

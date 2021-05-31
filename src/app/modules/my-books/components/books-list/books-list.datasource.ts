@@ -2,11 +2,7 @@ import { catchError, finalize, takeUntil } from 'rxjs/operators';
 import { ApiService } from '../../../../core/api.service';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import {
-  BookProfile,
-  BookProfileDTO,
-  LocationConfig,
-} from 'src/app/interfaces';
+import { BookProfile, BookProfileDTO } from 'src/app/interfaces';
 import { Injectable } from '@angular/core';
 
 interface BookProps {
@@ -18,8 +14,6 @@ interface BookProps {
   tradingPreferenceBook: string;
   tradingPreferenceDescription: string;
   tradingPreferenceGenre: string;
-  sameTownConfig: LocationConfig;
-  differentTownConfig: LocationConfig;
   image: File;
 }
 
@@ -82,11 +76,7 @@ export class BooksListDatasource implements DataSource<any> {
     return new Promise((resolve) => {
       const book = new FormData();
       Object.keys(props).forEach((key: string) => {
-        if (['sameTownConfig', 'differentTownConfig'].includes(key)) {
-          book.append(key, JSON.stringify(props[key]));
-        } else {
-          book.append(key, props[key]);
-        }
+        book.append(key, props[key]);
       });
       this.apiService
         .postBookHttp(book)

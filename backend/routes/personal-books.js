@@ -41,16 +41,10 @@ router.post(
       tradingPreferenceBook,
       tradingPreferenceGenre,
     } = req.body;
-    let {       sameTownConfig,
-      differentTownConfig } = req.body;
-    sameTownConfig = JSON.parse(sameTownConfig);
-    differentTownConfig = JSON.parse(differentTownConfig);
     new Book({
       title,
       author,
       category,
-      sameTownConfig,
-      differentTownConfig,
       description,
       tradingPreferenceDescription,
       tradingPreferenceAuthor,

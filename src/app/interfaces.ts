@@ -12,8 +12,6 @@ type CommonBook = {
   title: string;
   author: string;
   category: string;
-  sameTownConfig: LocationConfig;
-  differentTownConfig: LocationConfig;
   description: string;
   imagePath: string;
   username: string;

@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const checkAuth = require("../middleware/check-auth");
 const User = require("../models/user");
 
 const router = express.Router();
@@ -76,5 +77,11 @@ router.post("/login", (req, res, next) => {
       });
     });
 });
+
+router.put("/deliveryConfig", checkAuth, (req, res, next) => {
+  User.updateOne({_id: req.userData.userId.toString()}, req.body).then(() => {
+    res.status(201).json();
+  })
+})
 
 module.exports = router;

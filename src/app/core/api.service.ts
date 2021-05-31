@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BookProfile, BookProfileDTO } from '../interfaces';
+import { BookProfile, BookProfileDTO, LocationConfig } from '../interfaces';
 import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
+  DELIVERY_CONFIG,
   HOME_URL,
   HOMEPAGE,
   MY_BOOKS_URL,
@@ -14,6 +15,11 @@ import { Observable, throwError } from 'rxjs';
 import { NotificationService } from '../shared/notification/notification.service';
 import { NotificationType } from '../shared/notification/notification-type.enum';
 import { transformDTOBooks } from '../modules/helpers';
+
+interface IDelivery {
+  sameTownConfig: LocationConfig;
+  differentTownConfig: LocationConfig;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -79,6 +85,17 @@ export class ApiService {
             "Couldn't sign up. Please make sure you completed every input"
           )
         )
+      );
+  };
+
+  updateUserDeliverySettings = (deliveryConfig: IDelivery) => {
+    return this.httpClient
+      .put(`${this.USER_API_URL}/${DELIVERY_CONFIG}`, deliveryConfig)
+      .pipe(
+        tap(() =>
+          this.handleSuccess('User delivery methods updated successfully')
+        ),
+        catchError(this.handleError("Couldn't update user delivery methods"))
       );
   };
 

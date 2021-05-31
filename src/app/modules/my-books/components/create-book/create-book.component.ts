@@ -10,6 +10,7 @@ import { MyBooksService } from '../../my-books.service';
 import { BooksListDatasource } from '../books-list/books-list.datasource';
 import { mimeType } from './mime-type.validator';
 import { LocationConfig } from '../../../../interfaces';
+import { ApiService } from '../../../../core/api.service';
 
 @Component({
   selector: 'app-create-book',
@@ -54,7 +55,8 @@ export class CreateBookComponent implements OnInit {
     private formBuilder: FormBuilder,
     private myBooksService: MyBooksService,
     private dataSource: BooksListDatasource,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private apiService: ApiService
   ) {}
 
   updateAllCompleted(town: string, allSelected: string): void {
@@ -123,8 +125,6 @@ export class CreateBookComponent implements OnInit {
       tradingPreferenceGenre,
       tradingPreferenceDescription,
       description,
-      sameTownConfig: this.sameTownConfig,
-      differentTownConfig: this.differentTownConfig,
       category,
       image,
     });
@@ -134,6 +134,15 @@ export class CreateBookComponent implements OnInit {
     } else {
       this.resetForm && this.form.reset();
     }
+  }
+
+  changeSettings(): void {
+    this.apiService
+      .updateUserDeliverySettings({
+        sameTownConfig: this.sameTownConfig,
+        differentTownConfig: this.differentTownConfig,
+      })
+      .subscribe(() => {});
   }
 
   onImagePicked(event: Event): void {

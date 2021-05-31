@@ -5,6 +5,7 @@ export const NO_MATCH = 'NO_MATCH';
 export const HOME_URL = 'http://localhost:3000/api';
 export const MY_BOOKS_URL = 'personal-book-page';
 export const USER_SIGNUP_URL = 'signup';
+export const DELIVERY_CONFIG = 'deliveryConfig';
 export const USER_LOGIN_URL = 'login';
 export const HOMEPAGE = 'homepage';
 
