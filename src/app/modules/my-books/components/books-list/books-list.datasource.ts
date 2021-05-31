@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import {
   BookProfile,
   BookProfileDTO,
-  DestinationType,
+  LocationConfig,
 } from 'src/app/interfaces';
 import { Injectable } from '@angular/core';
 
@@ -14,13 +14,12 @@ interface BookProps {
   category: string;
   description: string;
   title: string;
-  destinationType: DestinationType;
   tradingPreferenceAuthor: string;
   tradingPreferenceBook: string;
   tradingPreferenceDescription: string;
   tradingPreferenceGenre: string;
-  courier: boolean;
-  onFoot: boolean;
+  sameTownConfig: LocationConfig;
+  differentTownConfig: LocationConfig;
   image: File;
 }
 
@@ -83,7 +82,11 @@ export class BooksListDatasource implements DataSource<any> {
     return new Promise((resolve) => {
       const book = new FormData();
       Object.keys(props).forEach((key: string) => {
-        book.append(key, props[key]);
+        if (['sameTownConfig', 'differentTownConfig'].includes(key)) {
+          book.append(key, JSON.stringify(props[key]));
+        } else {
+          book.append(key, props[key]);
+        }
       });
       this.apiService
         .postBookHttp(book)

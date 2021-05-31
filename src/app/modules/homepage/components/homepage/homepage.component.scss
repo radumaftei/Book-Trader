@@ -1,6 +1,7 @@
 :host {
   ::ng-deep {
     .wrapper {
+      min-height: 100vh;
       height: 100%;
       background: #d4e5eb;
 

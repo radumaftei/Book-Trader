@@ -9,7 +9,7 @@ import { getBookCategoriesArr } from '../../../../constants';
 import { MyBooksService } from '../../my-books.service';
 import { BooksListDatasource } from '../books-list/books-list.datasource';
 import { mimeType } from './mime-type.validator';
-import { DestinationType } from '../../../../interfaces';
+import { LocationConfig } from '../../../../interfaces';
 
 @Component({
   selector: 'app-create-book',
@@ -21,12 +21,33 @@ export class CreateBookComponent implements OnInit {
   form: FormGroup;
   bookCategories = getBookCategoriesArr();
   imagePreview: string;
-  destinationType: DestinationType = '0';
+  sameTownConfig: LocationConfig = {
+    onFoot: true,
+    courier: true,
+  };
+
+  differentTownConfig: LocationConfig = {
+    courier: true,
+  };
+  sameTownAllChecked = true;
+  differentTownAllChecked = true;
+
   addMultipleBooks = false;
   resetForm = false;
 
   get createBookDisabled(): boolean {
-    return !this.form.valid;
+    return !this.form.valid || this.deliveryMethodsEmpty;
+  }
+
+  get deliveryMethodsEmpty(): boolean {
+    return (
+      Object.keys(this.sameTownConfig).every(
+        (t: string) => !this.sameTownConfig[t]
+      ) &&
+      Object.keys(this.differentTownConfig).every(
+        (t: string) => !this.differentTownConfig[t]
+      )
+    );
   }
 
   constructor(
@@ -35,6 +56,28 @@ export class CreateBookComponent implements OnInit {
     private dataSource: BooksListDatasource,
     private cdr: ChangeDetectorRef
   ) {}
+
+  updateAllCompleted(town: string, allSelected: string): void {
+    this[allSelected] = Object.keys(this[town]).every(
+      (t: string) => this[town][t]
+    );
+  }
+
+  someCompletedSameTown(): boolean {
+    return (
+      Object.keys(this.sameTownConfig).filter((t) => this.sameTownConfig[t])
+        .length > 0 && !this.sameTownAllChecked
+    );
+  }
+
+  setAllForSeparateTowns(
+    town: string,
+    allSelected: string,
+    completed: boolean
+  ): void {
+    this[allSelected] = completed;
+    Object.keys(this[town]).forEach((t) => (this[town][t] = completed));
+  }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -46,8 +89,6 @@ export class CreateBookComponent implements OnInit {
       tradingPreferenceDescription: [''],
       description: ['', [Validators.required]],
       category: ['', [Validators.required]],
-      courier: [false],
-      onFoot: [false],
       image: [
         null,
         {
@@ -62,12 +103,6 @@ export class CreateBookComponent implements OnInit {
     if (this.createBookDisabled) {
       return;
     }
-    if (!this.form.get('courier').value && !this.form.get('onFoot').value) {
-      this.form.patchValue({
-        courier: true,
-        onFoot: true,
-      });
-    }
     const {
       title,
       author,
@@ -77,8 +112,6 @@ export class CreateBookComponent implements OnInit {
       tradingPreferenceDescription,
       description,
       category,
-      courier,
-      onFoot,
       image,
     } = this.form.value;
     // setInterval(() => {
@@ -90,10 +123,9 @@ export class CreateBookComponent implements OnInit {
       tradingPreferenceGenre,
       tradingPreferenceDescription,
       description,
+      sameTownConfig: this.sameTownConfig,
+      differentTownConfig: this.differentTownConfig,
       category,
-      destinationType: this.destinationType,
-      courier,
-      onFoot,
       image,
     });
     // }, 1000);

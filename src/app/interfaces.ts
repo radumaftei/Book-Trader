@@ -12,9 +12,8 @@ type CommonBook = {
   title: string;
   author: string;
   category: string;
-  courier: string;
-  onFoot: string;
-  destinationType: DestinationType;
+  sameTownConfig: LocationConfig;
+  differentTownConfig: LocationConfig;
   description: string;
   imagePath: string;
   username: string;
@@ -26,4 +25,7 @@ type CommonBook = {
   userId: string;
 };
 
-export type DestinationType = 'sameLocation' | 'otherLocation' | '0';
+export interface LocationConfig {
+  onFoot?: boolean;
+  courier: boolean;
+}
