@@ -1,20 +1,14 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "dist", "coverage", "report.html", "index.html"
-  ],
+  "ignorePatterns": ["dist", "coverage", "report.html", "index.html"],
   "parserOptions": {
     "ecmaVersion": 2020
   },
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "parserOptions": {
-        "project": [
-          "tsconfig.json"
-        ],
+        "project": ["tsconfig.json"],
         "createDefaultProgram": true
       },
       "extends": [
@@ -28,9 +22,7 @@
       }
     },
     {
-      "files": [
-        "*.html"
-      ],
+      "files": ["*.html"],
       "extends": [
         "plugin:@angular-eslint/template/recommended",
         "plugin:prettier/recommended"

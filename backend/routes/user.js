@@ -79,22 +79,22 @@ router.post("/login", (req, res, next) => {
 });
 
 router.put("/deliveryConfig", checkAuth, (req, res, next) => {
-  User.updateOne({_id: req.userData.userId.toString()}, req.body).then(() => {
+  User.updateOne({ _id: req.userData.userId.toString() }, req.body).then(() => {
     res.status(201).json();
-  })
-})
+  });
+});
 
 router.get("", checkAuth, (req, res, next) => {
   const userId = req.query.userId;
   User.findOne({ _id: userId }).then((user) => {
-    const {email, location, differentTownConfig, sameTownConfig } = user;
+    const { email, location, differentTownConfig, sameTownConfig } = user;
     res.status(201).json({
-        email,
-        location,
-        differentTownConfig,
-        sameTownConfig
+      email,
+      location,
+      differentTownConfig,
+      sameTownConfig,
     });
-  })
-})
+  });
+});
 
 module.exports = router;

@@ -20,7 +20,7 @@ interface BookProps {
 @Injectable({
   providedIn: 'root',
 })
-export class BooksListDatasource implements DataSource<any> {
+export class BooksListDatasource implements DataSource<BookProfile> {
   private unsubscribe = new Subject<void>();
   private readonly initialDataSubject = new BehaviorSubject<BookProfile[]>([]);
 
@@ -115,7 +115,7 @@ export class BooksListDatasource implements DataSource<any> {
       });
   };
 
-  resetChangedStatus = () => {
+  resetChangedStatus = (): void => {
     this.dataSubject.next(JSON.parse(JSON.stringify(this.initialBooks)));
   };
 

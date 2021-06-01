@@ -140,7 +140,9 @@ export class CreateBookComponent implements OnInit {
         sameTownConfig: this.sameTownConfig,
         differentTownConfig: this.differentTownConfig,
       })
-      .subscribe(() => {});
+      .subscribe(() => {
+        console.log('successful');
+      });
   }
 
   onImagePicked(event: Event): void {
