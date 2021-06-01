@@ -28,13 +28,11 @@ export class AuthService {
 
   createUser(authData: AuthData): void {
     this.apiService.createUserHttp(authData).subscribe(({ user }) => {
-      this.saveLoggedInUserToLs(user);
-      this.authStatusListener.next(true);
-      this.router.navigate(['homepage']).then().catch();
+      this.loginUser(authData);
     });
   }
 
-  loginUser = (authData: AuthData): void => {
+  loginUser(authData: AuthData): void {
     this.apiService.loginUserHttp(authData).subscribe(
       ({ token, expiresIn, user }) => {
         this.token = token;
@@ -52,7 +50,7 @@ export class AuthService {
         this.authStatusListener.next(false);
       }
     );
-  };
+  }
 
   async logout(): Promise<void> {
     this.token = null;
