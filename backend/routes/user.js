@@ -84,4 +84,17 @@ router.put("/deliveryConfig", checkAuth, (req, res, next) => {
   })
 })
 
+router.get("", checkAuth, (req, res, next) => {
+  const userId = req.query.userId;
+  User.findOne({ _id: userId }).then((user) => {
+    const {email, location, differentTownConfig, sameTownConfig } = user;
+    res.status(201).json({
+        email,
+        location,
+        differentTownConfig,
+        sameTownConfig
+    });
+  })
+})
+
 module.exports = router;

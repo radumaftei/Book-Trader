@@ -41,13 +41,21 @@ h1 {
     font-size: 12px;
   }
 
-  .desc {
+  .book-details {
     margin: 10px 0;
     overflow: auto;
     max-height: 100px;
     word-wrap: break-word;
     padding-left: 1em;
     font-size: 18px;
+
+    .trading-inline {
+      font-size: 20px;
+    }
+  }
+
+  .book-details-preferences {
+    font-size: 20px;
   }
 
   svg {
@@ -96,11 +104,12 @@ h1 {
 
     .actions {
       display: flex;
-      align-content: center;
       align-items: center;
-      flex-direction: column;
-      justify-content: flex-end;
-      height: 100px;
+      justify-content: space-between;
+
+      & > p:first-child {
+        font-size: 20px;
+      }
     }
   }
 }

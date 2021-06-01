@@ -18,7 +18,13 @@
               <p>{{ book.description }}</p>
             </mat-card-content>
             <mat-card-actions>
-              <button mat-button (click)="onTrade(book)">Trade</button>
+              <button
+                mat-stroked-button
+                color="primary"
+                (click)="openBookDetails(book)"
+              >
+                Book Details
+              </button>
             </mat-card-actions>
           </mat-card>
         </div>

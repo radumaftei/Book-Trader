@@ -49,6 +49,7 @@
             }
 
             mat-card-content {
+              height: 100px;
               overflow: hidden;
 
               p {
@@ -66,6 +67,10 @@
                   background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
                 }
               }
+            }
+
+            mat-card-actions {
+              text-align: center;
             }
           }
         }

@@ -23,7 +23,10 @@ type CommonBook = {
   userId: string;
 };
 
-export interface LocationConfig {
-  onFoot?: boolean;
+export interface DifferentTownConfig {
   courier: boolean;
+}
+
+export interface SameTownConfig extends DifferentTownConfig {
+  onFoot: boolean;
 }

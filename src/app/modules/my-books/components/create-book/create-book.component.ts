@@ -9,7 +9,7 @@ import { getBookCategoriesArr } from '../../../../constants';
 import { MyBooksService } from '../../my-books.service';
 import { BooksListDatasource } from '../books-list/books-list.datasource';
 import { mimeType } from './mime-type.validator';
-import { LocationConfig } from '../../../../interfaces';
+import { DifferentTownConfig, SameTownConfig } from '../../../../interfaces';
 import { ApiService } from '../../../../core/api.service';
 
 @Component({
@@ -22,12 +22,12 @@ export class CreateBookComponent implements OnInit {
   form: FormGroup;
   bookCategories = getBookCategoriesArr();
   imagePreview: string;
-  sameTownConfig: LocationConfig = {
+  sameTownConfig: SameTownConfig = {
     onFoot: true,
     courier: true,
   };
 
-  differentTownConfig: LocationConfig = {
+  differentTownConfig: DifferentTownConfig = {
     courier: true,
   };
   sameTownAllChecked = true;
@@ -116,7 +116,6 @@ export class CreateBookComponent implements OnInit {
       category,
       image,
     } = this.form.value;
-    // setInterval(() => {
     await this.dataSource.addBook({
       title,
       author,
@@ -128,7 +127,6 @@ export class CreateBookComponent implements OnInit {
       category,
       image,
     });
-    // }, 1000);
     if (!this.addMultipleBooks) {
       this.myBooksService.updateSelectedTab(0);
     } else {

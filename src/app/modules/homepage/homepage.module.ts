@@ -9,8 +9,11 @@ import { CommonModule } from '@angular/common';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { TradeDialogComponent } from './components/trade-dialog/trade-dialog.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRadioModule } from '@angular/material/radio';
+import { FormsModule } from '@angular/forms';
 
 const MATERIAL_MODULES = [
+  MatRadioModule,
   MatProgressSpinnerModule,
   MatTooltipModule,
   MatCardModule,
@@ -21,7 +24,7 @@ const MATERIAL_MODULES = [
 
 @NgModule({
   declarations: [HomepageComponent, TradeDialogComponent],
-  imports: [CommonModule, ...MATERIAL_MODULES, SharedModule],
+  imports: [CommonModule, ...MATERIAL_MODULES, SharedModule, FormsModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HomepageModule {}

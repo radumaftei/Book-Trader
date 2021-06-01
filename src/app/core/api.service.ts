@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BookProfile, BookProfileDTO, LocationConfig } from '../interfaces';
+import {
+  BookProfile,
+  BookProfileDTO,
+  DifferentTownConfig,
+  SameTownConfig,
+} from '../interfaces';
 import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
@@ -10,15 +15,15 @@ import {
   USER_LOGIN_URL,
   USER_SIGNUP_URL,
 } from '../constants';
-import { AuthData } from '../modules/auth/auth.model';
+import { AuthData, UserData } from '../modules/auth/auth.model';
 import { Observable, throwError } from 'rxjs';
 import { NotificationService } from '../shared/notification/notification.service';
 import { NotificationType } from '../shared/notification/notification-type.enum';
 import { transformDTOBooks } from '../modules/helpers';
 
 interface IDelivery {
-  sameTownConfig: LocationConfig;
-  differentTownConfig: LocationConfig;
+  sameTownConfig: SameTownConfig;
+  differentTownConfig: DifferentTownConfig;
 }
 
 @Injectable({
@@ -46,6 +51,17 @@ export class ApiService {
         catchError(this.handleError("Couldn't fetch books"))
       );
   };
+
+  getUserHttp(userId: string): Observable<UserData> {
+    return this.httpClient
+      .get<UserData>(this.USER_API_URL, {
+        observe: 'body',
+        params: {
+          userId,
+        },
+      })
+      .pipe(catchError(this.handleError("Couldn't get user")));
+  }
 
   postBookHttp = (book) => {
     return this.httpClient
