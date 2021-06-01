@@ -13,6 +13,13 @@ router.post("/signup", (req, res, next) => {
       email: req.body.email,
       password: hash,
       location: req.body.location,
+      sameTownConfig: {
+        courier: true,
+        onFoot: true
+      },
+      differentTownConfig: {
+        courier: true
+      }
     });
     user
       .save()

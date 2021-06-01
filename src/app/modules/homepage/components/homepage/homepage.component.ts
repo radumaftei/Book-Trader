@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { Subject } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DIALOG_POPUP_MESSAGES } from 'src/app/constants';
 import { BookProfile } from 'src/app/interfaces';
@@ -67,22 +67,28 @@ export class HomepageComponent implements OnInit, OnDestroy {
     dialogConfig.disableClose = true;
     dialogConfig.width = '800px';
 
-    this.homepageService
-      .getUser(book.userId)
+    forkJoin([
+      this.homepageService.getUser(book.userId),
+      this.homepageService.getUserBooks(),
+    ])
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe((user) => {
+      .subscribe(([userData, userBooks]) => {
         dialogConfig.data = {
           ...dialogConfig.data,
-          user,
+          user: userData,
+          userBooks,
         };
         dialogRef = this.dialog.open(TradeDialogComponent, dialogConfig);
-      });
 
-    dialogRef?.afterClosed().subscribe((result) => {
-      if (result) {
-        console.log('trade pressed');
-      }
-    });
+        dialogRef
+          .afterClosed()
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe((result) => {
+            if (result) {
+              console.log('trade pressed');
+            }
+          });
+      });
   };
 
   booksByCategory = (category: string): BookProfile[] => {

@@ -22,6 +22,10 @@ export class HomepageService {
     });
   }
 
+  getUserBooks(): Observable<BookProfile[]> {
+    return this.apiService.fetchBooks(false);
+  }
+
   getUser(userId: string): Observable<UserData> {
     return this.apiService.getUserHttp(userId);
   }

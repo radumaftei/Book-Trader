@@ -41,39 +41,45 @@
           <span class="trading-inline">Trading genres:</span>
           {{ book.tradingPreferenceGenre }}
         </p>
-        <div class="actions" *ngIf="showDifferentTown || showSameTown">
+        <div class="actions">
           <p>Choose an option for delivery</p>
-          <mat-radio-group>
-            <div class="delivery-section" *ngIf="showDifferentTown">
+          <mat-radio-group color="primary" [required]="true">
+            <div class="delivery-section">
               <p>Different town</p>
               <mat-radio-button
                 [checked]="false"
-                (change)="
-                  updateDeliveryMethod('differentTownConfig', 'courier', $event)
-                "
+                value="differentTownConfig-courier"
+                (change)="updateDeliveryMethod($event)"
               >
-                Courier</mat-radio-button
-              >
+                Courier
+              </mat-radio-button>
             </div>
-            <div class="delivery-section" *ngIf="showSameTown">
+            <div class="delivery-section">
               <p>Same town</p>
               <mat-radio-button
                 [checked]="false"
-                (change)="
-                  updateDeliveryMethod('sameTownConfig', 'courier', $event)
-                "
-                >Courier</mat-radio-button
+                value="sameTownConfig-courier"
+                (change)="updateDeliveryMethod($event)"
               >
+                Courier
+              </mat-radio-button>
               <mat-radio-button
                 [checked]="false"
-                (change)="
-                  updateDeliveryMethod('sameTownConfig', 'onFoot', $event)
-                "
+                value="sameTownConfig-onFoot"
+                (change)="updateDeliveryMethod($event)"
               >
-                Personal delivery</mat-radio-button
-              >
+                Personal delivery
+              </mat-radio-button>
             </div>
           </mat-radio-group>
+          <mat-form-field appearance="fill">
+            <mat-label>Select book for trade</mat-label>
+            <mat-select [required]="true" [(ngModel)]="selectedBook">
+              <mat-option *ngFor="let book of userBooks" [value]="book">
+                {{ book.title }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
     </div>

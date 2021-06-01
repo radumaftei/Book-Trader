@@ -2,7 +2,7 @@ import { catchError, finalize, takeUntil } from 'rxjs/operators';
 import { ApiService } from '../../../../core/api.service';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { BookProfile, BookProfileDTO } from 'src/app/interfaces';
+import { BookProfile } from 'src/app/interfaces';
 import { Injectable } from '@angular/core';
 
 interface BookProps {
@@ -56,7 +56,7 @@ export class BooksListDatasource implements DataSource<BookProfile> {
         catchError(() => of([])),
         finalize(() => this.loadingSubject.next(false))
       )
-      .subscribe((books: BookProfileDTO[]) => {
+      .subscribe((books: BookProfile[]) => {
         if (!books) return;
         this.noDataSubject.next(!books.length);
         let lineNumber = 0;

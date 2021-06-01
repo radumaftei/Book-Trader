@@ -14,6 +14,7 @@ export interface DialogData {
   isHomepage: boolean | null;
   book: BookProfile | null;
   user: UserData;
+  userBooks: BookProfile[];
 }
 
 @Component({
@@ -22,8 +23,11 @@ export interface DialogData {
 })
 export class TradeDialogComponent {
   book: BookProfile;
+  userBooks: BookProfile[];
+  selectedBook: BookProfile;
   sameTownConfig: SameTownConfig;
   differentTownConfig: DifferentTownConfig;
+  selectedConfig: string;
   showSameTown = true;
   showDifferentTown = true;
 
@@ -41,6 +45,7 @@ export class TradeDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
     this.book = data.book;
+    this.userBooks = data.userBooks;
     this.sameTownConfig = data.user.sameTownConfig;
     this.differentTownConfig = data.user.differentTownConfig;
     this.showDifferentTown = Object.keys(this.differentTownConfig).some(
@@ -51,20 +56,7 @@ export class TradeDialogComponent {
     );
   }
 
-  updateDeliveryMethod(
-    town: string,
-    type: string,
-    event: MatRadioChange
-  ): void {
-    console.log('before', this[town]);
-    this[town] = {
-      ...this[town],
-      [type]: event.value,
-    };
-    console.log('after', this[town]);
-  }
-
-  deliveryMethodSelected(town: string): void {
-    console.log(town, this[town]);
+  updateDeliveryMethod(event: MatRadioChange): void {
+    this.selectedConfig = event.value;
   }
 }
