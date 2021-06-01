@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../../core/api.service';
 import { BookProfile } from '../../interfaces';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { UserData } from '../auth/auth.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,15 +14,23 @@ export class HomepageService {
 
   constructor(private apiService: ApiService) {}
 
-  getHomepageBooks = (): void => {
+  getHomepageBooks(): void {
     this.apiService.fetchBooks().subscribe((books: BookProfile[]) => {
       if (!books) return;
       this.books = books;
       this.HOMEPAGE_BOOKS_UPDATE.next([...this.books]);
     });
-  };
+  }
 
-  cleanUp = (): void => {
+  getUserBooks(): Observable<BookProfile[]> {
+    return this.apiService.fetchBooks(false);
+  }
+
+  getUser(userId: string): Observable<UserData> {
+    return this.apiService.getUserHttp(userId);
+  }
+
+  cleanUp(): void {
     this.HOMEPAGE_BOOKS_UPDATE.next([]);
-  };
+  }
 }

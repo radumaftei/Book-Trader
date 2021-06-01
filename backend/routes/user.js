@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const checkAuth = require("../middleware/check-auth");
 const User = require("../models/user");
 
 const router = express.Router();
@@ -12,6 +13,13 @@ router.post("/signup", (req, res, next) => {
       email: req.body.email,
       password: hash,
       location: req.body.location,
+      sameTownConfig: {
+        courier: true,
+        onFoot: true
+      },
+      differentTownConfig: {
+        courier: true
+      }
     });
     user
       .save()
@@ -75,6 +83,25 @@ router.post("/login", (req, res, next) => {
         message: error,
       });
     });
+});
+
+router.put("/deliveryConfig", checkAuth, (req, res, next) => {
+  User.updateOne({ _id: req.userData.userId.toString() }, req.body).then(() => {
+    res.status(201).json();
+  });
+});
+
+router.get("", checkAuth, (req, res, next) => {
+  const userId = req.query.userId;
+  User.findOne({ _id: userId }).then((user) => {
+    const { email, location, differentTownConfig, sameTownConfig } = user;
+    res.status(201).json({
+      email,
+      location,
+      differentTownConfig,
+      sameTownConfig,
+    });
+  });
 });
 
 module.exports = router;

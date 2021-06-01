@@ -18,12 +18,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 const MATERIAL_MODULES = [
   MatCheckboxModule,
-  MatRadioModule,
   MatExpansionModule,
   MatSlideToggleModule,
   MatProgressSpinnerModule,

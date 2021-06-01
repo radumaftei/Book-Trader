@@ -2,11 +2,7 @@ import { catchError, finalize, takeUntil } from 'rxjs/operators';
 import { ApiService } from '../../../../core/api.service';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import {
-  BookProfile,
-  BookProfileDTO,
-  DestinationType,
-} from 'src/app/interfaces';
+import { BookProfile } from 'src/app/interfaces';
 import { Injectable } from '@angular/core';
 
 interface BookProps {
@@ -14,20 +10,17 @@ interface BookProps {
   category: string;
   description: string;
   title: string;
-  destinationType: DestinationType;
   tradingPreferenceAuthor: string;
   tradingPreferenceBook: string;
   tradingPreferenceDescription: string;
   tradingPreferenceGenre: string;
-  courier: boolean;
-  onFoot: boolean;
   image: File;
 }
 
 @Injectable({
   providedIn: 'root',
 })
-export class BooksListDatasource implements DataSource<any> {
+export class BooksListDatasource implements DataSource<BookProfile> {
   private unsubscribe = new Subject<void>();
   private readonly initialDataSubject = new BehaviorSubject<BookProfile[]>([]);
 
@@ -63,7 +56,7 @@ export class BooksListDatasource implements DataSource<any> {
         catchError(() => of([])),
         finalize(() => this.loadingSubject.next(false))
       )
-      .subscribe((books: BookProfileDTO[]) => {
+      .subscribe((books: BookProfile[]) => {
         if (!books) return;
         this.noDataSubject.next(!books.length);
         let lineNumber = 0;
@@ -122,7 +115,7 @@ export class BooksListDatasource implements DataSource<any> {
       });
   };
 
-  resetChangedStatus = () => {
+  resetChangedStatus = (): void => {
     this.dataSubject.next(JSON.parse(JSON.stringify(this.initialBooks)));
   };
 

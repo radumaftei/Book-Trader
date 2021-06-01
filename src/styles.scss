@@ -33,6 +33,10 @@ body {
     align-items: center;
     justify-content: center;
     margin-right: 50px;
+
+    img {
+      object-fit: cover;
+    }
   }
 
   .auth-image {

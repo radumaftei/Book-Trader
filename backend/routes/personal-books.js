@@ -16,62 +16,57 @@ const storage = multer.diskStorage({
     const error = isValid ? null : new Error("Invalid mime type!");
     cb(error, "backend/images");
   },
+
   filename: (req, file, cb) => {
-    const name = file.originalname.toLowerCase().split(" ").join("-");
+    const name = file.originalname
+      .toLowerCase()
+      .split(" ")
+      .join("-")
+      .split(".")[0];
     const ext = MIME_TYPE_MAP[file.mimetype];
     cb(null, `${name}-${Date.now()}.${ext}`);
   },
 });
 
-router.post(
-  "",
-  checkAuth,
-  multer({ storage }).single("image"),
-  (req, res, next) => {
-    const url = `${req.protocol}://${req.get("host")}`;
-    const {
-      title,
-      author,
-      category,
-      courier,
-      onFoot,
-      destinationType,
-      description,
-      tradingPreferenceDescription,
-      tradingPreferenceAuthor,
-      tradingPreferenceBook,
-      tradingPreferenceGenre,
-    } = req.body;
-    new Book({
-      title,
-      author,
-      category,
-      courier,
-      destinationType,
-      onFoot,
-      description,
-      tradingPreferenceDescription,
-      tradingPreferenceAuthor,
-      tradingPreferenceBook,
-      tradingPreferenceGenre,
-      imagePath: `${url}/images/${req.file.filename}`,
-      userId: req.userData.userId,
-      username: req.userData.email.split("@")[0],
-      location: req.userData.location,
-    })
-      .save()
-      .then((addedBook) => {
-        addedBook = addedBook.toObject();
-        res.status(201).json({
-          message: "Book added successfully",
-          newBook: {
-            ...addedBook,
-            id: addedBook._id,
-          },
-        });
+const upload = multer({ storage });
+router.post("", checkAuth, upload.single("image"), (req, res, next) => {
+  const url = `${req.protocol}://${req.get("host")}`;
+  const {
+    title,
+    author,
+    category,
+    description,
+    tradingPreferenceDescription,
+    tradingPreferenceAuthor,
+    tradingPreferenceBook,
+    tradingPreferenceGenre,
+  } = req.body;
+  new Book({
+    title,
+    author,
+    category,
+    description,
+    tradingPreferenceDescription,
+    tradingPreferenceAuthor,
+    tradingPreferenceBook,
+    tradingPreferenceGenre,
+    imagePath: `${url}/images/${req.file.filename}`,
+    userId: req.userData.userId,
+    username: req.userData.email.split("@")[0],
+    location: req.userData.location,
+  })
+    .save()
+    .then((addedBook) => {
+      addedBook = addedBook.toObject();
+      res.status(201).json({
+        message: "Book added successfully",
+        newBook: {
+          ...addedBook,
+          id: addedBook._id,
+        },
       });
-  }
-);
+    });
+});
 
 router.get("", checkAuth, (req, res, next) => {
   Book.find({ userId: req.userData.userId }).then((books) => {

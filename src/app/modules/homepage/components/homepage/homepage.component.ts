@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { Subject } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DIALOG_POPUP_MESSAGES } from 'src/app/constants';
 import { BookProfile } from 'src/app/interfaces';
-import { LoginSignUpUser } from 'src/app/modules/auth/auth.model';
 import { HomepageService } from '../../homepage.service';
 import { TradeDialogComponent } from '../trade-dialog/trade-dialog.component';
 
@@ -14,9 +13,7 @@ import { TradeDialogComponent } from '../trade-dialog/trade-dialog.component';
 })
 export class HomepageComponent implements OnInit, OnDestroy {
   private unsubscribe = new Subject<void>();
-  alive = true;
 
-  loggedInUser: LoginSignUpUser;
   isLoading = false;
   bookCards: BookProfile[];
   bookCategories = [];
@@ -30,10 +27,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.loggedInUser = {
-      email: localStorage.getItem('loggedInUserEmail'),
-      location: localStorage.getItem('loggedInUserLocation'),
-    };
     this.homepageService.getHomepageBooks();
     this.homepageService.homepageBooksUpdate$
       .pipe(takeUntil(this.unsubscribe))
@@ -62,24 +55,40 @@ export class HomepageComponent implements OnInit, OnDestroy {
       });
   }
 
-  onTrade = (book: BookProfile): void => {
+  openBookDetails = (book: BookProfile): void => {
+    let dialogRef;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       message: DIALOG_POPUP_MESSAGES.TRADE_BOOK,
       actionButton: 'Send Trade offer',
       isHomepage: true,
       book,
-      loggedInUser: this.loggedInUser,
     };
     dialogConfig.disableClose = true;
     dialogConfig.width = '800px';
-    const dialogRef = this.dialog.open(TradeDialogComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        console.log('trade pressed');
-      }
-    });
+    forkJoin([
+      this.homepageService.getUser(book.userId),
+      this.homepageService.getUserBooks(),
+    ])
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(([userData, userBooks]) => {
+        dialogConfig.data = {
+          ...dialogConfig.data,
+          user: userData,
+          userBooks,
+        };
+        dialogRef = this.dialog.open(TradeDialogComponent, dialogConfig);
+
+        dialogRef
+          .afterClosed()
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe((result) => {
+            if (result) {
+              console.log('trade pressed');
+            }
+          });
+      });
   };
 
   booksByCategory = (category: string): BookProfile[] => {
