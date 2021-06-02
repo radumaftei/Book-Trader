@@ -83,6 +83,9 @@
                 {{ book.title }}
               </mat-option>
             </mat-select>
+            <mat-error *ngIf="!selectedBook"
+              >Please select a book in order to trade</mat-error
+            >
           </mat-form-field>
           <h3 *ngIf="!userBooks.length">
             No books in your library to select from
@@ -94,7 +97,12 @@
 </mat-dialog-content>
 <div mat-dialog-actions>
   <div class="buttons-wrapper">
-    <button mat-raised-button color="primary" [mat-dialog-close]="true">
+    <button
+      mat-raised-button
+      color="primary"
+      [mat-dialog-close]="true"
+      [disabled]="tradeButtonDisabled"
+    >
       {{ data.actionButton }}
     </button>
   </div>

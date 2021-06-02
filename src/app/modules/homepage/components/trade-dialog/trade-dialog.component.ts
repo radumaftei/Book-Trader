@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   BookProfile,
@@ -6,7 +6,6 @@ import {
   SameTownConfig,
 } from '../../../../interfaces';
 import { UserData } from '../../../auth/auth.model';
-import { MatRadioChange } from '@angular/material/radio';
 
 export interface DialogData {
   message: string;
@@ -20,6 +19,7 @@ export interface DialogData {
 @Component({
   templateUrl: './trade-dialog.component.html',
   styleUrls: ['./trade-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TradeDialogComponent {
   book: BookProfile;
@@ -36,6 +36,10 @@ export class TradeDialogComponent {
       !!this.book.tradingPreferenceBook ||
       !!this.book.tradingPreferenceDescription
     );
+  }
+
+  get tradeButtonDisabled(): boolean {
+    return !(this.userBooks.length && this.selectedConfig && this.selectedBook);
   }
 
   constructor(
