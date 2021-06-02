@@ -49,7 +49,8 @@
               <mat-radio-button
                 [checked]="false"
                 value="differentTownConfig-courier"
-                (change)="updateDeliveryMethod($event)"
+                (change)="selectedConfig = $event.value"
+                [disabled]="!differentTownConfig.courier"
               >
                 Courier
               </mat-radio-button>
@@ -59,20 +60,23 @@
               <mat-radio-button
                 [checked]="false"
                 value="sameTownConfig-courier"
-                (change)="updateDeliveryMethod($event)"
+                (change)="selectedConfig = $event.value"
+                [disabled]="!sameTownConfig.courier"
               >
                 Courier
               </mat-radio-button>
               <mat-radio-button
                 [checked]="false"
                 value="sameTownConfig-onFoot"
-                (change)="updateDeliveryMethod($event)"
+                (change)="selectedConfig = $event.value"
+                [disabled]="!sameTownConfig.onFoot"
               >
                 Personal delivery
               </mat-radio-button>
             </div>
           </mat-radio-group>
-          <mat-form-field appearance="fill">
+
+          <mat-form-field appearance="fill" *ngIf="userBooks.length">
             <mat-label>Select book for trade</mat-label>
             <mat-select [required]="true" [(ngModel)]="selectedBook">
               <mat-option *ngFor="let book of userBooks" [value]="book">
@@ -80,6 +84,9 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+          <h3 *ngIf="!userBooks.length">
+            No books in your library to select from
+          </h3>
         </div>
       </div>
     </div>

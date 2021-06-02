@@ -92,8 +92,10 @@ router.put("/deliveryConfig", checkAuth, (req, res, next) => {
 });
 
 router.get("", checkAuth, (req, res, next) => {
-  const userId = req.query.userId;
-  User.findOne({ _id: userId }).then((user) => {
+  const userSearchQuery = req.query.userSearchQuery;
+  const byId = req.query.byId === 'true';
+  const filterProperty = byId ? '_id' : 'email';
+  User.findOne({[filterProperty]: userSearchQuery}).then((user) => {
     const { email, location, differentTownConfig, sameTownConfig } = user;
     res.status(201).json({
       email,

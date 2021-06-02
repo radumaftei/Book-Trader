@@ -15,7 +15,8 @@
         "plugin:@angular-eslint/recommended",
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:prettier/recommended"
+        "plugin:prettier/recommended",
+        "prettier/prettier"
       ],
       "rules": {
         "@typescript-eslint/no-non-null-assertion": "off"

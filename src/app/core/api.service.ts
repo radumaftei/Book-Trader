@@ -52,12 +52,13 @@ export class ApiService {
       );
   };
 
-  getUserHttp(userId: string): Observable<UserData> {
+  getUserHttp(userSearchQuery: string, byId = true): Observable<UserData> {
     return this.httpClient
       .get<UserData>(this.USER_API_URL, {
         observe: 'body',
         params: {
-          userId,
+          userSearchQuery,
+          byId,
         },
       })
       .pipe(catchError(this.handleError("Couldn't get user")));

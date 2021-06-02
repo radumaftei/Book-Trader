@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -10,7 +11,10 @@ import { MyBooksService } from '../../my-books.service';
 import { BooksListDatasource } from '../books-list/books-list.datasource';
 import { mimeType } from './mime-type.validator';
 import { DifferentTownConfig, SameTownConfig } from '../../../../interfaces';
-import { ApiService } from '../../../../core/api.service';
+import { CommonService } from '../../../../shared/common.service';
+import { takeUntil } from 'rxjs/operators';
+import { UserData } from '../../../auth/auth.model';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-create-book',
@@ -18,7 +22,8 @@ import { ApiService } from '../../../../core/api.service';
   styleUrls: ['./create-book.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreateBookComponent implements OnInit {
+export class CreateBookComponent implements OnInit, OnDestroy {
+  private unsubscribe = new Subject<void>();
   form: FormGroup;
   bookCategories = getBookCategoriesArr();
   imagePreview: string;
@@ -56,8 +61,41 @@ export class CreateBookComponent implements OnInit {
     private myBooksService: MyBooksService,
     private dataSource: BooksListDatasource,
     private cdr: ChangeDetectorRef,
-    private apiService: ApiService
+    private commonService: CommonService
   ) {}
+
+  ngOnInit(): void {
+    this.commonService
+      .getUser(localStorage.getItem('loggedInUserEmail'), false)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe((user: UserData) => {
+        this.sameTownConfig = user.sameTownConfig;
+        this.differentTownConfig = user.differentTownConfig;
+        this.sameTownAllChecked = Object.keys(this.sameTownConfig).every(
+          (t: string) => this.sameTownConfig[t]
+        );
+        this.differentTownAllChecked = Object.keys(
+          this.differentTownConfig
+        ).every((t: string) => this.differentTownConfig[t]);
+      });
+    this.form = this.formBuilder.group({
+      title: ['', [Validators.required]],
+      author: ['', [Validators.required]],
+      tradingPreferenceAuthor: [''],
+      tradingPreferenceBook: [''],
+      tradingPreferenceGenre: [''],
+      tradingPreferenceDescription: [''],
+      description: ['', [Validators.required]],
+      category: ['', [Validators.required]],
+      image: [
+        null,
+        {
+          validators: [Validators.required],
+          asyncValidators: [mimeType],
+        },
+      ],
+    });
+  }
 
   updateAllCompleted(town: string, allSelected: string): void {
     this[allSelected] = Object.keys(this[town]).every(
@@ -79,26 +117,6 @@ export class CreateBookComponent implements OnInit {
   ): void {
     this[allSelected] = completed;
     Object.keys(this[town]).forEach((t) => (this[town][t] = completed));
-  }
-
-  ngOnInit(): void {
-    this.form = this.formBuilder.group({
-      title: ['', [Validators.required]],
-      author: ['', [Validators.required]],
-      tradingPreferenceAuthor: [''],
-      tradingPreferenceBook: [''],
-      tradingPreferenceGenre: [''],
-      tradingPreferenceDescription: [''],
-      description: ['', [Validators.required]],
-      category: ['', [Validators.required]],
-      image: [
-        null,
-        {
-          validators: [Validators.required],
-          asyncValidators: [mimeType],
-        },
-      ],
-    });
   }
 
   async onCreateBook(): Promise<void> {
@@ -135,14 +153,10 @@ export class CreateBookComponent implements OnInit {
   }
 
   changeSettings(): void {
-    this.apiService
-      .updateUserDeliverySettings({
-        sameTownConfig: this.sameTownConfig,
-        differentTownConfig: this.differentTownConfig,
-      })
-      .subscribe(() => {
-        console.log('successful');
-      });
+    this.myBooksService.changeDeliverySettings(
+      this.sameTownConfig,
+      this.differentTownConfig
+    );
   }
 
   onImagePicked(event: Event): void {
@@ -155,5 +169,10 @@ export class CreateBookComponent implements OnInit {
       this.cdr.detectChanges();
     };
     reader.readAsDataURL(file);
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 }

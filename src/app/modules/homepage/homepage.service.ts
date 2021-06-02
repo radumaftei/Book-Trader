@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '../../core/api.service';
 import { BookProfile } from '../../interfaces';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { UserData } from '../auth/auth.model';
 
 @Injectable({
   providedIn: 'root',
@@ -24,10 +23,6 @@ export class HomepageService {
 
   getUserBooks(): Observable<BookProfile[]> {
     return this.apiService.fetchBooks(false);
-  }
-
-  getUser(userId: string): Observable<UserData> {
-    return this.apiService.getUserHttp(userId);
   }
 
   cleanUp(): void {
