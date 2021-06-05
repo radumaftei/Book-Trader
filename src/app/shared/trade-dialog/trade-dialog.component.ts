@@ -4,8 +4,8 @@ import {
   BookProfile,
   DifferentTownConfig,
   SameTownConfig,
-} from '../../../../interfaces';
-import { UserData } from '../../../auth/auth.model';
+} from '../../interfaces';
+import { UserData } from '../../modules/auth/auth.model';
 
 export interface DialogData {
   message: string;

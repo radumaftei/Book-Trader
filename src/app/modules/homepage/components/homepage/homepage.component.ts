@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { DIALOG_POPUP_MESSAGES } from 'src/app/constants';
 import { BookProfile } from 'src/app/interfaces';
 import { HomepageService } from '../../homepage.service';
-import { TradeDialogComponent } from '../trade-dialog/trade-dialog.component';
+import { TradeDialogComponent } from '../../../../shared/trade-dialog/trade-dialog.component';
 import { CommonService } from '../../../../shared/common.service';
 
 @Component({

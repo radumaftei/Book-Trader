@@ -9,7 +9,7 @@ import {
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { fromEvent, Subject } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { TradeDialogComponent } from '../../../homepage/components/trade-dialog/trade-dialog.component';
+import { TradeDialogComponent } from '../../../../shared/trade-dialog/trade-dialog.component';
 import {
   COLUMN_TYPES,
   defaultPageOptions,
