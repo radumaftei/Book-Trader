@@ -52,22 +52,16 @@ export class BooksListDatasource implements DataSource<BookProfile> {
   }
 
   getBooksForTable(queryParams: PageOptions): void {
-    const queryParameters = {
-      ...queryParams,
-      pageIndex: queryParams.pageIndex + 1,
-    };
     this.loadingSubject.next(true);
     this.noDataSubject.next(false);
     this.apiService
-      .fetchBooks(false, queryParameters)
+      .fetchBooks(false, queryParams)
       .pipe(
         takeUntil(this.unsubscribe),
         catchError(() => of([])),
         finalize(() => this.loadingSubject.next(false))
       )
       .subscribe((data: BookApi) => {
-        debugger;
-        console.log('books', data);
         this.countSubject.next(data.length);
         if (!data.books) return;
         this.noDataSubject.next(!data.books.length);

@@ -46,13 +46,17 @@ export class ApiService {
     homepage = true,
     queryParams: PageOptions = defaultPageOptions
   ): Observable<BookApi> => {
+    const query = {
+      ...queryParams,
+      pageIndex: queryParams.pageIndex + 1,
+    };
     return this.httpClient
       .get<{ message: string; books: BookProfileDTO[]; length: number }>(
         homepage ? this.HOMEPAGE_URL : this.BOOKS_API_URL,
         {
           observe: 'body',
           params: {
-            ...queryParams,
+            ...query,
           },
         }
       )

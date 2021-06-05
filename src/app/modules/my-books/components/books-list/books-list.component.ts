@@ -141,7 +141,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   };
 
   deleteRow = (bookId: string): void => {
-    console.log('book id', bookId);
+    this.paginator.pageIndex = 0;
     this.openDialog(bookId);
   };
 

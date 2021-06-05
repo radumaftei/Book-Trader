@@ -22,6 +22,7 @@ export interface DialogData {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TradeDialogComponent {
+  isHomepage: boolean | null;
   book: BookProfile;
   userBooks: BookProfile[];
   selectedBook: BookProfile;
@@ -39,16 +40,19 @@ export class TradeDialogComponent {
   }
 
   get tradeButtonDisabled(): boolean {
-    return !(this.userBooks.length && this.selectedConfig && this.selectedBook);
+    return !this.isHomepage
+      ? false
+      : !(this.userBooks?.length && this.selectedConfig && this.selectedBook);
   }
 
   constructor(
     public dialogRef: MatDialogRef<TradeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
+    this.isHomepage = data.isHomepage;
     this.book = data.book;
     this.userBooks = data.userBooks;
-    this.sameTownConfig = data.user.sameTownConfig;
-    this.differentTownConfig = data.user.differentTownConfig;
+    this.sameTownConfig = data.user?.sameTownConfig;
+    this.differentTownConfig = data.user?.differentTownConfig;
   }
 }
