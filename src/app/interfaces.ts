@@ -30,3 +30,13 @@ export interface DifferentTownConfig {
 export interface SameTownConfig extends DifferentTownConfig {
   onFoot: boolean;
 }
+
+export interface PageOptions {
+  pageIndex: number;
+  pageSize: number;
+}
+
+export interface BookApi {
+  books: BookProfile[];
+  length: number;
+}

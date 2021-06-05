@@ -1,4 +1,4 @@
-import { BookProfile, BookProfileDTO } from '../interfaces';
+import { BookApi, BookProfileDTO } from '../interfaces';
 
 export const areObjectDifferent = (
   obj1: Record<string, unknown>,
@@ -15,8 +15,11 @@ export const areObjectDifferent = (
   return objectsDifferent;
 };
 
-export const transformDTOBooks = (books: BookProfileDTO[]): BookProfile[] =>
-  books.map(
+export const transformDTOBooks = (
+  books: BookProfileDTO[],
+  length: number
+): BookApi => ({
+  books: books.map(
     ({
       _id,
       title,
@@ -47,4 +50,6 @@ export const transformDTOBooks = (books: BookProfileDTO[]): BookProfile[] =>
       userId,
       changed: false,
     })
-  );
+  ),
+  length,
+});

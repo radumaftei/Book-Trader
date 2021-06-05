@@ -78,7 +78,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
         dialogConfig.data = {
           ...dialogConfig.data,
           user: userData,
-          userBooks,
+          userBooks: userBooks.books,
         };
         dialogRef = this.dialog.open(TradeDialogComponent, dialogConfig);
 
