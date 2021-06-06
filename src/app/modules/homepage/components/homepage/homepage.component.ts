@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { DIALOG_POPUP_MESSAGES } from 'src/app/constants';
 import { BookProfile } from 'src/app/interfaces';
 import { HomepageService } from '../../homepage.service';
-import { TradeDialogComponent } from '../../../../shared/trade-dialog/trade-dialog.component';
+import { DialogComponent } from '../../../../shared/dialog/dialog.component';
 import { CommonService } from '../../../../shared/common.service';
 
 @Component({
@@ -80,7 +80,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
           user: userData,
           userBooks: userBooks.books,
         };
-        dialogRef = this.dialog.open(TradeDialogComponent, dialogConfig);
+        dialogRef = this.dialog.open(DialogComponent, dialogConfig);
 
         dialogRef
           .afterClosed()

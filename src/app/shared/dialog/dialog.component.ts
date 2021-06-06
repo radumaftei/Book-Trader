@@ -17,11 +17,11 @@ export interface DialogData {
 }
 
 @Component({
-  templateUrl: './trade-dialog.component.html',
-  styleUrls: ['./trade-dialog.component.scss'],
+  templateUrl: './dialog.component.html',
+  styleUrls: ['./dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TradeDialogComponent {
+export class DialogComponent {
   isHomepage: boolean | null;
   book: BookProfile;
   userBooks: BookProfile[];
@@ -46,7 +46,7 @@ export class TradeDialogComponent {
   }
 
   constructor(
-    public dialogRef: MatDialogRef<TradeDialogComponent>,
+    public dialogRef: MatDialogRef<DialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
     this.isHomepage = data.isHomepage;

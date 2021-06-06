@@ -1,9 +1,13 @@
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { DashboardComponent } from './modules/my-books/components/dashboard/dashboard.component';
 import { AuthGuard } from './modules/auth/auth.guard';
 
 const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'login',
+  },
   {
     path: 'login',
     loadChildren: () =>
@@ -32,6 +36,15 @@ const routes: Routes = [
     },
   },
   {
+    path: 'profile',
+    loadChildren: () =>
+      import('./modules/profile/profile.module').then((m) => m.ProfileModule),
+    canActivate: [AuthGuard],
+    data: {
+      animation: 'Profile',
+    },
+  },
+  {
     path: 'personal-book-page',
     loadChildren: () =>
       import('./modules/my-books/components/dashboard/dashboard.module').then(
@@ -41,11 +54,6 @@ const routes: Routes = [
     data: {
       animation: 'PersonalBookPage',
     },
-  },
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'login',
   },
   {
     path: '**',

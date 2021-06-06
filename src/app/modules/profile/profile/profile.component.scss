@@ -1,0 +1,12 @@
+.wrapper {
+  min-height: 100vh;
+  height: 100%;
+  background: #d4e5eb;
+
+  .profile-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+

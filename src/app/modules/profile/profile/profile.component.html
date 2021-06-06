@@ -1,0 +1,93 @@
+<div class="wrapper">
+  <app-header></app-header>
+
+  <div class="profile-content">
+    <h1>Welcome, user</h1>
+    <mat-expansion-panel *ngIf="(loading$ | async) === false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>Delivery methods by location</mat-panel-title>
+        <mat-panel-description>
+          <mat-icon>local_shipping</mat-icon></mat-panel-description
+        >
+      </mat-expansion-panel-header>
+      <section class="delivery-method-section">
+        <mat-checkbox
+          [checked]="sameTownAllChecked"
+          [indeterminate]="someCompletedSameTown()"
+          (change)="
+            setAllForSeparateTowns(
+              'sameTownConfig',
+              'sameTownAllChecked',
+              $event.checked
+            )
+          "
+          >Delivery to the same town</mat-checkbox
+        >
+        <ul>
+          <li>
+            <mat-checkbox
+              [ngModelOptions]="{ standalone: true }"
+              [(ngModel)]="sameTownConfig.courier"
+              (ngModelChange)="
+                updateAllCompleted('sameTownConfig', 'sameTownAllChecked')
+              "
+              >Courier</mat-checkbox
+            >
+          </li>
+          <li>
+            <mat-checkbox
+              [ngModelOptions]="{ standalone: true }"
+              [(ngModel)]="sameTownConfig.onFoot"
+              (ngModelChange)="
+                updateAllCompleted('sameTownConfig', 'sameTownAllChecked')
+              "
+              >Personal delivery</mat-checkbox
+            >
+          </li>
+        </ul>
+      </section>
+      <section class="delivery-method-section">
+        <mat-checkbox
+          [checked]="differentTownAllChecked"
+          (change)="
+            setAllForSeparateTowns(
+              'differentTownConfig',
+              'differentTownAllChecked',
+              $event.checked
+            )
+          "
+          >Delivery to a different town</mat-checkbox
+        >
+        <ul>
+          <li>
+            <mat-checkbox
+              [ngModelOptions]="{ standalone: true }"
+              [(ngModel)]="differentTownConfig.courier"
+              (ngModelChange)="
+                updateAllCompleted(
+                  'differentTownConfig',
+                  'differentTownAllChecked'
+                )
+              "
+              >Courier</mat-checkbox
+            >
+          </li>
+        </ul>
+      </section>
+      <mat-error *ngIf="deliveryMethodsEmpty"
+        >Please select at least one delivery method !
+      </mat-error>
+      <div class="delivery-settings-button">
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="(loading$ | async) || deliveryMethodsEmpty"
+          (click)="changeSettings()"
+          type="button"
+        >
+          Change delivery settings
+        </button>
+      </div>
+    </mat-expansion-panel>
+  </div>
+</div>

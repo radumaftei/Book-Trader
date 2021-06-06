@@ -7,6 +7,7 @@
 * {
   padding: 0;
   box-sizing: border-box;
+  font-family: 'futura-pt';
 }
 
 html {
@@ -104,4 +105,19 @@ mat-spinner {
   z-index: 10;
   margin: auto;
   top: 35vh;
+}
+
+.delivery-method-section {
+  padding: 0 10px;
+  margin: 12px 0;
+
+  ul {
+    padding-left: 20px;
+    list-style-type: none;
+  }
+}
+
+.delivery-settings-button {
+  text-align: center;
+  margin-top: 20px;
 }

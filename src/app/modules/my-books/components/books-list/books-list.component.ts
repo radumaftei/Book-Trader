@@ -9,10 +9,11 @@ import {
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { fromEvent, Subject } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { TradeDialogComponent } from '../../../../shared/trade-dialog/trade-dialog.component';
+import { DialogComponent } from '../../../../shared/dialog/dialog.component';
 import {
   COLUMN_TYPES,
   defaultPageOptions,
+  DIALOG_POPUP_ACTIONS,
   DIALOG_POPUP_MESSAGES,
   getBookCategoriesArr,
 } from '../../../../constants';
@@ -111,16 +112,16 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
           pageIndex,
         });
       });
-    this.searchInput &&
-      fromEvent(this.searchInput.nativeElement, 'keyup')
-        .pipe(
-          takeUntil(this.unsubscribe),
-          debounceTime(200),
-          distinctUntilChanged()
-        )
-        .subscribe((searchValue) => {
-          console.log('searchValue', searchValue);
-        });
+    // this.searchInput &&
+    //   fromEvent(this.searchInput.nativeElement, 'keyup')
+    //     .pipe(
+    //       takeUntil(this.unsubscribe),
+    //       debounceTime(200),
+    //       distinctUntilChanged()
+    //     )
+    //     .subscribe((searchValue) => {
+    //       console.log('searchValue', searchValue);
+    //     });
   }
 
   topTableButtonClicked = (action: string): void => {
@@ -150,10 +151,10 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
     dialogConfig.disableClose = true;
     dialogConfig.data = {
       message: DIALOG_POPUP_MESSAGES.DELETE_BOOK,
-      actionButton: 'Delete',
+      actionButton: DIALOG_POPUP_ACTIONS.DELETE,
       width: '400px',
     };
-    const dialogRef = this.dialog.open(TradeDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
