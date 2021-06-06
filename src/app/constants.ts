@@ -52,6 +52,7 @@ export const BOOK_CATEGORIES = {
 export const DIALOG_POPUP_MESSAGES = {
   DELETE_BOOK: 'Are you sure you want to delete this book?',
   TRADE_BOOK: 'Trading details',
+  UNSAVED_CHANGES: 'Are you sure you want to exit this page?',
 };
 
 export const getBookCategoriesArr = (): string[] =>

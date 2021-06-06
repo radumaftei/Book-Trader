@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -10,11 +11,14 @@ import { getBookCategoriesArr } from '../../../../constants';
 import { MyBooksService } from '../../my-books.service';
 import { BooksListDatasource } from '../books-list/books-list.datasource';
 import { mimeType } from './mime-type.validator';
-import { DifferentTownConfig, SameTownConfig } from '../../../../interfaces';
 import { CommonService } from '../../../../shared/common.service';
-import { takeUntil } from 'rxjs/operators';
-import { UserData } from '../../../auth/auth.model';
 import { Subject } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  distinctUntilKeyChanged,
+  takeUntil,
+} from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-book',
@@ -22,7 +26,7 @@ import { Subject } from 'rxjs';
   styleUrls: ['./create-book.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreateBookComponent implements OnInit, OnDestroy {
+export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe = new Subject<void>();
   form: FormGroup;
   bookCategories = getBookCategoriesArr();
@@ -42,6 +46,14 @@ export class CreateBookComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private commonService: CommonService
   ) {}
+
+  ngAfterViewInit(): void {
+    this.form.valueChanges
+      .pipe(debounceTime(500), takeUntil(this.unsubscribe))
+      .subscribe(() => {
+        this.myBooksService.setChanges(true);
+      });
+  }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -111,5 +123,6 @@ export class CreateBookComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+    this.myBooksService.setChanges(false);
   }
 }

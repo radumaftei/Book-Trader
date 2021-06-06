@@ -1,8 +1,14 @@
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AuthGuard } from './modules/auth/auth.guard';
+import { UnsavedChangesGuard } from './modules/my-books/unsaved-changes.guard';
 
 const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'login',
+  },
   {
     path: 'login',
     loadChildren: () =>
@@ -46,14 +52,10 @@ const routes: Routes = [
         (m) => m.DashboardModule
       ),
     canActivate: [AuthGuard],
+    canDeactivate: [UnsavedChangesGuard],
     data: {
       animation: 'PersonalBookPage',
     },
-  },
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'login',
   },
   {
     path: '**',

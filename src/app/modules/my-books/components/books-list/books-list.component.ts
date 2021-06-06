@@ -9,7 +9,7 @@ import {
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { fromEvent, Subject } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { TradeDialogComponent } from '../../../../shared/trade-dialog/trade-dialog.component';
+import { DialogComponent } from '../../../../shared/dialog/dialog.component';
 import {
   COLUMN_TYPES,
   defaultPageOptions,
@@ -153,7 +153,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
       actionButton: 'Delete',
       width: '400px',
     };
-    const dialogRef = this.dialog.open(TradeDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
