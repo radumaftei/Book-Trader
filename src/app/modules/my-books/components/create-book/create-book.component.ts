@@ -11,14 +11,8 @@ import { getBookCategoriesArr } from '../../../../constants';
 import { MyBooksService } from '../../my-books.service';
 import { BooksListDatasource } from '../books-list/books-list.datasource';
 import { mimeType } from './mime-type.validator';
-import { CommonService } from '../../../../shared/common.service';
 import { Subject } from 'rxjs';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  distinctUntilKeyChanged,
-  takeUntil,
-} from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-book',
@@ -43,8 +37,7 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
     private formBuilder: FormBuilder,
     private myBooksService: MyBooksService,
     private dataSource: BooksListDatasource,
-    private cdr: ChangeDetectorRef,
-    private commonService: CommonService
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngAfterViewInit(): void {

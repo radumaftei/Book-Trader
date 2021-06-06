@@ -4,16 +4,11 @@
   (selectedIndexChange)="onChangeTab($event)"
   mat-align-tabs="center"
   dynamicHeight
-  #tabs
 >
   <mat-tab label="My books">
-    <ng-template matTabContent>
-      <app-books-list></app-books-list>
-    </ng-template>
+    <app-books-list></app-books-list>
   </mat-tab>
   <mat-tab label="Add a book">
-    <ng-template matTabContent>
-      <app-create-book></app-create-book>
-    </ng-template>
+    <app-create-book></app-create-book>
   </mat-tab>
 </mat-tab-group>

@@ -1,39 +1,53 @@
-import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MyBooksService } from '../../my-books.service';
-import { MatTab, MatTabGroup, MatTabHeader } from '@angular/material/tabs';
+import { ICanDeactivateComponent } from '../../unsaved-changes.guard';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DIALOG_POPUP_MESSAGES } from '../../../../constants';
+import {
+  DIALOG_POPUP_ACTIONS,
+  DIALOG_POPUP_MESSAGES,
+} from '../../../../constants';
 import { DialogComponent } from '../../../../shared/dialog/dialog.component';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('tabs') tabs: MatTabGroup;
+export class DashboardComponent
+  implements ICanDeactivateComponent, OnInit, OnDestroy
+{
+  private unsubscribe = new Subject<void>();
   selectedTab$ = this.myBooksService.selectedTab$;
+  private shouldNavigate = new BehaviorSubject<boolean>(true);
 
   constructor(
     private myBooksService: MyBooksService,
     private dialog: MatDialog
   ) {}
 
-  ngAfterViewInit(): void {
-    this.tabs._handleClick = this.tabChange.bind(this);
+  ngOnInit(): void {
+    this.myBooksService.changes$
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe((changes) => this.shouldNavigate.next(!changes));
   }
 
-  tabChange(tab: MatTab, tabHeader: MatTabHeader, idx: number): void {
-    let result = true;
-    const changesMade = this.myBooksService.changes;
+  canDeactivate(): Observable<boolean> {
+    if (this.myBooksService.changes) {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = true;
+      dialogConfig.data = {
+        message: DIALOG_POPUP_MESSAGES.UNSAVED_CHANGES,
+        actionButton: DIALOG_POPUP_ACTIONS.LOSE_CHANGES,
+        width: '400px',
+      };
+      const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
 
-    if (changesMade) {
-      result = confirm(`Do you really want to leave this tab?`);
+      dialogRef.afterClosed().subscribe((result) => {
+        this.shouldNavigate.next(result === DIALOG_POPUP_ACTIONS.LOSE_CHANGES);
+      });
     }
-
-    return (
-      result &&
-      MatTabGroup.prototype._handleClick.apply(this.tabs, [tab, tabHeader, idx])
-    );
+    return this.shouldNavigate.asObservable();
   }
 
   onChangeTab = (index: number): void => {

@@ -55,6 +55,12 @@ export const DIALOG_POPUP_MESSAGES = {
   UNSAVED_CHANGES: 'Are you sure you want to exit this page?',
 };
 
+export const DIALOG_POPUP_ACTIONS = {
+  DELETE: 'Delete',
+  SEND_TRADE_OFFER: 'Send Trade offer',
+  LOSE_CHANGES: 'Lose changes',
+};
+
 export const getBookCategoriesArr = (): string[] =>
   Object.values(BOOK_CATEGORIES);
 

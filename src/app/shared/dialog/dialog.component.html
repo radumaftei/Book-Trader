@@ -100,7 +100,7 @@
     <button
       mat-raised-button
       color="primary"
-      mat-dialog-close
+      [mat-dialog-close]="data.actionButton"
       [disabled]="tradeButtonDisabled"
     >
       {{ data.actionButton }}
