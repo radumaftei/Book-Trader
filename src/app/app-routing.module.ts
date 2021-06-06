@@ -1,31 +1,31 @@
-import { RouterModule, Routes } from '@angular/router';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { LoginComponent } from './modules/auth/login/components/login.component';
 import { DashboardComponent } from './modules/my-books/components/dashboard/dashboard.component';
-import { SignUpComponent } from './modules/auth/signup/signup.component.';
 import { AuthGuard } from './modules/auth/auth.guard';
-import { HomepageComponent } from './modules/homepage/components/homepage/homepage.component';
 
 const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent,
-    children: [],
+    loadChildren: () =>
+      import('./modules/auth/login/login.module').then((m) => m.LoginModule),
     data: {
       animation: 'Login',
     },
   },
   {
     path: 'signup',
-    component: SignUpComponent,
-    children: [],
+    loadChildren: () =>
+      import('./modules/auth/signup/signup.module').then((m) => m.SignupModule),
     data: {
       animation: 'Signup',
     },
   },
   {
     path: 'homepage',
-    component: HomepageComponent,
+    loadChildren: () =>
+      import('./modules/homepage/homepage.module').then(
+        (m) => m.HomepageModule
+      ),
     canActivate: [AuthGuard],
     data: {
       animation: 'Homepage',
@@ -33,7 +33,10 @@ const routes: Routes = [
   },
   {
     path: 'personal-book-page',
-    component: DashboardComponent,
+    loadChildren: () =>
+      import('./modules/my-books/components/dashboard/dashboard.module').then(
+        (m) => m.DashboardModule
+      ),
     canActivate: [AuthGuard],
     data: {
       animation: 'PersonalBookPage',
@@ -51,7 +54,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      preloadingStrategy: PreloadAllModules,
+    }),
+  ],
   exports: [RouterModule],
   providers: [AuthGuard],
 })

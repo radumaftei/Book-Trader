@@ -2,6 +2,7 @@
 :host {
   ::ng-deep {
     .mat-tab-body-wrapper {
+      min-height: calc(100vh - 113px);
       background: #d4e5eb;
     }
   }
