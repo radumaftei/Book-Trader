@@ -2,8 +2,9 @@ import { catchError, finalize, takeUntil } from 'rxjs/operators';
 import { ApiService } from '../../../../core/api.service';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { BookProfile } from 'src/app/interfaces';
+import { BookApi, BookProfile, PageOptions } from 'src/app/interfaces';
 import { Injectable } from '@angular/core';
+import { defaultPageOptions } from '../../../../constants';
 
 interface BookProps {
   author: string;
@@ -46,21 +47,26 @@ export class BooksListDatasource implements DataSource<BookProfile> {
     return this.initialDataSubject.getValue();
   }
 
-  getBooksForTable(): void {
+  get totalBooksLength(): number {
+    return this.countSubject.getValue();
+  }
+
+  getBooksForTable(queryParams: PageOptions): void {
     this.loadingSubject.next(true);
     this.noDataSubject.next(false);
     this.apiService
-      .fetchBooks(false)
+      .fetchBooks(false, queryParams)
       .pipe(
         takeUntil(this.unsubscribe),
         catchError(() => of([])),
         finalize(() => this.loadingSubject.next(false))
       )
-      .subscribe((books: BookProfile[]) => {
-        if (!books) return;
-        this.noDataSubject.next(!books.length);
+      .subscribe((data: BookApi) => {
+        this.countSubject.next(data.length);
+        if (!data.books) return;
+        this.noDataSubject.next(!data.books.length);
         let lineNumber = 0;
-        const bookData = books.map((book) => {
+        const bookData = data.books.map((book) => {
           lineNumber = lineNumber + 1;
           return {
             ...book,
@@ -102,7 +108,7 @@ export class BooksListDatasource implements DataSource<BookProfile> {
         .putBooksHttp(booksToUpdate)
         .pipe(takeUntil(this.unsubscribe))
         .subscribe(() => {
-          this.getBooksForTable();
+          this.getBooksForTable(defaultPageOptions);
         });
   };
 
@@ -111,7 +117,7 @@ export class BooksListDatasource implements DataSource<BookProfile> {
       .deleteBooksHttp(id)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(() => {
-        this.getBooksForTable();
+        this.getBooksForTable(defaultPageOptions);
       });
   };
 

@@ -6,18 +6,24 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { fromEvent, Subject } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { TradeDialogComponent } from '../../../homepage/components/trade-dialog/trade-dialog.component';
+import { TradeDialogComponent } from '../../../../shared/trade-dialog/trade-dialog.component';
 import {
   COLUMN_TYPES,
+  defaultPageOptions,
   DIALOG_POPUP_MESSAGES,
   getBookCategoriesArr,
 } from '../../../../constants';
 import { AuthService } from '../../../auth/auth.service';
 import { BooksListDatasource } from './books-list.datasource';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  startWith,
+  takeUntil,
+} from 'rxjs/operators';
 
 @Component({
   selector: 'app-books-list',
@@ -62,8 +68,9 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   ];
 
   COLUMN_TYPES = COLUMN_TYPES;
-  pageSizeOptions = [5, 10, 15, 20];
   editPressed = false;
+
+  defaultPageSizeOptions = defaultPageOptions;
   displayedColumns: string[] = [
     '#',
     'image',
@@ -77,9 +84,9 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
     'tradingPreferenceDescription',
     'delete',
   ];
-  paginator!: MatPaginator;
 
   @ViewChild('searchInput') searchInput: ElementRef;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   get actionButtonsDisabled(): boolean {
     return !this.dataSource.books.length || !this.authService.authorized();
@@ -92,16 +99,18 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.dataSource.getBooksForTable();
+    this.dataSource.getBooksForTable(this.defaultPageSizeOptions);
   }
 
   ngAfterViewInit(): void {
-    // this.dataSource.counter$
-    //   .pipe(takeUntil(this.unsubscribe))
-    //   .subscribe((count) => {
-    //     debugger;
-    //     this.paginator.length = count;
-    //   });
+    this.paginator.page
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(({ pageSize, pageIndex }: PageEvent) => {
+        this.dataSource.getBooksForTable({
+          pageSize,
+          pageIndex,
+        });
+      });
     this.searchInput &&
       fromEvent(this.searchInput.nativeElement, 'keyup')
         .pipe(
@@ -121,6 +130,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
         break;
       case 'save':
         this.dataSource.updateBooks();
+        this.paginator.pageIndex = 0;
         this.editPressed = false;
         break;
       case 'cancel':
@@ -131,6 +141,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   };
 
   deleteRow = (bookId: string): void => {
+    this.paginator.pageIndex = 0;
     this.openDialog(bookId);
   };
 

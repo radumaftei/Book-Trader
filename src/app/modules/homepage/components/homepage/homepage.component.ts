@@ -5,7 +5,8 @@ import { takeUntil } from 'rxjs/operators';
 import { DIALOG_POPUP_MESSAGES } from 'src/app/constants';
 import { BookProfile } from 'src/app/interfaces';
 import { HomepageService } from '../../homepage.service';
-import { TradeDialogComponent } from '../trade-dialog/trade-dialog.component';
+import { TradeDialogComponent } from '../../../../shared/trade-dialog/trade-dialog.component';
+import { CommonService } from '../../../../shared/common.service';
 
 @Component({
   templateUrl: './homepage.component.html',
@@ -22,7 +23,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   constructor(
     private homepageService: HomepageService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private commonService: CommonService
   ) {}
 
   ngOnInit(): void {
@@ -68,7 +70,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
     dialogConfig.width = '800px';
 
     forkJoin([
-      this.homepageService.getUser(book.userId),
+      this.commonService.getUser(book.userId),
       this.homepageService.getUserBooks(),
     ])
       .pipe(takeUntil(this.unsubscribe))
@@ -76,7 +78,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
         dialogConfig.data = {
           ...dialogConfig.data,
           user: userData,
-          userBooks,
+          userBooks: userBooks.books,
         };
         dialogRef = this.dialog.open(TradeDialogComponent, dialogConfig);
 

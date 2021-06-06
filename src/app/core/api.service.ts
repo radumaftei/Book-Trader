@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import {
+  BookApi,
   BookProfile,
   BookProfileDTO,
   DifferentTownConfig,
+  PageOptions,
   SameTownConfig,
 } from '../interfaces';
 import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
+  defaultPageOptions,
   DELIVERY_CONFIG,
   HOME_URL,
   HOMEPAGE,
@@ -39,25 +42,43 @@ export class ApiService {
     private notificationService: NotificationService
   ) {}
 
-  fetchBooks = (homepage = true): Observable<BookProfile[]> => {
+  fetchBooks = (
+    homepage = true,
+    queryParams: PageOptions = defaultPageOptions
+  ): Observable<BookApi> => {
+    const query = {
+      ...queryParams,
+      pageIndex: queryParams.pageIndex + 1,
+    };
     return this.httpClient
-      .get<{ message: string; books: BookProfileDTO[] }>(
-        homepage ? this.HOMEPAGE_URL : this.BOOKS_API_URL
+      .get<{ message: string; books: BookProfileDTO[]; length: number }>(
+        homepage ? this.HOMEPAGE_URL : this.BOOKS_API_URL,
+        {
+          observe: 'body',
+          params: {
+            ...query,
+          },
+        }
       )
       .pipe(
-        map((data: { message: string; books: BookProfileDTO[] }) =>
-          transformDTOBooks(data.books)
+        map(
+          (data: {
+            message: string;
+            books: BookProfileDTO[];
+            length: number;
+          }) => transformDTOBooks(data.books, data.length)
         ),
         catchError(this.handleError("Couldn't fetch books"))
       );
   };
 
-  getUserHttp(userId: string): Observable<UserData> {
+  getUserHttp(userSearchQuery: string, byId = true): Observable<UserData> {
     return this.httpClient
       .get<UserData>(this.USER_API_URL, {
         observe: 'body',
         params: {
-          userId,
+          userSearchQuery,
+          byId,
         },
       })
       .pipe(catchError(this.handleError("Couldn't get user")));

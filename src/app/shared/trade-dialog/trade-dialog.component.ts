@@ -1,12 +1,11 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   BookProfile,
   DifferentTownConfig,
   SameTownConfig,
-} from '../../../../interfaces';
-import { UserData } from '../../../auth/auth.model';
-import { MatRadioChange } from '@angular/material/radio';
+} from '../../interfaces';
+import { UserData } from '../../modules/auth/auth.model';
 
 export interface DialogData {
   message: string;
@@ -20,16 +19,16 @@ export interface DialogData {
 @Component({
   templateUrl: './trade-dialog.component.html',
   styleUrls: ['./trade-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TradeDialogComponent {
+  isHomepage: boolean | null;
   book: BookProfile;
   userBooks: BookProfile[];
   selectedBook: BookProfile;
   sameTownConfig: SameTownConfig;
   differentTownConfig: DifferentTownConfig;
   selectedConfig: string;
-  showSameTown = true;
-  showDifferentTown = true;
 
   get preferences(): boolean {
     return (
@@ -40,23 +39,20 @@ export class TradeDialogComponent {
     );
   }
 
+  get tradeButtonDisabled(): boolean {
+    return !this.isHomepage
+      ? false
+      : !(this.userBooks?.length && this.selectedConfig && this.selectedBook);
+  }
+
   constructor(
     public dialogRef: MatDialogRef<TradeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
+    this.isHomepage = data.isHomepage;
     this.book = data.book;
     this.userBooks = data.userBooks;
-    this.sameTownConfig = data.user.sameTownConfig;
-    this.differentTownConfig = data.user.differentTownConfig;
-    this.showDifferentTown = Object.keys(this.differentTownConfig).some(
-      (t: string) => this.differentTownConfig[t]
-    );
-    this.showSameTown = Object.keys(this.sameTownConfig).some(
-      (t: string) => this.sameTownConfig[t]
-    );
-  }
-
-  updateDeliveryMethod(event: MatRadioChange): void {
-    this.selectedConfig = event.value;
+    this.sameTownConfig = data.user?.sameTownConfig;
+    this.differentTownConfig = data.user?.differentTownConfig;
   }
 }
