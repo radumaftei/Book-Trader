@@ -24,37 +24,15 @@ import { Subject } from 'rxjs';
 })
 export class CreateBookComponent implements OnInit, OnDestroy {
   private unsubscribe = new Subject<void>();
-  loading$ = this.commonService.loading$;
   form: FormGroup;
   bookCategories = getBookCategoriesArr();
   imagePreview: string;
-  sameTownConfig: SameTownConfig = {
-    onFoot: true,
-    courier: true,
-  };
-
-  differentTownConfig: DifferentTownConfig = {
-    courier: true,
-  };
-  sameTownAllChecked = true;
-  differentTownAllChecked = true;
 
   addMultipleBooks = false;
   resetForm = false;
 
   get createBookDisabled(): boolean {
-    return !this.form.valid || this.deliveryMethodsEmpty;
-  }
-
-  get deliveryMethodsEmpty(): boolean {
-    return (
-      Object.keys(this.sameTownConfig).every(
-        (t: string) => !this.sameTownConfig[t]
-      ) &&
-      Object.keys(this.differentTownConfig).every(
-        (t: string) => !this.differentTownConfig[t]
-      )
-    );
+    return !this.form.valid;
   }
 
   constructor(
@@ -66,20 +44,6 @@ export class CreateBookComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.commonService
-      .getUser(localStorage.getItem('loggedInUserEmail'), false)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe((user: UserData) => {
-        this.sameTownConfig = user.sameTownConfig;
-        this.differentTownConfig = user.differentTownConfig;
-        this.sameTownAllChecked = Object.keys(this.sameTownConfig).every(
-          (t: string) => this.sameTownConfig[t]
-        );
-        this.differentTownAllChecked = Object.keys(
-          this.differentTownConfig
-        ).every((t: string) => this.differentTownConfig[t]);
-        this.commonService.setLoading(false);
-      });
     this.form = this.formBuilder.group({
       title: ['', [Validators.required]],
       author: ['', [Validators.required]],
@@ -97,28 +61,6 @@ export class CreateBookComponent implements OnInit, OnDestroy {
         },
       ],
     });
-  }
-
-  updateAllCompleted(town: string, allSelected: string): void {
-    this[allSelected] = Object.keys(this[town]).every(
-      (t: string) => this[town][t]
-    );
-  }
-
-  someCompletedSameTown(): boolean {
-    return (
-      Object.keys(this.sameTownConfig).filter((t) => this.sameTownConfig[t])
-        .length > 0 && !this.sameTownAllChecked
-    );
-  }
-
-  setAllForSeparateTowns(
-    town: string,
-    allSelected: string,
-    completed: boolean
-  ): void {
-    this[allSelected] = completed;
-    Object.keys(this[town]).forEach((t) => (this[town][t] = completed));
   }
 
   async onCreateBook(): Promise<void> {
@@ -154,13 +96,6 @@ export class CreateBookComponent implements OnInit, OnDestroy {
     }
   }
 
-  changeSettings(): void {
-    this.commonService.changeDeliverySettings(
-      this.sameTownConfig,
-      this.differentTownConfig
-    );
-  }
-
   onImagePicked(event: Event): void {
     const file = (event.target as HTMLInputElement).files[0];
     this.form.patchValue({ image: file });
@@ -176,6 +111,5 @@ export class CreateBookComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-    this.commonService.setLoading(true);
   }
 }
