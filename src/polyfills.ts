@@ -59,15 +59,6 @@
  */
 import 'zone.js';  // Included with Angular CLI.
 
-document.addEventListener('DOMContentLoaded', () => {
-
-  Array.from(document.querySelectorAll('input[matInput]'))
-    .forEach(element => {
-      element.setAttribute('autocomplete', 'off');
-    });
-
-});
-
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */

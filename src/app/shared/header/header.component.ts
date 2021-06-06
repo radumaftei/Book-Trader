@@ -18,6 +18,10 @@ export class HeaderComponent {
     await this.router.navigate(['homepage']);
   }
 
+  async onProfileClick(): Promise<void> {
+    await this.router.navigate(['profile']);
+  }
+
   async onMyBooksClick(): Promise<void> {
     await this.router.navigate(['personal-book-page']);
   }

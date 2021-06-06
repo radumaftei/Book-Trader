@@ -1,6 +1,5 @@
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { DashboardComponent } from './modules/my-books/components/dashboard/dashboard.component';
 import { AuthGuard } from './modules/auth/auth.guard';
 
 const routes: Routes = [
@@ -29,6 +28,15 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: {
       animation: 'Homepage',
+    },
+  },
+  {
+    path: 'profile',
+    loadChildren: () =>
+      import('./modules/profile/profile.module').then((m) => m.ProfileModule),
+    canActivate: [AuthGuard],
+    data: {
+      animation: 'Profile',
     },
   },
   {
