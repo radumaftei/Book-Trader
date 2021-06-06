@@ -1,13 +1,12 @@
-import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
 import { NgModule } from '@angular/core';
-import { LoginComponent } from './login/components/login.component';
-import { SignUpComponent } from './signup/signup.component.';
+import { SignupRoutingModule } from './signup-routing.module';
+import { SignUpComponent } from './signup.component.';
+import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 
 const MATERIAL_MODULES = [
@@ -19,13 +18,12 @@ const MATERIAL_MODULES = [
 ];
 
 @NgModule({
-  declarations: [LoginComponent, SignUpComponent],
+  declarations: [SignUpComponent],
   imports: [
     CommonModule,
-    RouterModule,
-    ReactiveFormsModule,
+    SignupRoutingModule,
     ...MATERIAL_MODULES,
+    ReactiveFormsModule,
   ],
-  exports: [],
 })
-export class AuthModule {}
+export class SignupModule {}

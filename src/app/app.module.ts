@@ -3,10 +3,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { AuthModule } from './modules/auth/auth.module';
 import { AppRoutingModule } from './app-routing.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { HomepageModule } from './modules/homepage/homepage.module';
 import { MyBooksModule } from './modules/my-books/my-books.module';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { AuthInterceptor } from './modules/auth/auth-interceptor';
@@ -27,8 +25,6 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     // My stuff
     AppRoutingModule,
-    AuthModule,
-    HomepageModule,
     MyBooksModule,
     SharedModule,
   ],
