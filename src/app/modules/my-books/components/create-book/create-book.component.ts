@@ -24,6 +24,7 @@ import { Subject } from 'rxjs';
 })
 export class CreateBookComponent implements OnInit, OnDestroy {
   private unsubscribe = new Subject<void>();
+  loading$ = this.commonService.loading$;
   form: FormGroup;
   bookCategories = getBookCategoriesArr();
   imagePreview: string;
@@ -77,6 +78,7 @@ export class CreateBookComponent implements OnInit, OnDestroy {
         this.differentTownAllChecked = Object.keys(
           this.differentTownConfig
         ).every((t: string) => this.differentTownConfig[t]);
+        this.commonService.setLoading(false);
       });
     this.form = this.formBuilder.group({
       title: ['', [Validators.required]],
@@ -153,7 +155,7 @@ export class CreateBookComponent implements OnInit, OnDestroy {
   }
 
   changeSettings(): void {
-    this.myBooksService.changeDeliverySettings(
+    this.commonService.changeDeliverySettings(
       this.sameTownConfig,
       this.differentTownConfig
     );
@@ -174,5 +176,6 @@ export class CreateBookComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+    this.commonService.setLoading(true);
   }
 }

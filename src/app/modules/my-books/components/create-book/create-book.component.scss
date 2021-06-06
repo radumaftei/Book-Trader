@@ -5,6 +5,11 @@
     form {
       width: 100%;
 
+      .reminder-delivery {
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
       mat-form-field {
         margin-bottom: 5px;
 
@@ -15,25 +20,10 @@
 
       mat-expansion-panel {
         margin-bottom: 30px;
-
-        .delivery-method-section {
-          padding: 0 10px;
-          margin: 12px 0;
-
-          ul {
-            padding-left: 20px;
-            list-style-type: none;
-          }
-        }
       }
 
       .bottom-checkbox {
         margin-bottom: 15px;
-      }
-
-      .delivery-settings {
-        text-align: center;
-        margin-top: 20px;
       }
 
       .form-button {

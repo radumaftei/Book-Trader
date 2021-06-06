@@ -14,18 +14,4 @@ export class MyBooksService {
   updateSelectedTab = (index: number): void => {
     this.SELECTED_TAB.next(index);
   };
-
-  changeDeliverySettings(
-    sameTownConfig: SameTownConfig,
-    differentTownConfig: DifferentTownConfig
-  ): void {
-    this.apiService
-      .updateUserDeliverySettings({
-        sameTownConfig: sameTownConfig,
-        differentTownConfig: differentTownConfig,
-      })
-      .subscribe(() => {
-        console.log('successful');
-      });
-  }
 }
