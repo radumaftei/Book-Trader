@@ -55,7 +55,7 @@ export class BooksListDatasource implements DataSource<BookProfile> {
     this.loadingSubject.next(true);
     this.noDataSubject.next(false);
     this.apiService
-      .fetchBooks(false, queryParams)
+      .fetchBooks(false, true, queryParams)
       .pipe(
         takeUntil(this.unsubscribe),
         catchError(() => of([])),

@@ -11,6 +11,28 @@
   <button
     mat-icon-button
     class="header_icon"
+    aria-label="Notifications icon"
+    matTooltip="Notifications"
+    (click)="toggleNotifications()"
+    [matTooltipPosition]="'below'"
+    [matMenuTriggerFor]="appMenu"
+    [matMenuTriggerData]="{ property: 'Sally' }"
+  >
+    <mat-icon [matBadge]="9" matBadgeColor="warn" [matBadgeHidden]="hidden"
+      >notifications</mat-icon
+    >
+  </button>
+
+  <mat-menu #appMenu="matMenu">
+    <ng-template matMenuContent let-name="property">
+      <button mat-menu-item>Settings</button>
+      <button mat-menu-item>Log off {{ name }}</button>
+    </ng-template>
+  </mat-menu>
+
+  <button
+    mat-icon-button
+    class="header_icon"
     aria-label="My account icon"
     matTooltip="My account"
     (click)="onProfileClick()"

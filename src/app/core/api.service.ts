@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
   BookApi,
-  BookProfile,
   BookProfileDTO,
   DifferentTownConfig,
   PageOptions,
@@ -44,6 +43,7 @@ export class ApiService {
 
   fetchBooks = (
     homepage = true,
+    withPagination = false,
     queryParams: PageOptions = defaultPageOptions
   ): Observable<BookApi> => {
     const query = {
@@ -57,6 +57,7 @@ export class ApiService {
           observe: 'body',
           params: {
             ...query,
+            withPagination,
           },
         }
       )

@@ -1,14 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MyBooksService } from '../../my-books.service';
 import { ICanDeactivateComponent } from '../../unsaved-changes.guard';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import {
-  DIALOG_POPUP_ACTIONS,
-  DIALOG_POPUP_MESSAGES,
-} from '../../../../constants';
 import { DialogComponent } from '../../../../shared/dialog/dialog.component';
 import { takeUntil } from 'rxjs/operators';
+import { DIALOG_POPUP_ACTIONS, DIALOG_POPUP_MESSAGES } from '../../../../enums';
 
 @Component({
   templateUrl: './dashboard.component.html',

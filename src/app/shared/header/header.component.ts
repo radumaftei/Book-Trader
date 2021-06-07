@@ -8,6 +8,8 @@ import { AuthService } from '../../modules/auth/auth.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
+  hidden = false;
+
   constructor(private router: Router, private authService: AuthService) {}
 
   async onLogoutClick(): Promise<void> {
@@ -24,5 +26,9 @@ export class HeaderComponent {
 
   async onMyBooksClick(): Promise<void> {
     await this.router.navigate(['personal-book-page']);
+  }
+
+  toggleNotifications(): void {
+    this.hidden = true;
   }
 }

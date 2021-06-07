@@ -2,11 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { DIALOG_POPUP_MESSAGES } from 'src/app/constants';
 import { BookProfile } from 'src/app/interfaces';
 import { HomepageService } from '../../homepage.service';
 import { DialogComponent } from '../../../../shared/dialog/dialog.component';
 import { CommonService } from '../../../../shared/common.service';
+import {DIALOG_POPUP_ACTIONS, DIALOG_POPUP_MESSAGES} from '../../../../enums';
 
 @Component({
   templateUrl: './homepage.component.html',
@@ -62,7 +62,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       message: DIALOG_POPUP_MESSAGES.TRADE_BOOK,
-      actionButton: 'Send Trade offer',
+      actionButton: DIALOG_POPUP_ACTIONS.SEND_TRADE_OFFER,
       isHomepage: true,
       book,
     };

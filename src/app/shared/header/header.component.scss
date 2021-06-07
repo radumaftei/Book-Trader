@@ -8,6 +8,10 @@ mat-toolbar {
 
   .header_icon {
     margin-right: 10px;
+
+    .mat-icon {
+      line-height: 20px;
+    }
   }
 
   .header_icon:not(.homepage_icon) {
