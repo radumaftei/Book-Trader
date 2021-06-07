@@ -29,6 +29,6 @@ export class HeaderComponent {
   }
 
   toggleNotifications(): void {
-    this.hidden = !this.hidden;
+    this.hidden = true;
   }
 }
