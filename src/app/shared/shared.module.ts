@@ -21,8 +21,10 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
+import { MatBadgeModule } from '@angular/material/badge';
 
 const MATERIAL_MODULES = [
+  MatBadgeModule,
   MatTabsModule,
   MatInputModule,
   MatSelectModule,

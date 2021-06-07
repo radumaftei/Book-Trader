@@ -11,6 +11,19 @@
   <button
     mat-icon-button
     class="header_icon"
+    aria-label="Notifications icon"
+    matTooltip="Notifications"
+    (click)="toggleNotifications()"
+    [matTooltipPosition]="'below'"
+  >
+    <mat-icon [matBadge]="9" matBadgeColor="warn" [matBadgeHidden]="hidden"
+      >notifications</mat-icon
+    >
+  </button>
+
+  <button
+    mat-icon-button
+    class="header_icon"
     aria-label="My account icon"
     matTooltip="My account"
     (click)="onProfileClick()"

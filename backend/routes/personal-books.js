@@ -69,10 +69,10 @@ router.post("", checkAuth, upload.single("image"), (req, res, next) => {
 });
 
 router.get("", checkAuth, (req, res, next) => {
-  const { pageIndex, pageSize } = req.query;
+  const { pageIndex, pageSize, withPagination } = req.query;
   Book.find({ userId: req.userData.userId }).then((books) => {
     const length = books.length;
-    const booksByQuery = books.slice((pageIndex - 1) * pageSize, pageIndex * pageSize);
+    const booksByQuery = withPagination === 'true' ? books.slice((pageIndex - 1) * pageSize, pageIndex * pageSize) : books;
     res.status(200).json({
       message: "Your books fetched successfully!",
       books: booksByQuery,

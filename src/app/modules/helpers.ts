@@ -1,4 +1,5 @@
 import { BookApi, BookProfileDTO } from '../interfaces';
+import {BOOK_CATEGORIES} from '../enums';
 
 export const areObjectDifferent = (
   obj1: Record<string, unknown>,
@@ -53,3 +54,7 @@ export const transformDTOBooks = (
   ),
   length,
 });
+
+
+export const getBookCategoriesArr = (): string[] =>
+  Object.values(BOOK_CATEGORIES);

@@ -7,24 +7,17 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { fromEvent, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '../../../../shared/dialog/dialog.component';
 import {
-  COLUMN_TYPES,
   defaultPageOptions,
-  DIALOG_POPUP_ACTIONS,
-  DIALOG_POPUP_MESSAGES,
-  getBookCategoriesArr,
 } from '../../../../constants';
 import { AuthService } from '../../../auth/auth.service';
 import { BooksListDatasource } from './books-list.datasource';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  startWith,
-  takeUntil,
-} from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
+import {COLUMN_TYPES, DIALOG_POPUP_ACTIONS, DIALOG_POPUP_MESSAGES} from '../../../../enums';
+import {getBookCategoriesArr} from '../../../helpers';
 
 @Component({
   selector: 'app-books-list',
