@@ -34,7 +34,7 @@ export class DashboardComponent
       const dialogConfig = new MatDialogConfig();
       dialogConfig.disableClose = true;
       dialogConfig.data = {
-        message: DIALOG_POPUP_MESSAGES.UNSAVED_CHANGES,
+        title: DIALOG_POPUP_MESSAGES.UNSAVED_CHANGES,
         actionButton: DIALOG_POPUP_ACTIONS.LOSE_CHANGES,
         width: '400px',
       };

@@ -1,0 +1,29 @@
+
+.notifications-menu-wrapper {
+  margin: 0 25px;
+  min-height: 200px;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+
+    mat-spinner {
+      top: 0;
+    }
+
+  .mat-card {
+    min-width: 500px;
+
+    &:not(:last-child) {
+      margin-bottom: 5px;
+    }
+    &:last-child {
+      margin-bottom: 30px;
+    }
+  }
+
+  .notifications-buttons-wrapper {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 15px;
+  }
+}

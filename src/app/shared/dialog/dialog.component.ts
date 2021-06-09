@@ -8,10 +8,11 @@ import {
 import { UserData } from '../../modules/auth/auth.model';
 
 export interface DialogData {
-  message: string;
+  title: string;
   actionButton: string;
-  isHomepage: boolean | null;
-  book: BookProfile | null;
+  description?: string;
+  isHomepage?: boolean;
+  book?: BookProfile;
   user: UserData;
   userBooks: BookProfile[];
 }
@@ -23,6 +24,7 @@ export interface DialogData {
 })
 export class DialogComponent {
   isHomepage: boolean | null;
+  description: string;
   book: BookProfile;
   userBooks: BookProfile[];
   selectedBook: BookProfile;
@@ -45,10 +47,15 @@ export class DialogComponent {
       : !(this.userBooks?.length && this.selectedConfig && this.selectedBook);
   }
 
+  get dataOnClose(): string {
+    return this.isHomepage ? this.selectedConfig : this.data.actionButton;
+  }
+
   constructor(
     public dialogRef: MatDialogRef<DialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
+    this.description = data.description;
     this.isHomepage = data.isHomepage;
     this.book = data.book;
     this.userBooks = data.userBooks;

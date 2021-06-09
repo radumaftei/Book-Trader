@@ -10,14 +10,16 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Subject } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '../../../../shared/dialog/dialog.component';
-import {
-  defaultPageOptions,
-} from '../../../../constants';
+import { defaultPageOptions } from '../../../../constants';
 import { AuthService } from '../../../auth/auth.service';
 import { BooksListDatasource } from './books-list.datasource';
 import { takeUntil } from 'rxjs/operators';
-import {COLUMN_TYPES, DIALOG_POPUP_ACTIONS, DIALOG_POPUP_MESSAGES} from '../../../../enums';
-import {getBookCategoriesArr} from '../../../helpers';
+import {
+  COLUMN_TYPES,
+  DIALOG_POPUP_ACTIONS,
+  DIALOG_POPUP_MESSAGES,
+} from '../../../../enums';
+import { getBookCategoriesArr } from '../../../helpers';
 
 @Component({
   selector: 'app-books-list',
@@ -143,7 +145,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.data = {
-      message: DIALOG_POPUP_MESSAGES.DELETE_BOOK,
+      title: DIALOG_POPUP_MESSAGES.DELETE_BOOK,
       actionButton: DIALOG_POPUP_ACTIONS.DELETE,
       width: '400px',
     };

@@ -7,6 +7,7 @@ const app = express();
 const personalBooksRoutes = require("./routes/personal-books");
 const homepageBooksRoutes = require("./routes/homepage-books");
 const userRoutes = require("./routes/user");
+const tradeRoutes = require("./routes/trade");
 
 mongoose
   .connect(
@@ -40,5 +41,6 @@ app.use((req, res, next) => {
 app.use("/api/personal-book-page", personalBooksRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/homepage", homepageBooksRoutes);
+app.use("/api/trade", tradeRoutes);
 
 module.exports = app;

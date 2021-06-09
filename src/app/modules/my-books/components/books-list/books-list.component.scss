@@ -1,10 +1,6 @@
 .table-content {
   padding: 15px;
 
-  .spacer {
-    flex: 1;
-  }
-
   .table-title-wrapper {
     background: #e5e5e5;
     display: flex;
@@ -50,7 +46,6 @@
 
     .mat-spinner {
       position: absolute;
-      top: 270px;
     }
   }
 

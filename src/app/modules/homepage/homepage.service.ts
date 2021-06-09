@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../../core/api.service';
-import { BookApi, BookProfile } from '../../interfaces';
+import { BookApi, BookProfile, TradeDetails } from '../../interfaces';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -23,6 +23,10 @@ export class HomepageService {
 
   getUserBooks(): Observable<BookApi> {
     return this.apiService.fetchBooks(false);
+  }
+
+  createTrade(tradeDetails: TradeDetails): Observable<{ message: string }> {
+    return this.apiService.postTrade(tradeDetails);
   }
 
   cleanUp(): void {

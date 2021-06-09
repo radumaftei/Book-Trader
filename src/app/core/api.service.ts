@@ -5,6 +5,7 @@ import {
   DifferentTownConfig,
   PageOptions,
   SameTownConfig,
+  TradeDetails,
 } from '../interfaces';
 import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -14,6 +15,7 @@ import {
   HOME_URL,
   HOMEPAGE,
   MY_BOOKS_URL,
+  TRADE_URL,
   USER_LOGIN_URL,
   USER_SIGNUP_URL,
 } from '../constants';
@@ -34,7 +36,8 @@ interface IDelivery {
 export class ApiService {
   private BOOKS_API_URL = `${HOME_URL}/${MY_BOOKS_URL}`;
   private USER_API_URL = `${HOME_URL}/user`;
-  private HOMEPAGE_URL = `${HOME_URL}/${HOMEPAGE}`;
+  private HOMEPAGE_API_URL = `${HOME_URL}/${HOMEPAGE}`;
+  private TRADE_API_URL = `${HOME_URL}/${TRADE_URL}`;
 
   constructor(
     private httpClient: HttpClient,
@@ -52,7 +55,7 @@ export class ApiService {
     };
     return this.httpClient
       .get<{ message: string; books: BookProfileDTO[]; length: number }>(
-        homepage ? this.HOMEPAGE_URL : this.BOOKS_API_URL,
+        homepage ? this.HOMEPAGE_API_URL : this.BOOKS_API_URL,
         {
           observe: 'body',
           params: {
@@ -151,6 +154,23 @@ export class ApiService {
           )
         )
       );
+  };
+
+  postTrade = (tradeDetails: TradeDetails): Observable<{ message: string }> => {
+    return this.httpClient
+      .post<{ message: string }>(this.TRADE_API_URL, tradeDetails)
+      .pipe(
+        tap(() => this.handleSuccess('Trade made successfully')),
+        catchError(
+          this.handleError("Couldn't make the trade, please try again")
+        )
+      );
+  };
+
+  fetchTrades = (): Observable<TradeDetails[]> => {
+    return this.httpClient
+      .get<TradeDetails[]>(this.TRADE_API_URL)
+      .pipe(catchError(this.handleError('Trouble fetching notifications')));
   };
 
   handleError =

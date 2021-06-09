@@ -18,6 +18,10 @@ body {
   margin: 0;
 }
 
+.spacer {
+  flex: 1;
+}
+
 .is-active {
   text-decoration: underline;
 }
@@ -114,14 +118,5 @@ mat-spinner {
 
 .mat-menu-panel {
   max-width: none !important;
-
-  .mat-menu-content {
-    .mat-card {
-      min-width: 500px;
-
-      &:not(:last-child) {
-        margin-bottom: 20px;
-      }
-    }
-  }
 }
+

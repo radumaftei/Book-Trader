@@ -6,7 +6,7 @@ import { BookProfile } from 'src/app/interfaces';
 import { HomepageService } from '../../homepage.service';
 import { DialogComponent } from '../../../../shared/dialog/dialog.component';
 import { CommonService } from '../../../../shared/common.service';
-import {DIALOG_POPUP_ACTIONS, DIALOG_POPUP_MESSAGES} from '../../../../enums';
+import { DIALOG_POPUP_ACTIONS, DIALOG_POPUP_MESSAGES } from '../../../../enums';
 
 @Component({
   templateUrl: './homepage.component.html',
@@ -61,13 +61,14 @@ export class HomepageComponent implements OnInit, OnDestroy {
     let dialogRef;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      message: DIALOG_POPUP_MESSAGES.TRADE_BOOK,
+      title: DIALOG_POPUP_MESSAGES.TRADE_BOOK,
       actionButton: DIALOG_POPUP_ACTIONS.SEND_TRADE_OFFER,
       isHomepage: true,
       book,
     };
     dialogConfig.disableClose = true;
     dialogConfig.width = '800px';
+    dialogConfig.autoFocus = false;
 
     forkJoin([
       this.commonService.getUser(book.userId),
@@ -85,9 +86,19 @@ export class HomepageComponent implements OnInit, OnDestroy {
         dialogRef
           .afterClosed()
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe((result) => {
+          .subscribe((result: string) => {
             if (result) {
-              console.log('trade pressed');
+              this.homepageService
+                .createTrade({
+                  fromUser: localStorage.getItem('loggedInUserEmail'),
+                  toUser: dialogConfig.data.user.email,
+                  bookTitle: book.title,
+                  tradeMethod: result,
+                })
+                .pipe(takeUntil(this.unsubscribe))
+                .subscribe((data) => {
+                  console.log('resulted shit', data);
+                });
             }
           });
       });

@@ -40,3 +40,12 @@ export interface BookApi {
   books: BookProfile[];
   length: number;
 }
+
+export interface TradeDetails {
+  fromUser: string;
+  toUser: string;
+  bookTitle: string;
+  accepted?: boolean;
+  rejected?: boolean;
+  tradeMethod: string;
+}

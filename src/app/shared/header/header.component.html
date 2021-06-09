@@ -23,11 +23,9 @@
   </button>
 
   <mat-menu #appMenu="matMenu" xPosition="before">
-    <div (click)="$event.stopPropagation()">
-      <mat-card>Simple card ( )</mat-card>
-      <mat-card>Simple card ( )</mat-card>
-      <mat-card>Simple card ( )</mat-card>
-    </div>
+    <ng-template matMenuContent>
+      <app-notification-menu></app-notification-menu>
+    </ng-template>
   </mat-menu>
 
   <button
