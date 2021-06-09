@@ -9,7 +9,7 @@ import { UserData } from '../../modules/auth/auth.model';
 
 export interface DialogData {
   title: string;
-  actionButton: string;
+  actionButton?: string;
   description?: string;
   isHomepage?: boolean;
   book?: BookProfile;

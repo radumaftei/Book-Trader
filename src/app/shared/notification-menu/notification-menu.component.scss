@@ -12,6 +12,8 @@
 
   .mat-card {
     min-width: 500px;
+    border-radius: 10px;
+    background-color: #f0f1f7;
 
     &:not(:last-child) {
       margin-bottom: 5px;

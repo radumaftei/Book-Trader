@@ -4,6 +4,10 @@
     cancel
   </span>
 </div>
+
+<h3 *ngIf="data.description">
+  {{ data.description }}
+</h3>
 <mat-dialog-content *ngIf="data.isHomepage">
   <div class="card">
     <div class="img-avatar">
@@ -95,7 +99,7 @@
     </div>
   </div>
 </mat-dialog-content>
-<div mat-dialog-actions>
+<div mat-dialog-actions *ngIf="data.actionButton">
   <div class="buttons-wrapper">
     <button
       mat-raised-button
