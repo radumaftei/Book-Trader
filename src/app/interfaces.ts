@@ -44,7 +44,11 @@ export interface BookApi {
 export interface TradeDetails {
   fromUser: string;
   toUser: string;
-  bookTitle: string;
+  description: string;
+  tradedBookTitle: string;
+  tradedWithBookTitle: string;
+  tradedBookId: string;
+  tradedWithBookId: string;
   accepted?: boolean;
   rejected?: boolean;
   tradeMethod: string;

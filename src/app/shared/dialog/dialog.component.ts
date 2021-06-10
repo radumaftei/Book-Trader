@@ -47,8 +47,20 @@ export class DialogComponent {
       : !(this.userBooks?.length && this.selectedConfig && this.selectedBook);
   }
 
-  get dataOnClose(): string {
-    return this.isHomepage ? this.selectedConfig : this.data.actionButton;
+  get dataOnClose():
+    | string
+    | {
+        tradedWithBookId: string;
+        tradedWithBookTitle: string;
+        tradeMethod: string;
+      } {
+    return this.isHomepage
+      ? {
+          tradedWithBookId: this.selectedBook?.id,
+          tradedWithBookTitle: this.selectedBook?.title,
+          tradeMethod: this.selectedConfig,
+        }
+      : this.data.actionButton;
   }
 
   constructor(

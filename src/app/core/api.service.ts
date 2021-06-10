@@ -156,15 +156,11 @@ export class ApiService {
       );
   };
 
-  postTrade = (tradeDetails: TradeDetails): Observable<{ message: string }> => {
-    return this.httpClient
-      .post<{ message: string }>(this.TRADE_API_URL, tradeDetails)
-      .pipe(
-        tap(() => this.handleSuccess('Trade made successfully')),
-        catchError(
-          this.handleError("Couldn't make the trade, please try again")
-        )
-      );
+  postTrade = (tradeDetails: TradeDetails): Observable<unknown> => {
+    return this.httpClient.post(this.TRADE_API_URL, tradeDetails).pipe(
+      tap(() => this.handleSuccess('Trade made successfully')),
+      catchError(this.handleError("Couldn't make the trade, please try again"))
+    );
   };
 
   fetchTrades = (): Observable<TradeDetails[]> => {

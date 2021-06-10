@@ -86,14 +86,28 @@ export class HomepageComponent implements OnInit, OnDestroy {
         dialogRef
           .afterClosed()
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe((result: string) => {
+          .subscribe((result) => {
             if (result) {
-              this.homepageService
+              const fromUser = localStorage.getItem('loggedInUserEmail');
+              const toUser = dialogConfig.data.user.email;
+              const { tradedWithBookId, tradedWithBookTitle, tradeMethod } =
+                result;
+              const tradedBookTitle = book.title;
+              const tradedBookId = book.id;
+              const [town, method] = tradeMethod.split('-');
+              const informationForUser = `The user ${fromUser} wants to trade from ${
+                town === 'sameTownConfig' ? 'same' : 'a different'
+              } town by ${method === 'onFoot' ? 'foot' : 'courier'}`;
+              this.commonService
                 .createTrade({
-                  fromUser: localStorage.getItem('loggedInUserEmail'),
-                  toUser: dialogConfig.data.user.email,
-                  bookTitle: book.title,
-                  tradeMethod: result,
+                  fromUser,
+                  toUser,
+                  description: informationForUser,
+                  tradedWithBookId,
+                  tradedWithBookTitle,
+                  tradedBookTitle,
+                  tradedBookId,
+                  tradeMethod,
                 })
                 .pipe(takeUntil(this.unsubscribe))
                 .subscribe((data) => {

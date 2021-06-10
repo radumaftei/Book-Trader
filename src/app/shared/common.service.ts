@@ -2,7 +2,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UserData } from '../modules/auth/auth.model';
 import { ApiService } from '../core/api.service';
-import { DifferentTownConfig, SameTownConfig } from '../interfaces';
+import {
+  DifferentTownConfig,
+  SameTownConfig,
+  TradeDetails,
+} from '../interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +31,10 @@ export class CommonService {
         differentTownConfig: differentTownConfig,
       })
       .subscribe(() => {});
+  }
+
+  createTrade(tradeDetails: TradeDetails): Observable<unknown> {
+    return this.apiService.postTrade(tradeDetails);
   }
 
   setLoading(flag: boolean): void {

@@ -9,17 +9,22 @@ router.post("", checkAuth, (req, res) => {
   const {
     fromUser,
     toUser,
-    bookTitle,
-    tradeMethod
+    description,
+    tradeMethod,
+    tradedBookTitle,
+    tradedWithBookTitle,
+    tradedBookId,
+    tradedWithBookId
   } = req.body;
   const [ town, method ] = tradeMethod.split('-');
-  console.log('TITLE', bookTitle)
-
-
   new Trade({
     fromUser,
     toUser,
-    bookTitle,
+    tradedBookTitle,
+    tradedWithBookTitle,
+    tradedBookId,
+    tradedWithBookId,
+    description,
     accepted: false,
     rejected: false,
     tradeMethod: {
@@ -27,9 +32,7 @@ router.post("", checkAuth, (req, res) => {
     }
   }).save()
     .then((trade) => {
-      res.status(201).json({
-        message: 'Trade yuyhuuuu'
-      })
+      res.status(201).json()
     })
 })
 
