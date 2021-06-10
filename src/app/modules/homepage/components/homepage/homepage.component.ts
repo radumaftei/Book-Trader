@@ -15,7 +15,8 @@ import { DIALOG_POPUP_ACTIONS, DIALOG_POPUP_MESSAGES } from '../../../../enums';
 export class HomepageComponent implements OnInit, OnDestroy {
   private unsubscribe = new Subject<void>();
 
-  isLoading = false;
+  loading$ = this.commonService.loading$;
+
   bookCards: BookProfile[];
   bookCategories = [];
   offsetBookNumberMapper = {};
@@ -28,13 +29,13 @@ export class HomepageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.isLoading = true;
+    this.commonService.getTrades();
     this.homepageService.getHomepageBooks();
     this.homepageService.homepageBooksUpdate$
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((books) => {
         if (!books) return;
-        this.isLoading = false;
+        this.commonService.setLoading(false);
         if (!books.length) return;
         this.bookCards = books;
         this.bookCategories = books
@@ -169,5 +170,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
     this.unsubscribe.next();
     this.unsubscribe.complete();
     this.homepageService.cleanUp();
+    this.commonService.setLoading(true);
   }
 }

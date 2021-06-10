@@ -12,8 +12,14 @@ import {
   providedIn: 'root',
 })
 export class CommonService {
+  private notificationsNumberSubject = new BehaviorSubject<number>(0);
+  notificationsNumber$ = this.notificationsNumberSubject.asObservable();
+
   private loadingSubject = new BehaviorSubject<boolean>(true);
   loading$ = this.loadingSubject.asObservable();
+
+  private tradesSubject = new BehaviorSubject<TradeDetails[]>([]);
+  trades$ = this.tradesSubject.asObservable();
 
   constructor(private apiService: ApiService) {}
 
@@ -35,6 +41,13 @@ export class CommonService {
 
   createTrade(tradeDetails: TradeDetails): Observable<unknown> {
     return this.apiService.postTrade(tradeDetails);
+  }
+
+  getTrades(): void {
+    this.apiService.fetchTrades().subscribe((trades: TradeDetails[]) => {
+      this.tradesSubject.next(trades);
+      this.notificationsNumberSubject.next(trades.length);
+    });
   }
 
   setLoading(flag: boolean): void {

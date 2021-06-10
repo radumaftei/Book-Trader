@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../modules/auth/auth.service';
+import { CommonService } from '../common.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -8,9 +10,19 @@ import { AuthService } from '../../modules/auth/auth.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  hidden = false;
+  notificationsNumber$: Observable<number> =
+    this.commonService.notificationsNumber$;
+  // notificationsRead: boolean;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private commonService: CommonService
+  ) {}
+
+  get actionButtonsDisabled(): boolean {
+    return !this.authService.authorized();
+  }
 
   async onLogoutClick(): Promise<void> {
     await this.authService.logout();
@@ -26,9 +38,5 @@ export class HeaderComponent {
 
   async onMyBooksClick(): Promise<void> {
     await this.router.navigate(['personal-book-page']);
-  }
-
-  toggleNotifications(): void {
-    this.hidden = true;
   }
 }

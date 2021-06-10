@@ -3,6 +3,7 @@
     mat-raised-button
     class="homepage_icon header_icon"
     (click)="onHomepageClick()"
+    [disabled]="actionButtonsDisabled"
   >
     Home Page
   </button>
@@ -13,11 +14,11 @@
     class="header_icon"
     aria-label="Notifications icon"
     matTooltip="Notifications"
-    (click)="toggleNotifications()"
+    [disabled]="actionButtonsDisabled"
     [matTooltipPosition]="'below'"
     [matMenuTriggerFor]="appMenu"
   >
-    <mat-icon [matBadge]="9" matBadgeColor="warn" [matBadgeHidden]="hidden"
+    <mat-icon [matBadge]="notificationsNumber$ | async" matBadgeColor="warn"
       >notifications</mat-icon
     >
   </button>
@@ -34,6 +35,7 @@
     aria-label="My account icon"
     matTooltip="My account"
     (click)="onProfileClick()"
+    [disabled]="actionButtonsDisabled"
     [matTooltipPosition]="'below'"
   >
     <mat-icon>account_circle</mat-icon>
@@ -45,6 +47,7 @@
     aria-label="My books icon"
     matTooltip="My books"
     (click)="onMyBooksClick()"
+    [disabled]="actionButtonsDisabled"
     [matTooltipPosition]="'below'"
   >
     <mat-icon>book</mat-icon>

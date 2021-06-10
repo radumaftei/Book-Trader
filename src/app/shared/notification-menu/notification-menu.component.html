@@ -1,13 +1,5 @@
 <div class="notifications-menu-wrapper" (click)="$event.stopPropagation()">
-  <mat-spinner
-    *ngIf="loading$ | async"
-    strokeWidth="4"
-    [diameter]="60"
-  ></mat-spinner>
-  <div
-    class="notifications-buttons-wrapper"
-    *ngIf="(loading$ | async) === false"
-  >
+  <div class="notifications-buttons-wrapper">
     <button
       mat-button
       aria-label="Mark all as read"
@@ -27,9 +19,21 @@
     </button>
   </div>
   <mat-card *ngFor="let trade of trades$ | async">
-    User {{ trade.fromUser }} wants to trade your book
-    {{ trade.bookTitle }} with (other user's book)
-    <button mat-button color="primary">Accept Trade</button>
-    <button mat-button color="warn">Reject Trade</button>
+    User <span class="highlighted">{{ trade.fromUser }}</span> wants to trade
+    your book <span class="highlighted">{{ trade.tradedBookTitle }}</span> with
+    <span class="highlighted">{{ trade.tradedWithBookTitle }}</span>
+    <div class="trade-button-wrapper">
+      <button mat-button color="primary">Accept Trade</button>
+      <button mat-button color="warn">Reject Trade</button>
+      <button
+        mat-icon-button
+        color="primary"
+        (click)="showNotificationInformation(trade)"
+        matTooltip="Show delivery information wanted by {{ trade.fromUser }}"
+        [matTooltipHideDelay]="400"
+      >
+        <mat-icon>info</mat-icon>
+      </button>
+    </div>
   </mat-card>
 </div>
