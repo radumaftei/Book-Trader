@@ -100,6 +100,7 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.resetForm && this.form.reset();
     }
+    this.dataSource.setNoData(false);
   }
 
   onImagePicked(event: Event): void {

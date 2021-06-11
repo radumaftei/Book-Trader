@@ -1,29 +1,21 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
-import { CommonService } from '../../../shared/common.service';
 
 @Component({
   templateUrl: './signup.component.html',
   styleUrls: ['signup.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SignUpComponent implements OnInit, OnDestroy {
+export class SignUpComponent implements OnInit {
   form: FormGroup;
   hide = true;
-  loading$ = this.commonService.loading$;
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private authService: AuthService,
-    private commonService: CommonService
+    private authService: AuthService
   ) {}
 
   get signUpButtonDisabled(): boolean {
@@ -31,7 +23,6 @@ export class SignUpComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.commonService.setLoading(false);
     this.form = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(5)]],
@@ -55,10 +46,5 @@ export class SignUpComponent implements OnInit, OnDestroy {
       location: this.form.value.location,
       phoneNumber: parseInt(this.form.value.phoneNumber),
     });
-    this.commonService.setLoading(true);
-  }
-
-  ngOnDestroy(): void {
-    this.commonService.setLoading(false);
   }
 }

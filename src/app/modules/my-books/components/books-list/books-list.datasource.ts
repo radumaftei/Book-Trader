@@ -53,7 +53,7 @@ export class BooksListDatasource implements DataSource<BookProfile> {
 
   getBooksForTable(queryParams: PageOptions): void {
     this.loadingSubject.next(true);
-    this.noDataSubject.next(false);
+    this.setNoData(false);
     this.apiService
       .fetchBooks(false, true, queryParams)
       .pipe(
@@ -64,7 +64,7 @@ export class BooksListDatasource implements DataSource<BookProfile> {
       .subscribe((data: BookApi) => {
         this.countSubject.next(data.length);
         if (!data.books) return;
-        this.noDataSubject.next(!data.books.length);
+        this.setNoData(!data.books.length);
         let lineNumber = 0;
         const bookData = data.books.map((book) => {
           lineNumber = lineNumber + 1;
@@ -99,6 +99,10 @@ export class BooksListDatasource implements DataSource<BookProfile> {
           resolve(true);
         });
     });
+  }
+
+  setNoData(noData: boolean): void {
+    this.noDataSubject.next(noData);
   }
 
   updateBooks = (): void => {
