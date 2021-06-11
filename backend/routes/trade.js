@@ -55,11 +55,9 @@ router.get("", checkAuth, (req, res, next) => {
 });
 
 router.put("", checkAuth, (req, res, next) => {
-  console.log('body', req.body)
-  const { trade: { fromUser, toUser, _id } } = req.body;
-  const updateField = req.body.tradeType === 'accept' ? 'accepted' : 'rejected';
+  const { trade: { fromUser, toUser, _id }, tradeType } = req.body;
   Trade.updateOne({ _id }, {
-    [updateField]: true,
+    status: tradeType,
     fromUser: toUser,
     toUser: fromUser
   } ).then(() => {

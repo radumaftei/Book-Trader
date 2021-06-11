@@ -21,7 +21,7 @@
     </button>
   </div>
   <mat-card *ngFor="let trade of trades$ | async">
-    <ng-container *ngIf="!trade.rejected && !trade.accepted">
+    <ng-container *ngIf="trade.status === TRADE_STATUSES.PENDING">
       User <span class="highlighted">{{ trade.fromUser }}</span> wants to trade
       your book
       <span class="highlighted">{{ trade.tradedBookTitle }}</span> with
@@ -30,11 +30,15 @@
         <button
           mat-button
           color="primary"
-          (click)="handleTrade(trade, 'accept')"
+          (click)="handleTrade(trade, TRADE_STATUSES.IN_PROGRESS)"
         >
           Accept Trade
         </button>
-        <button mat-button color="warn" (click)="handleTrade(trade, 'reject')">
+        <button
+          mat-button
+          color="warn"
+          (click)="handleTrade(trade, TRADE_STATUSES.REJECTED)"
+        >
           Reject Trade
         </button>
         <button
@@ -48,9 +52,9 @@
         </button>
       </div>
     </ng-container>
-    <ng-container *ngIf="trade.accepted || trade.rejected">
+    <ng-container *ngIf="showRejectedInProgress(trade)">
       User <span class="highlighted">{{ trade.toUser }}</span>
-      {{ trade.accepted ? "accepted" : "rejected" }} your trade offer for
+      {{ getMessageForRejectedInProgress(trade) }} your trade offer for
       <span class="highlighted">{{ trade.tradedBookTitle }}</span> book with
       <span class="highlighted">{{ trade.tradedWithBookTitle }}</span>
     </ng-container>

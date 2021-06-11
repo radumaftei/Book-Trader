@@ -1,3 +1,5 @@
+import { TRADE_STATUSES } from './enums';
+
 export interface BookProfile extends CommonBook {
   changed: boolean;
   lineNumber?: number;
@@ -51,17 +53,7 @@ export interface TradeDetails {
   tradedWithBookTitle: string;
   tradedBookId: string;
   tradedWithBookId: string;
-  accepted?: boolean;
-  rejected?: boolean;
-  tradeMethod: string;
   status?: TRADE_STATUSES;
   completedBy?: string;
-}
-
-export enum TRADE_STATUSES {
-  PENDING = 'PENDING',
-  IN_PROGRESS = 'IN_PROGRESS',
-  REJECTED = 'REJECTED',
-  COMPLETED = 'COMPLETED',
-  CANCELED = 'CANCELED',
+  tradeMethod: string;
 }

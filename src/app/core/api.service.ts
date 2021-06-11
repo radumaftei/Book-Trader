@@ -163,23 +163,14 @@ export class ApiService {
       .pipe(catchError(this.handleError('Trouble fetching notifications')));
   };
 
-  putTrade = (
-    trade: TradeDetails,
-    tradeType: 'accept' | 'reject'
-  ): Observable<unknown> => {
+  putTrade = (trade: TradeDetails, tradeType: string): Observable<unknown> => {
     return this.httpClient
       .put(this.TRADE_API_URL, {
         trade,
         tradeType,
       })
       .pipe(
-        tap(() =>
-          this.handleSuccess(
-            `Trade ${
-              tradeType === 'accept' ? 'accepted' : 'rejected'
-            } successfully`
-          )
-        ),
+        tap(() => this.handleSuccess(`Trade updated successfully`)),
         catchError(this.handleError("Couldn't save books/book"))
       );
   };

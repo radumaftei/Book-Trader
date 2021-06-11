@@ -1,14 +1,9 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { CommonService } from '../common.service';
 import { Observable, Subject } from 'rxjs';
 import { TradeDetails } from '../../interfaces';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DIALOG_POPUP_MESSAGES } from '../../enums';
+import { DIALOG_POPUP_MESSAGES, TRADE_STATUSES } from '../../enums';
 import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
@@ -19,6 +14,8 @@ import { DialogComponent } from '../dialog/dialog.component';
 })
 export class NotificationMenuComponent implements OnDestroy {
   private unsubscribe = new Subject<void>();
+
+  TRADE_STATUSES = TRADE_STATUSES;
 
   trades$: Observable<TradeDetails[]> = this.commonService.trades$;
 
@@ -35,12 +32,29 @@ export class NotificationMenuComponent implements OnDestroy {
     console.log('deleted');
   }
 
-  handleTrade(trade: TradeDetails, tradeType: 'accept' | 'reject'): void {
-    this.commonService
-      .acceptRejectTrades(trade, tradeType)
-      .subscribe((data) => {
-        console.log('put data', data);
-      });
+  showRejectedInProgress = (trade: TradeDetails): boolean =>
+    [TRADE_STATUSES.REJECTED, TRADE_STATUSES.IN_PROGRESS].includes(
+      trade.status
+    );
+
+  getMessageForRejectedInProgress = (trade: TradeDetails): string => {
+    switch (trade.status) {
+      case TRADE_STATUSES.REJECTED: {
+        return 'rejected';
+      }
+      case TRADE_STATUSES.IN_PROGRESS: {
+        return 'accepted';
+      }
+      default: {
+        return '';
+      }
+    }
+  };
+
+  handleTrade(trade: TradeDetails, tradeType: string): void {
+    this.commonService.acceptRejectTrades(trade, tradeType).subscribe(() => {
+      this.commonService.getTrades();
+    });
   }
 
   showNotificationInformation(trade: TradeDetails): void {

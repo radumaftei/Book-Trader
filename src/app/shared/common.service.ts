@@ -48,7 +48,7 @@ export class CommonService {
 
   acceptRejectTrades(
     trade: TradeDetails,
-    tradeType: 'accept' | 'reject'
+    tradeType: string
   ): Observable<unknown> {
     return this.apiService.putTrade(trade, tradeType);
   }
