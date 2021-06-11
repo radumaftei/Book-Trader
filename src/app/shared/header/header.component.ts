@@ -11,7 +11,7 @@ import { TradeDetails } from '../../interfaces';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  trades$: Observable<TradeDetails[]> = this.commonService.trades$;
+  userTrades$: Observable<TradeDetails[]> = this.commonService.userTrades$;
   // notificationsRead: boolean;
 
   constructor(

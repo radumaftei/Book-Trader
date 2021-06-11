@@ -157,9 +157,14 @@ export class ApiService {
     );
   };
 
-  fetchTrades = (): Observable<TradeDetails[]> => {
+  fetchTrades = (all: boolean): Observable<TradeDetails[]> => {
     return this.httpClient
-      .get<TradeDetails[]>(this.TRADE_API_URL)
+      .get<TradeDetails[]>(this.TRADE_API_URL, {
+        observe: 'body',
+        params: {
+          all,
+        },
+      })
       .pipe(catchError(this.handleError('Trouble fetching notifications')));
   };
 
@@ -178,7 +183,6 @@ export class ApiService {
   handleError =
     (notificationMessage: string, showBeError = false) =>
     (error: HttpErrorResponse): Observable<never> => {
-      debugger;
       let errorMessage = 'Unknown error!';
       if (error.error instanceof ErrorEvent) {
         // Client side errors

@@ -19,8 +19,8 @@
     [matMenuTriggerFor]="appMenu"
   >
     <mat-icon
-      [matBadge]="(trades$ | async)?.length"
-      [matBadgeHidden]="(trades$ | async)?.length === 0"
+      [matBadge]="(userTrades$ | async)?.length"
+      [matBadgeHidden]="(userTrades$ | async)?.length === 0"
       matBadgeColor="warn"
       >notifications</mat-icon
     >

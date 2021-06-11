@@ -22,6 +22,7 @@
                 mat-stroked-button
                 color="primary"
                 (click)="openBookDetails(book)"
+                [disabled]="book.hidden"
               >
                 Book Details
               </button>

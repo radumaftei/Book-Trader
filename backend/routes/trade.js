@@ -2,6 +2,7 @@ const express = require("express");
 
 const checkAuth = require("../middleware/check-auth");
 const Trade = require("../models/trade");
+const Book = require("../models/book");
 
 const router = express.Router();
 
@@ -47,21 +48,36 @@ router.post("", checkAuth, (req, res) => {
 })
 
 router.get("", checkAuth, (req, res, next) => {
-  Trade.find({ toUser: req.userData.email }).then((trades) => {
+  const {all} = req.query;
+  all === 'false' ? Trade.find({ toUser: req.userData.email }).then((trades) => {
     res.status(200).json(
       trades
     );
-  });
+  }) : Trade.find({ toUser: req.userData.email }).then((firstTrades) => {
+    Trade.find({ fromUser: req.userData.email }).then((secondTrades) => {
+      res.status(200).json(
+        firstTrades.concat(secondTrades)
+      );
+    })
+  })
 });
 
 router.put("", checkAuth, (req, res, next) => {
   const { trade: { fromUser, toUser, _id }, tradeType } = req.body;
+  const { trade } = req.body;
   Trade.updateOne({ _id }, {
     status: tradeType,
     fromUser: toUser,
     toUser: fromUser
   } ).then(() => {
-    res.status(201).json();
+    const bookIds = [trade.tradedBookId, trade.tradedWithBookId];
+    bookIds.forEach((bookId) => {
+      Book.updateOne({ _id: bookId }, {
+        hidden: true
+      }).then(() => {
+        res.status(201).json();
+      })
+    })
   });
 });
 

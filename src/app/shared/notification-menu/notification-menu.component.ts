@@ -5,6 +5,7 @@ import { TradeDetails } from '../../interfaces';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DIALOG_POPUP_MESSAGES, TRADE_STATUSES } from '../../enums';
 import { DialogComponent } from '../dialog/dialog.component';
+import { HomepageService } from '../../modules/homepage/homepage.service';
 
 @Component({
   selector: 'app-notification-menu',
@@ -16,12 +17,12 @@ export class NotificationMenuComponent implements OnDestroy {
   private unsubscribe = new Subject<void>();
 
   TRADE_STATUSES = TRADE_STATUSES;
-
-  trades$: Observable<TradeDetails[]> = this.commonService.trades$;
+  userTrades$: Observable<TradeDetails[]> = this.commonService.userTrades$;
 
   constructor(
     private commonService: CommonService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private homepageService: HomepageService
   ) {}
 
   markAllNotificationsAsRead(): void {
@@ -51,9 +52,13 @@ export class NotificationMenuComponent implements OnDestroy {
     }
   };
 
-  handleTrade(trade: TradeDetails, tradeType: string): void {
+  handleTrade(trade: TradeDetails, tradeType: TRADE_STATUSES): void {
     this.commonService.acceptRejectTrades(trade, tradeType).subscribe(() => {
       this.commonService.getTrades();
+      if (tradeType === TRADE_STATUSES.IN_PROGRESS) {
+        console.log('type progress');
+        this.homepageService.getHomepageBooks();
+      }
     });
   }
 

@@ -15,8 +15,11 @@ export class CommonService {
   private loadingSubject = new BehaviorSubject<boolean>(true);
   loading$ = this.loadingSubject.asObservable();
 
-  private tradesSubject = new BehaviorSubject<TradeDetails[]>([]);
-  trades$ = this.tradesSubject.asObservable();
+  private userTradesSubject = new BehaviorSubject<TradeDetails[]>([]);
+  userTrades$ = this.userTradesSubject.asObservable();
+
+  private allTradesForUserSubject = new BehaviorSubject<TradeDetails[]>([]);
+  allTradesForUser$ = this.allTradesForUserSubject.asObservable();
 
   constructor(private apiService: ApiService) {}
 
@@ -40,9 +43,10 @@ export class CommonService {
     return this.apiService.postTrade(tradeDetails);
   }
 
-  getTrades(): void {
-    this.apiService.fetchTrades().subscribe((trades: TradeDetails[]) => {
-      this.tradesSubject.next(trades);
+  getTrades(all = false): void {
+    this.apiService.fetchTrades(all).subscribe((trades: TradeDetails[]) => {
+      !all && this.userTradesSubject.next(trades);
+      all && this.allTradesForUserSubject.next(trades);
     });
   }
 
