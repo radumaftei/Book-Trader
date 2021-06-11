@@ -18,6 +18,10 @@ body {
   margin: 0;
 }
 
+.spacer {
+  flex: 1;
+}
+
 .is-active {
   text-decoration: underline;
 }
@@ -78,16 +82,6 @@ body {
 }
 
 .auth-form-container {
-  //background: linear-gradient(
-  //  164deg,
-  //  rgba(255, 255, 255, 1) 25%,
-  //  rgba(195, 196, 139, 1) 69%,
-  //  rgba(128, 128, 128, 1) 81%,
-  //  rgba(101, 101, 101, 1) 96%,
-  //  rgba(94, 94, 94, 1) 100%,
-  //  rgba(0, 0, 0, 1) 100%,
-  //  rgba(0, 0, 0, 1) 100%
-  //);
   background: #041738;
 }
 
@@ -121,3 +115,9 @@ mat-spinner {
   text-align: center;
   margin-top: 20px;
 }
+
+.mat-menu-panel {
+  max-height: 70vh !important;
+  max-width: none !important;
+}
+

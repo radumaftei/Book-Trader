@@ -3,6 +3,7 @@
     mat-raised-button
     class="homepage_icon header_icon"
     (click)="onHomepageClick()"
+    [disabled]="actionButtonsDisabled"
   >
     Home Page
   </button>
@@ -13,20 +14,18 @@
     class="header_icon"
     aria-label="Notifications icon"
     matTooltip="Notifications"
-    (click)="toggleNotifications()"
+    [disabled]="actionButtonsDisabled"
     [matTooltipPosition]="'below'"
     [matMenuTriggerFor]="appMenu"
-    [matMenuTriggerData]="{ property: 'Sally' }"
   >
-    <mat-icon [matBadge]="9" matBadgeColor="warn" [matBadgeHidden]="hidden"
+    <mat-icon [matBadge]="notificationsNumber$ | async" matBadgeColor="warn"
       >notifications</mat-icon
     >
   </button>
 
-  <mat-menu #appMenu="matMenu">
-    <ng-template matMenuContent let-name="property">
-      <button mat-menu-item>Settings</button>
-      <button mat-menu-item>Log off {{ name }}</button>
+  <mat-menu #appMenu="matMenu" xPosition="before">
+    <ng-template matMenuContent>
+      <app-notification-menu></app-notification-menu>
     </ng-template>
   </mat-menu>
 
@@ -36,6 +35,7 @@
     aria-label="My account icon"
     matTooltip="My account"
     (click)="onProfileClick()"
+    [disabled]="actionButtonsDisabled"
     [matTooltipPosition]="'below'"
   >
     <mat-icon>account_circle</mat-icon>
@@ -47,6 +47,7 @@
     aria-label="My books icon"
     matTooltip="My books"
     (click)="onMyBooksClick()"
+    [disabled]="actionButtonsDisabled"
     [matTooltipPosition]="'below'"
   >
     <mat-icon>book</mat-icon>

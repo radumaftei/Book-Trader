@@ -1,8 +1,8 @@
 <div class="wrapper">
   <app-header></app-header>
-  <div class="backdrop" *ngIf="isLoading"></div>
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <ng-container *ngIf="bookCategories?.length && !isLoading">
+  <div class="backdrop" *ngIf="loading$ | async"></div>
+  <mat-spinner *ngIf="loading$ | async"></mat-spinner>
+  <ng-container *ngIf="bookCategories?.length && (loading$ | async) === false">
     <ng-container *ngFor="let category of bookCategories">
       <section>
         <div class="mat-title">{{ category }}</div>

@@ -6,7 +6,7 @@ import { BookProfile } from 'src/app/interfaces';
 import { HomepageService } from '../../homepage.service';
 import { DialogComponent } from '../../../../shared/dialog/dialog.component';
 import { CommonService } from '../../../../shared/common.service';
-import {DIALOG_POPUP_ACTIONS, DIALOG_POPUP_MESSAGES} from '../../../../enums';
+import { DIALOG_POPUP_ACTIONS, DIALOG_POPUP_MESSAGES } from '../../../../enums';
 
 @Component({
   templateUrl: './homepage.component.html',
@@ -15,7 +15,8 @@ import {DIALOG_POPUP_ACTIONS, DIALOG_POPUP_MESSAGES} from '../../../../enums';
 export class HomepageComponent implements OnInit, OnDestroy {
   private unsubscribe = new Subject<void>();
 
-  isLoading = false;
+  loading$ = this.commonService.loading$;
+
   bookCards: BookProfile[];
   bookCategories = [];
   offsetBookNumberMapper = {};
@@ -28,13 +29,13 @@ export class HomepageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.isLoading = true;
+    this.commonService.getTrades();
     this.homepageService.getHomepageBooks();
     this.homepageService.homepageBooksUpdate$
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((books) => {
         if (!books) return;
-        this.isLoading = false;
+        this.commonService.setLoading(false);
         if (!books.length) return;
         this.bookCards = books;
         this.bookCategories = books
@@ -61,13 +62,14 @@ export class HomepageComponent implements OnInit, OnDestroy {
     let dialogRef;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      message: DIALOG_POPUP_MESSAGES.TRADE_BOOK,
+      title: DIALOG_POPUP_MESSAGES.TRADE_BOOK,
       actionButton: DIALOG_POPUP_ACTIONS.SEND_TRADE_OFFER,
       isHomepage: true,
       book,
     };
     dialogConfig.disableClose = true;
     dialogConfig.width = '800px';
+    dialogConfig.autoFocus = false;
 
     forkJoin([
       this.commonService.getUser(book.userId),
@@ -87,7 +89,31 @@ export class HomepageComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.unsubscribe))
           .subscribe((result) => {
             if (result) {
-              console.log('trade pressed');
+              const fromUser = localStorage.getItem('loggedInUserEmail');
+              const toUser = dialogConfig.data.user.email;
+              const { tradedWithBookId, tradedWithBookTitle, tradeMethod } =
+                result;
+              const tradedBookTitle = book.title;
+              const tradedBookId = book.id;
+              const [town, method] = tradeMethod.split('-');
+              const informationForUser = `The user ${fromUser} wants to trade from ${
+                town === 'sameTownConfig' ? 'same' : 'a different'
+              } town by ${method === 'onFoot' ? 'foot' : 'courier'}`;
+              this.commonService
+                .createTrade({
+                  fromUser,
+                  toUser,
+                  description: informationForUser,
+                  tradedWithBookId,
+                  tradedWithBookTitle,
+                  tradedBookTitle,
+                  tradedBookId,
+                  tradeMethod,
+                })
+                .pipe(takeUntil(this.unsubscribe))
+                .subscribe((data) => {
+                  console.log('resulted shit', data);
+                });
             }
           });
       });
@@ -144,5 +170,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
     this.unsubscribe.next();
     this.unsubscribe.complete();
     this.homepageService.cleanUp();
+    this.commonService.setLoading(true);
   }
 }

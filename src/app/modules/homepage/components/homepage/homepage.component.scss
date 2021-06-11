@@ -29,8 +29,14 @@
             margin: 20px;
 
             .example-header-image {
-              background-image: url("https://material.angular.io/assets/img/examples/shiba1.jpg");
+              background-image: url("http://localhost:3000/images/profile-pic-1623188442491.jpg");
               background-size: cover;
+            }
+
+            .mat-card-image {
+              object-fit: contain;
+              max-width: 240px;
+              max-height: 140px;
             }
 
             .mat-card-header-text {

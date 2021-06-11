@@ -1,0 +1,43 @@
+.notifications-menu-wrapper {
+  margin: 0 25px;
+  min-height: 200px;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+
+    mat-spinner {
+      top: 0;
+    }
+
+  .mat-card {
+    min-width: 500px;
+    border-radius: 10px;
+    background-color: #f0f1f7;
+
+    &:not(:last-child) {
+      margin-bottom: 5px;
+    }
+    &:last-child {
+      margin-bottom: 30px;
+    }
+
+    .highlighted {
+      font-size: 20px;
+      font-weight: 500;
+      text-decoration: underline;
+    }
+
+    .trade-button-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+  }
+
+  .notifications-buttons-wrapper {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 15px;
+  }
+}
+

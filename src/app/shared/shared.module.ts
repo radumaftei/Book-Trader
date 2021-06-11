@@ -23,6 +23,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
+import { NotificationMenuComponent } from './notification-menu/notification-menu.component';
 
 const MATERIAL_MODULES = [
   MatMenuModule,
@@ -47,10 +48,11 @@ const MATERIAL_MODULES = [
 ];
 
 @NgModule({
-  declarations: [HeaderComponent, DialogComponent],
+  declarations: [HeaderComponent, DialogComponent, NotificationMenuComponent],
   imports: [CommonModule, ...MATERIAL_MODULES, NotificationModule, FormsModule],
   exports: [
     HeaderComponent,
+    NotificationMenuComponent,
     NotificationModule,
     ...MATERIAL_MODULES,
     CommonModule,

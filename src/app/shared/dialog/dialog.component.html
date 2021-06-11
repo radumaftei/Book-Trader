@@ -1,9 +1,13 @@
 <div class="trade-modal-header">
-  <h1 mat-dialog-title>{{ data.message }}</h1>
+  <h1 mat-dialog-title>{{ data.title }}</h1>
   <span class="material-icons trade-cancel-icon" mat-dialog-close>
     cancel
   </span>
 </div>
+
+<h3 class="description" *ngIf="data.description">
+  {{ data.description }}
+</h3>
 <mat-dialog-content *ngIf="data.isHomepage">
   <div class="card">
     <div class="img-avatar">
@@ -95,12 +99,12 @@
     </div>
   </div>
 </mat-dialog-content>
-<div mat-dialog-actions>
+<div mat-dialog-actions *ngIf="data.actionButton">
   <div class="buttons-wrapper">
     <button
       mat-raised-button
       color="primary"
-      [mat-dialog-close]="data.actionButton"
+      [mat-dialog-close]="dataOnClose"
       [disabled]="tradeButtonDisabled"
     >
       {{ data.actionButton }}

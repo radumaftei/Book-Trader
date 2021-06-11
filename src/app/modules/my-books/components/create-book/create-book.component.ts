@@ -12,7 +12,7 @@ import { BooksListDatasource } from '../books-list/books-list.datasource';
 import { mimeType } from './mime-type.validator';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import {getBookCategoriesArr} from '../../../helpers';
+import { getBookCategoriesArr } from '../../../helpers';
 
 @Component({
   selector: 'app-create-book',
@@ -94,6 +94,7 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
       category,
       image,
     });
+    this.myBooksService.setChanges(false);
     if (!this.addMultipleBooks) {
       this.myBooksService.updateSelectedTab(0);
     } else {
