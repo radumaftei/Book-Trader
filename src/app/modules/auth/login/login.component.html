@@ -1,6 +1,6 @@
 <div class="form-container auth-form-container">
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <div *ngIf="!isLoading" class="formular">
+  <mat-spinner *ngIf="loading$ | async"></mat-spinner>
+  <div *ngIf="(loading$ | async) === false" class="formular">
     <div class="auth-img">
       <img
         class="auth-image"
@@ -10,7 +10,7 @@
     </div>
     <form class="inputs" [formGroup]="form">
       <h1>Login Form</h1>
-      <mat-form-field class="email-form" appearance="fill">
+      <mat-form-field appearance="fill">
         <mat-label>Enter your E-mail</mat-label>
         <input
           matInput
@@ -23,7 +23,7 @@
           >Please enter your e-mail</mat-error
         >
       </mat-form-field>
-      <mat-form-field class="password-form" appearance="fill">
+      <mat-form-field appearance="fill">
         <mat-label>Enter your Password</mat-label>
         <input
           matInput

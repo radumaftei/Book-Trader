@@ -18,7 +18,10 @@
     [matTooltipPosition]="'below'"
     [matMenuTriggerFor]="appMenu"
   >
-    <mat-icon [matBadge]="notificationsNumber$ | async" matBadgeColor="warn"
+    <mat-icon
+      [matBadge]="(trades$ | async)?.length"
+      [matBadgeHidden]="(trades$ | async)?.length === 0"
+      matBadgeColor="warn"
       >notifications</mat-icon
     >
   </button>

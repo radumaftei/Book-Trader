@@ -62,20 +62,12 @@ body {
       flex-direction: column;
       flex-wrap: wrap;
 
-      .email-form {
+      mat-form-field {
         margin-bottom: 10px;
-      }
-
-      .password-form {
-        margin-bottom: 30px;
       }
 
       .sign-up-link {
         margin-top: 30px;
-      }
-
-      .location-form {
-        margin-bottom: 30px;
       }
     }
   }

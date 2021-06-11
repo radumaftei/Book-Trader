@@ -1,6 +1,6 @@
 <div class="form-container auth-form-container">
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <div *ngIf="!isLoading" class="formular">
+  <mat-spinner *ngIf="loading$ | async"></mat-spinner>
+  <div *ngIf="(loading$ | async) === false" class="formular">
     <div class="auth-img">
       <img
         class="auth-image"
@@ -10,11 +10,12 @@
     </div>
     <form class="inputs" [formGroup]="form">
       <h1>SignUp Form</h1>
-      <mat-form-field class="email-form" appearance="fill">
+      <mat-form-field appearance="fill">
         <mat-label>Enter your E-mail</mat-label>
         <input
           matInput
           type="text"
+          name="signup-input-email"
           formControlName="email"
           placeholder="E-mail"
         />
@@ -22,7 +23,7 @@
           >Please enter your e-mail</mat-error
         >
       </mat-form-field>
-      <mat-form-field class="password-form" appearance="fill">
+      <mat-form-field appearance="fill">
         <mat-label>Enter your Password</mat-label>
         <input
           matInput
@@ -43,7 +44,20 @@
           >Please enter your password</mat-error
         >
       </mat-form-field>
-      <mat-form-field class="location-form" appearance="fill">
+      <mat-form-field appearance="fill">
+        <mat-label>Enter your Phone Number</mat-label>
+        <input
+          matInput
+          type="text"
+          [maxLength]="10"
+          formControlName="phoneNumber"
+          placeholder="Phone Number"
+        />
+        <mat-error *ngIf="form.get('phoneNumber').invalid"
+          >Please enter your phone number</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field appearance="fill">
         <mat-label>Enter your Location</mat-label>
         <input
           matInput

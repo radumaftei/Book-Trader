@@ -12,9 +12,6 @@ import {
   providedIn: 'root',
 })
 export class CommonService {
-  private notificationsNumberSubject = new BehaviorSubject<number>(0);
-  notificationsNumber$ = this.notificationsNumberSubject.asObservable();
-
   private loadingSubject = new BehaviorSubject<boolean>(true);
   loading$ = this.loadingSubject.asObservable();
 
@@ -46,8 +43,14 @@ export class CommonService {
   getTrades(): void {
     this.apiService.fetchTrades().subscribe((trades: TradeDetails[]) => {
       this.tradesSubject.next(trades);
-      this.notificationsNumberSubject.next(trades.length);
     });
+  }
+
+  acceptRejectTrades(
+    trade: TradeDetails,
+    tradeType: 'accept' | 'reject'
+  ): Observable<unknown> {
+    return this.apiService.putTrade(trade, tradeType);
   }
 
   setLoading(flag: boolean): void {

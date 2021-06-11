@@ -21,6 +21,7 @@ type CommonBook = {
   tradingPreferenceGenre: string;
   tradingPreferenceDescription: string;
   userId: string;
+  hidden: boolean;
 };
 
 export interface DifferentTownConfig {
@@ -42,6 +43,7 @@ export interface BookApi {
 }
 
 export interface TradeDetails {
+  _id?: string;
   fromUser: string;
   toUser: string;
   description: string;
@@ -52,4 +54,14 @@ export interface TradeDetails {
   accepted?: boolean;
   rejected?: boolean;
   tradeMethod: string;
+  status?: TRADE_STATUSES;
+  completedBy?: string;
+}
+
+export enum TRADE_STATUSES {
+  PENDING = 'PENDING',
+  IN_PROGRESS = 'IN_PROGRESS',
+  REJECTED = 'REJECTED',
+  COMPLETED = 'COMPLETED',
+  CANCELED = 'CANCELED',
 }

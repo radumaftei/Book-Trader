@@ -14,6 +14,7 @@ const bookSchema = Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   username: { type: String, required: true },
   location: { type: String, required: true },
+  hidden: { type: Boolean, required: true }
 });
 
 module.exports = mongoose.model("Book", bookSchema);

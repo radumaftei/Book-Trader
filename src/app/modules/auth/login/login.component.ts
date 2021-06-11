@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { CommonService } from '../../../shared/common.service';
 
 @Component({
   templateUrl: './login.component.html',
@@ -17,11 +18,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
   form: FormGroup;
   hide = true;
-  isLoading = false;
+  loading$ = this.commonService.loading$;
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private commonService: CommonService
   ) {}
 
   get loginButtonDisabled(): boolean {
@@ -42,17 +44,18 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: this.form.value.password,
       location: null,
     });
-    this.isLoading = true;
+    this.commonService.setLoading(true);
     this.subscription = this.authService
       .getAuthStatusListener()
       .subscribe((data) => {
         if (!data) {
-          this.isLoading = false;
+          this.commonService.setLoading(false);
         }
       });
   }
 
   ngOnDestroy(): void {
     this.subscription && this.subscription.unsubscribe();
+    this.commonService.setLoading(false);
   }
 }

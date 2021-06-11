@@ -14,7 +14,6 @@ import { DIALOG_POPUP_ACTIONS, DIALOG_POPUP_MESSAGES } from '../../../../enums';
 })
 export class HomepageComponent implements OnInit, OnDestroy {
   private unsubscribe = new Subject<void>();
-
   loading$ = this.commonService.loading$;
 
   bookCards: BookProfile[];
@@ -29,7 +28,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.commonService.getTrades();
     this.homepageService.getHomepageBooks();
     this.homepageService.homepageBooksUpdate$
       .pipe(takeUntil(this.unsubscribe))

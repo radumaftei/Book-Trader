@@ -13,6 +13,7 @@ router.post("/signup", (req, res, next) => {
       email: req.body.email,
       password: hash,
       location: req.body.location,
+      phoneNumber: req.body.phoneNumber,
       sameTownConfig: {
         courier: true,
         onFoot: true
@@ -45,7 +46,7 @@ router.post("/login", (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
-        return res.status(401).json({
+        return res.status(404).json({
           message: `Auth Failed. No user found with email ${req.body.email}`,
         });
       }

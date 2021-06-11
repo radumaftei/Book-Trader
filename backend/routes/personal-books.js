@@ -54,6 +54,7 @@ router.post("", checkAuth, upload.single("image"), (req, res, next) => {
     userId: req.userData.userId,
     username: req.userData.email.split("@")[0],
     location: req.userData.location,
+    hidden: false
   })
     .save()
     .then((addedBook) => {

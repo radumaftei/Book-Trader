@@ -1,4 +1,9 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { CommonService } from '../common.service';
 import { Observable, Subject } from 'rxjs';
 import { TradeDetails } from '../../interfaces';
@@ -30,6 +35,14 @@ export class NotificationMenuComponent implements OnDestroy {
     console.log('deleted');
   }
 
+  handleTrade(trade: TradeDetails, tradeType: 'accept' | 'reject'): void {
+    this.commonService
+      .acceptRejectTrades(trade, tradeType)
+      .subscribe((data) => {
+        console.log('put data', data);
+      });
+  }
+
   showNotificationInformation(trade: TradeDetails): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -42,9 +55,7 @@ export class NotificationMenuComponent implements OnDestroy {
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        console.log('result', result);
-      }
+      console.log('result', result);
     });
   }
 

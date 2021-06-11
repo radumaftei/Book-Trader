@@ -147,13 +147,7 @@ export class ApiService {
         expiresIn: number;
         user: { email: string; location: string };
       }>(`${this.USER_API_URL}/${USER_LOGIN_URL}`, authData)
-      .pipe(
-        catchError(
-          this.handleError(
-            "Couldn't login. Please re-check username and password"
-          )
-        )
-      );
+      .pipe(catchError(this.handleError('', true)));
   };
 
   postTrade = (tradeDetails: TradeDetails): Observable<unknown> => {
@@ -169,9 +163,31 @@ export class ApiService {
       .pipe(catchError(this.handleError('Trouble fetching notifications')));
   };
 
+  putTrade = (
+    trade: TradeDetails,
+    tradeType: 'accept' | 'reject'
+  ): Observable<unknown> => {
+    return this.httpClient
+      .put(this.TRADE_API_URL, {
+        trade,
+        tradeType,
+      })
+      .pipe(
+        tap(() =>
+          this.handleSuccess(
+            `Trade ${
+              tradeType === 'accept' ? 'accepted' : 'rejected'
+            } successfully`
+          )
+        ),
+        catchError(this.handleError("Couldn't save books/book"))
+      );
+  };
+
   handleError =
-    (notificationMessage: string) =>
+    (notificationMessage: string, showBeError = false) =>
     (error: HttpErrorResponse): Observable<never> => {
+      debugger;
       let errorMessage = 'Unknown error!';
       if (error.error instanceof ErrorEvent) {
         // Client side errors
@@ -182,7 +198,7 @@ export class ApiService {
       }
 
       this.notificationService.showNotification(
-        notificationMessage,
+        !showBeError ? notificationMessage : error.error.message,
         NotificationType.ERROR
       );
       console.error(errorMessage);

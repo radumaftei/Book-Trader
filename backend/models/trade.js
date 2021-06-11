@@ -9,8 +9,8 @@ const tradeSchema = Schema({
   tradedWithBookTitle: { type: String, required: true },
   tradedBookId: { type: Schema.Types.ObjectId, ref: "Book", required: true },
   tradedWithBookId: { type: Schema.Types.ObjectId, ref: "Book", required: true },
-  accepted: { type: Boolean, required: true },
-  rejected: { type: Boolean, required: true },
+  status: { type: String, required: true },
+  completedBy: { type: String, required: true },
   tradeMethod: Schema.Types.Mixed
 })
 
