@@ -15,25 +15,9 @@ const TRADE_STATUSES = Object.freeze({
 })
 
 router.post("", checkAuth, (req, res) => {
-  const {
-    fromUser,
-    toUser,
-    description,
-    tradeMethod,
-    tradedBookTitle,
-    tradedWithBookTitle,
-    tradedBookId,
-    tradedWithBookId
-  } = req.body;
-  const [ town, method ] = tradeMethod.split('-');
+  const [ town, method ] = req.body.tradeMethod.split('-');
   new Trade({
-    fromUser,
-    toUser,
-    tradedBookTitle,
-    tradedWithBookTitle,
-    tradedBookId,
-    tradedWithBookId,
-    description,
+    ...req.body,
     accepted: false,
     rejected: false,
     tradeMethod: {
@@ -64,12 +48,14 @@ router.get("", checkAuth, (req, res, next) => {
 });
 
 router.put("", checkAuth, (req, res, next) => {
-  const { trade: { fromUser, toUser, _id }, tradeType } = req.body;
+  const { trade: { fromUser, toUser, _id, fromPhoneNumber, toPhoneNumber }, tradeType } = req.body;
   const { trade } = req.body;
   Trade.updateOne({ _id }, {
     status: tradeType,
     fromUser: toUser,
-    toUser: fromUser
+    toUser: fromUser,
+    fromPhoneNumber: toPhoneNumber,
+    toPhoneNumber: fromPhoneNumber
   } ).then(() => {
     if (tradeType === TRADE_STATUSES.IN_PROGRESS) {
       const bookIds = [trade.tradedBookId, trade.tradedWithBookId];

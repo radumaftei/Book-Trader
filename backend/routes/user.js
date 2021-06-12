@@ -75,6 +75,7 @@ router.post("/login", (req, res, next) => {
         user: {
           email: fetchedUser.email,
           location: fetchedUser.location,
+          phoneNumber: fetchedUser.phoneNumber
         },
       });
     })
@@ -96,10 +97,11 @@ router.get("", checkAuth, (req, res, next) => {
   const byId = req.query.byId === 'true';
   const filterProperty = byId ? '_id' : 'email';
   User.findOne({[filterProperty]: userSearchQuery}).then((user) => {
-    const { email, location, differentTownConfig, sameTownConfig } = user;
+    const { email, location, differentTownConfig, sameTownConfig, phoneNumber } = user;
     res.status(201).json({
       email,
       location,
+      phoneNumber,
       differentTownConfig,
       sameTownConfig,
     });

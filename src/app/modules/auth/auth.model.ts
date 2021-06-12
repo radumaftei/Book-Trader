@@ -10,6 +10,7 @@ export interface AuthData {
 export interface UserData {
   email: string;
   location: string;
+  phoneNumber?: number;
   sameTownConfig?: SameTownConfig;
   differentTownConfig?: DifferentTownConfig;
 }

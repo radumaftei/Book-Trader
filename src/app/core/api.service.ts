@@ -138,7 +138,7 @@ export class ApiService {
       .post<{
         token: string;
         expiresIn: number;
-        user: { email: string; location: string };
+        user: { email: string; location: string; phoneNumber: number };
       }>(`${this.USER_API_URL}/${USER_LOGIN_URL}`, authData)
       .pipe(catchError(this.handleError('', true)));
   };

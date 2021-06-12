@@ -47,6 +47,8 @@ export interface TradeDetails {
   _id?: string;
   fromUser: string;
   toUser: string;
+  fromPhoneNumber: number;
+  toPhoneNumber: number;
   description: string;
   tradedBookTitle: string;
   tradedWithBookTitle: string;

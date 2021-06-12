@@ -93,6 +93,10 @@ export class HomepageComponent implements OnInit, OnDestroy {
           .subscribe((result) => {
             if (result) {
               const fromUser = localStorage.getItem('loggedInUserEmail');
+              const fromPhoneNumber = parseInt(
+                localStorage.getItem('phoneNumber')
+              );
+              const toPhoneNumber = dialogConfig.data.user.phoneNumber;
               const toUser = dialogConfig.data.user.email;
               const { tradedWithBookId, tradedWithBookTitle, tradeMethod } =
                 result;
@@ -106,6 +110,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
                 .createTrade({
                   fromUser,
                   toUser,
+                  fromPhoneNumber,
+                  toPhoneNumber,
                   description: informationForUser,
                   tradedWithBookId,
                   tradedWithBookTitle,
