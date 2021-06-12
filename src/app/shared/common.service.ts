@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, noop, Observable } from 'rxjs';
 import { UserData } from '../modules/auth/auth.model';
 import { ApiService } from '../core/api.service';
 import {
@@ -22,8 +22,11 @@ export class CommonService {
   private userTradesSubject = new BehaviorSubject<TradeDetails[]>([]);
   userTrades$ = this.userTradesSubject.asObservable();
 
-  private allTradesForUserSubject = new BehaviorSubject<TradeDetails[]>([]);
-  allTradesForUser$ = this.allTradesForUserSubject.asObservable();
+  private tradeHistoryForUserSubject = new BehaviorSubject<TradeDetails[]>([]);
+  tradeHistoryForUser$ = this.tradeHistoryForUserSubject.asObservable();
+
+  private unreadNotificationsSubject = new BehaviorSubject<number>(0);
+  unreadNotificationsNumber$ = this.unreadNotificationsSubject.asObservable();
 
   constructor(private apiService: ApiService) {}
 
@@ -40,14 +43,14 @@ export class CommonService {
         sameTownConfig: sameTownConfig,
         differentTownConfig: differentTownConfig,
       })
-      .subscribe(() => {});
+      .subscribe(noop);
   }
 
   createTrade(tradeDetails: TradeDetails): Observable<unknown> {
     return this.apiService.postTrade(tradeDetails);
   }
 
-  updateReadBy(readBy: string): Observable<string> {
+  updateReadBy(readBy: string): Observable<unknown> {
     const tradeIds: string[] = this.userTradesSubject
       .getValue()
       .map((trade: TradeDetails) => trade._id);
@@ -57,9 +60,14 @@ export class CommonService {
   getTrades(all = false): void {
     this.apiService.fetchTrades(all).subscribe((trades: TradeDetails[]) => {
       if (!all) {
+        const unreadNotifications = trades.filter(
+          (trade: TradeDetails) =>
+            !trade.readBy.includes(localStorage.getItem('loggedInUserEmail'))
+        ).length;
+        this.unreadNotificationsSubject.next(unreadNotifications);
         this.userTradesSubject.next(trades);
       } else {
-        this.allTradesForUserSubject.next(trades);
+        this.tradeHistoryForUserSubject.next(trades);
       }
     });
   }

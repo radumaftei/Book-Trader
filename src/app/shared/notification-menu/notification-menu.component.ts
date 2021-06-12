@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { CommonService } from '../common.service';
-import { Observable, Subject } from 'rxjs';
+import { noop, Observable, Subject } from 'rxjs';
 import { TradeDetails } from '../../interfaces';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DIALOG_POPUP_MESSAGES, TRADE_STATUSES } from '../../enums';
 import { DialogComponent } from '../dialog/dialog.component';
 import { HomepageService } from '../../modules/homepage/homepage.service';
+import { takeUntil } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-notification-menu',
@@ -22,11 +24,18 @@ export class NotificationMenuComponent implements OnDestroy {
   constructor(
     private commonService: CommonService,
     private dialog: MatDialog,
-    private homepageService: HomepageService
+    private homepageService: HomepageService,
+    private router: Router
   ) {}
 
   markAllNotificationsAsRead(): void {
-    this.commonService.updateReadBy(localStorage.getItem('loggedInUserEmail'));
+    this.commonService
+      .updateReadBy(localStorage.getItem('loggedInUserEmail'))
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(() => {
+        this.commonService.getTrades();
+        this.router.url === '/profile' && this.commonService.getTrades(true);
+      });
   }
 
   showRejectedInProgress = (trade: TradeDetails): boolean =>
@@ -52,7 +61,6 @@ export class NotificationMenuComponent implements OnDestroy {
     this.commonService.acceptRejectTrades(trade, tradeType).subscribe(() => {
       this.commonService.getTrades();
       if (tradeType === TRADE_STATUSES.IN_PROGRESS) {
-        console.log('type progress');
         this.homepageService.getHomepageBooks();
       }
     });
@@ -69,7 +77,11 @@ export class NotificationMenuComponent implements OnDestroy {
 
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe(() => {});
+    dialogRef.afterClosed().subscribe(noop);
+  }
+
+  unreadNotification(readBy: string): boolean {
+    return !readBy.includes(localStorage.getItem('loggedInUserEmail'));
   }
 
   ngOnDestroy(): void {

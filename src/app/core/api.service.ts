@@ -173,11 +173,12 @@ export class ApiService {
       );
   };
 
-  putReadBy = (readBy: string, tradeIds: string[]): Observable<string> => {
+  putReadBy = (readBy: string, tradeIds: string[]): Observable<unknown> => {
+    const url = `${this.TRADE_API_URL}/${READ_BY}`;
     return this.httpClient
       .put<string>(`${this.TRADE_API_URL}/${READ_BY}`, {
         userEmail: readBy,
-        ids: tradeIds,
+        tradeIds,
       })
       .pipe(
         catchError(this.handleError("Couldn't update notification status"))

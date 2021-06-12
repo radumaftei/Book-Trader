@@ -87,21 +87,17 @@ router.put("", checkAuth, (req, res, next) => {
 });
 
 router.put("/readBy", checkAuth, (req, res) => {
-  const { userEmail, ids } = req.body;
-  ids.forEach((_id) => {
+  const { userEmail, tradeIds } = req.body;
+  tradeIds.forEach((_id) => {
     Trade.findOne({ _id })
       .then((trade) => {
         const readBy = trade.readBy;
-        if (readBy.includes(userEmail)) {
-          res.status(201).json();
-        } else {
-          const finalReadBy = trade.readBy.concat(',', userEmail);
+          const finalReadBy = !readBy.includes(userEmail) ? trade.readBy.concat(',', userEmail) : readBy;
           Trade.updateOne({ _id }, {
             readBy: finalReadBy
           }).then(() => {
             res.status(201).json();
           })
-        }
       })
   })
 });

@@ -14,6 +14,10 @@
     border-radius: 10px;
     background-color: #f0f1f7;
 
+    &.unread-notifications {
+      background-color: #B0BEC5;
+    }
+
     &:not(:last-child) {
       margin-bottom: 5px;
     }

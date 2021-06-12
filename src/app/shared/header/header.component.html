@@ -18,7 +18,12 @@
     [matTooltipPosition]="'below'"
     [matMenuTriggerFor]="appMenu"
   >
-    <mat-icon matBadgeColor="warn">notifications</mat-icon>
+    <mat-icon
+      matBadgeColor="warn"
+      [matBadge]="unreadNotificationsNumber$ | async"
+      [matBadgeHidden]="(unreadNotificationsNumber$ | async) === 0"
+      >notifications</mat-icon
+    >
   </button>
 
   <mat-menu #appMenu="matMenu" xPosition="before">

@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs';
+import { noop, Subscription } from 'rxjs';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
     this.subscription = this.authService
       .getAuthStatusListener()
-      .subscribe(() => {});
+      .subscribe(noop);
   }
 
   ngOnDestroy(): void {

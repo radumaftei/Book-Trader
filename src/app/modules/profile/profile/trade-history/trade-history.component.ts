@@ -10,8 +10,8 @@ import { TRADE_STATUSES } from 'src/app/enums';
   styleUrls: ['./trade-history.component.scss'],
 })
 export class TradeHistoryComponent {
-  allTradesForUser$: Observable<TradeDetails[]> =
-    this.commonService.allTradesForUser$;
+  tradeHistoryForUser$: Observable<TradeDetails[]> =
+    this.commonService.tradeHistoryForUser$;
   TRADE_STATUSES = TRADE_STATUSES;
 
   constructor(private commonService: CommonService) {
@@ -19,4 +19,8 @@ export class TradeHistoryComponent {
   }
 
   handleTrade(trade: TradeDetails, tradeType: TRADE_STATUSES): void {}
+
+  unreadNotification(readBy: string): boolean {
+    return !readBy.includes(localStorage.getItem('loggedInUserEmail'));
+  }
 }

@@ -10,7 +10,10 @@
       Mark all as read
     </button>
   </div>
-  <mat-card *ngFor="let userTrade of userTrades$ | async">
+  <mat-card
+    *ngFor="let userTrade of userTrades$ | async"
+    [ngClass]="{ 'unread-notifications': unreadNotification(userTrade.readBy) }"
+  >
     <ng-container *ngIf="userTrade.status === TRADE_STATUSES.PENDING">
       User <span class="highlighted">{{ userTrade.fromUser }}</span> wants to
       trade your book

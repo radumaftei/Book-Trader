@@ -9,6 +9,8 @@ import { CommonService } from '../common.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
+  unreadNotificationsNumber$ = this.commonService.unreadNotificationsNumber$;
+
   constructor(
     private router: Router,
     private authService: AuthService,

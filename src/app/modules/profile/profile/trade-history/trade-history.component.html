@@ -1,6 +1,9 @@
 <div class="history-wrapper">
   <h1>Trade history</h1>
-  <mat-card *ngFor="let userTrade of allTradesForUser$ | async">
+  <mat-card
+    *ngFor="let userTrade of tradeHistoryForUser$ | async"
+    [ngClass]="{ 'unread-notifications': unreadNotification(userTrade.readBy) }"
+  >
     Your trade:
     <span class="highlighted">{{ userTrade.tradedWithBookTitle }}</span> for
     <span class="highlighted">{{ userTrade.tradedBookTitle }}</span> is
@@ -26,5 +29,7 @@
       </button>
     </div>
   </mat-card>
-  <p *ngIf="(allTradesForUser$ | async).length === 0">No Trades were made !</p>
+  <p *ngIf="(tradeHistoryForUser$ | async).length === 0">
+    No Trades were made !
+  </p>
 </div>
