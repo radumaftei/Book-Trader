@@ -9,13 +9,11 @@
   {{ data.description }}
 </h3>
 <mat-dialog-content *ngIf="data.isHomepage">
-  <div class="card">
-    <div class="img-avatar">
-      <!--     round img -->
-    </div>
-    <div class="card-text">
+  <div class="card-wrapper">
+    <div class="img-avatar"></div>
+    <div class="card-text-book-image">
       <img class="book-image" [src]="book.imagePath" [alt]="book.title" />
-      <div class="title-total">
+      <div class="book-details-wrapper">
         <div class="title">
           <p>
             Book added by
@@ -45,8 +43,8 @@
           <span class="trading-inline">Trading genres:</span>
           {{ book.tradingPreferenceGenre }}
         </p>
+        <p class="choose-delivery-option">Choose an option for delivery</p>
         <div class="actions">
-          <p>Choose an option for delivery</p>
           <mat-radio-group color="primary" [required]="true">
             <div class="delivery-section">
               <p>Different town</p>

@@ -25,7 +25,7 @@
         <input
           matInput
           #bookAuthor
-          maxlength="30"
+          maxlength="50"
           type="text"
           formControlName="author"
           placeholder="Book Author"
@@ -33,14 +33,14 @@
         <mat-error *ngIf="form.get('author').invalid"
           >Please enter an author</mat-error
         >
-        <mat-hint align="end">{{ bookAuthor.value.length }} / 30</mat-hint>
+        <mat-hint align="end">{{ bookAuthor.value.length }} / 50</mat-hint>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Book description</mat-label>
         <textarea
           matInput
           #bookDescription
-          maxlength="100"
+          maxlength="300"
           class="description-trading-form"
           formControlName="description"
           placeholder="Book Description"
@@ -49,47 +49,67 @@
           >Please enter a description</mat-error
         >
         <mat-hint align="end"
-          >{{ bookDescription.value.length }} / 100</mat-hint
+          >{{ bookDescription.value.length }} / 300</mat-hint
         >
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Trading preference authors</mat-label>
         <input
           matInput
+          #preferenceAuthors
+          maxlength="100"
           type="text"
           formControlName="tradingPreferenceAuthor"
           placeholder="Trading preference author"
         />
+        <mat-hint align="end"
+          >{{ preferenceAuthors.value.length }} / 100</mat-hint
+        >
         <mat-hint>* Separate by comma *</mat-hint>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Trading preference books</mat-label>
         <input
           matInput
+          #preferenceBooks
+          maxlength="200"
           type="text"
           formControlName="tradingPreferenceBook"
           placeholder="Trading preference books"
         />
+        <mat-hint align="end"
+          >{{ preferenceBooks.value.length }} / 200</mat-hint
+        >
         <mat-hint>* Separate by comma *</mat-hint>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Trading preference genres</mat-label>
         <input
           matInput
+          #preferenceGenres
+          maxlength="50"
           type="text"
           formControlName="tradingPreferenceGenre"
           placeholder="Trading preference genres"
         />
+        <mat-hint align="end"
+          >{{ preferenceGenres.value.length }} / 50</mat-hint
+        >
         <mat-hint>* Separate by comma *</mat-hint>
       </mat-form-field>
       <mat-form-field class="trading-preferences-details" appearance="outline">
         <mat-label>Trading preferences details</mat-label>
         <textarea
           matInput
+          #preferenceDetails
+          maxlength="200"
           class="description-trading-form"
           formControlName="tradingPreferenceDescription"
           placeholder="Trading preferences details"
         ></textarea>
+        <mat-hint align="end"
+          >{{ preferenceDetails.value.length }} / 200</mat-hint
+        >
         <mat-hint
           >* This will be included in your book details in the homepage of other
           users. You can specify things like: e.g. I don't want a specific book

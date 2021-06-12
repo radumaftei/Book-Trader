@@ -16,6 +16,10 @@
         &.trading-preferences-details {
           margin-bottom: 30px;
         }
+
+        mat-hint {
+          max-width: 370px;
+        }
       }
 
       mat-expansion-panel {
