@@ -22,28 +22,27 @@
           </p>
         </div>
         <h2>Title: {{ book.title }}</h2>
-        <p class="book-details">
-          <span class="trading-inline">Description:</span>
+        <div class="book-details">
+          <p class="section-title">Description</p>
           {{ book.description }}
-        </p>
-        <p class="book-details-preferences" *ngIf="preferences">Preferences:</p>
-        <p class="book-details" *ngIf="book.tradingPreferenceAuthor">
-          <span class="trading-inline">Trading authors:</span>
+        </div>
+        <div class="book-details" *ngIf="book.tradingPreferenceAuthor">
+          <p class="section-title">Trading authors</p>
           {{ book.tradingPreferenceAuthor }}
-        </p>
-        <p class="book-details" *ngIf="book.tradingPreferenceBook">
-          <span class="trading-inline">Trading books:</span>
+        </div>
+        <div class="book-details" *ngIf="book.tradingPreferenceBook">
+          <p class="section-title">Trading books</p>
           {{ book.tradingPreferenceBook }}
-        </p>
-        <p class="book-details" *ngIf="book.tradingPreferenceDescription">
-          <span class="trading-inline">Trading description:</span>
+        </div>
+        <div class="book-details" *ngIf="book.tradingPreferenceDescription">
+          <p class="section-title">Trading description</p>
           {{ book.tradingPreferenceDescription }}
-        </p>
-        <p class="book-details" *ngIf="book.tradingPreferenceGenre">
-          <span class="trading-inline">Trading genres:</span>
+        </div>
+        <div class="book-details" *ngIf="book.tradingPreferenceGenre">
+          <p class="section-title">Trading genres</p>
           {{ book.tradingPreferenceGenre }}
-        </p>
-        <p class="choose-delivery-option">Choose an option for delivery</p>
+        </div>
+        <p class="section-title">Choose an option for delivery</p>
         <div class="actions">
           <mat-radio-group color="primary" [required]="true">
             <div class="delivery-section">
