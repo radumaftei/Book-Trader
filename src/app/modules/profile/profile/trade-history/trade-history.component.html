@@ -1,12 +1,14 @@
 <div class="history-wrapper">
   <h1>Trade history</h1>
   <mat-card *ngFor="let userTrade of allTradesForUser$ | async">
-    <ng-container *ngIf="userTrade.status === TRADE_STATUSES.PENDING">
-      User <span class="highlighted">{{ userTrade.fromUser }}</span> wants to
-      trade your book
-      <span class="highlighted">{{ userTrade.tradedBookTitle }}</span> with
-      <span class="highlighted">{{ userTrade.tradedWithBookTitle }}</span>
-    </ng-container>
+    Your trade:
+    <span class="highlighted">{{ userTrade.tradedWithBookTitle }}</span> for
+    <span class="highlighted">{{ userTrade.tradedBookTitle }}</span> is
+    <span class="highlighted">{{ userTrade.status.toLowerCase() }}</span
+    >.
+    <!--    <ng-container *ngIf="userTrade.status === TRADE_STATUSES.IN_PROGRESS">-->
+    <!--      You can find the other user by calling at <span class="highlighted"></span>-->
+    <!--    </ng-container>-->
     <div class="trade-button-wrapper">
       <button
         mat-button

@@ -1,5 +1,7 @@
 const express = require("express");
 const multer = require("multer");
+const fs = require('fs');
+
 const checkAuth = require("../middleware/check-auth");
 const Book = require("../models/book");
 
@@ -9,12 +11,14 @@ const MIME_TYPE_MAP = {
   "image/jpg": "jpg",
 };
 
+const IMAGES_DIR_PATH = 'backend/images';
+
 const router = express.Router();
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const isValid = MIME_TYPE_MAP[file.mimetype];
     const error = isValid ? null : new Error("Invalid mime type!");
-    cb(error, "backend/images");
+    cb(error, IMAGES_DIR_PATH);
   },
 
   filename: (req, file, cb) => {
@@ -60,11 +64,8 @@ router.post("", checkAuth, upload.single("image"), (req, res, next) => {
     .then((addedBook) => {
       addedBook = addedBook.toObject();
       res.status(201).json({
-        message: "Book added successfully",
-        newBook: {
           ...addedBook,
           id: addedBook._id,
-        },
       });
     });
 });
@@ -75,7 +76,6 @@ router.get("", checkAuth, (req, res, next) => {
     const length = books.length;
     const booksByQuery = withPagination === 'true' ? books.slice((pageIndex - 1) * pageSize, pageIndex * pageSize) : books;
     res.status(200).json({
-      message: "Your books fetched successfully!",
       books: booksByQuery,
       length
     });
@@ -92,9 +92,20 @@ router.put("", checkAuth, (req, res, next) => {
 });
 
 router.delete("/:id", checkAuth, (req, res, next) => {
-  Book.deleteOne({ _id: req.params.id }).then(() => {
-    res.status(200).json({ message: "Book deleted !" });
-  });
+  Book.findOne({ _id: req.params.id }).then((book) => {
+    const imagePathArray = book.imagePath.split('/');
+    const path = `${IMAGES_DIR_PATH}/${imagePathArray[imagePathArray.length - 1]}`;
+    Book.deleteOne({ _id: req.params.id }).then(() => {
+      fs.unlink(path, (err) => {
+        if (err) {
+          console.error(err)
+          return;
+        }
+        res.status(200).json();
+      })
+    });
+  })
+
 });
 
 module.exports = router;

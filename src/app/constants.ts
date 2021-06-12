@@ -11,6 +11,7 @@ export const DELIVERY_CONFIG = 'deliveryConfig';
 export const USER_LOGIN_URL = 'login';
 export const HOMEPAGE = 'homepage';
 export const TRADE_URL = 'trade';
+export const READ_BY = 'readBy';
 
 export const TRADING_PREFERENCES_STATUS = {
   NO_PREFERENCE,

@@ -11,6 +11,7 @@ const tradeSchema = Schema({
   tradedWithBookId: { type: Schema.Types.ObjectId, ref: "Book", required: true },
   status: { type: String, required: true },
   completedBy: { type: String },
+  readBy: { type: String },
   tradeMethod: Schema.Types.Mixed
 })
 

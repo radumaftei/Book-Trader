@@ -39,7 +39,6 @@ export enum DIALOG_POPUP_ACTIONS {
 }
 
 export enum COLUMN_TYPES {
-  INDEX = 'INDEX',
   STRING = 'STRING',
   IMAGE = 'IMAGE',
   DROPDOWN = 'DROPDOWN',

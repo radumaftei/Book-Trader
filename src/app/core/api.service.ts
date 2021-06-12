@@ -15,6 +15,7 @@ import {
   HOME_URL,
   HOMEPAGE,
   MY_BOOKS_URL,
+  READ_BY,
   TRADE_URL,
   USER_LOGIN_URL,
   USER_SIGNUP_URL,
@@ -54,7 +55,7 @@ export class ApiService {
       pageIndex: queryParams.pageIndex + 1,
     };
     return this.httpClient
-      .get<{ message: string; books: BookProfileDTO[]; length: number }>(
+      .get<{ books: BookProfileDTO[]; length: number }>(
         homepage ? this.HOMEPAGE_API_URL : this.BOOKS_API_URL,
         {
           observe: 'body',
@@ -65,12 +66,8 @@ export class ApiService {
         }
       )
       .pipe(
-        map(
-          (data: {
-            message: string;
-            books: BookProfileDTO[];
-            length: number;
-          }) => transformDTOBooks(data.books, data.length)
+        map((data: { books: BookProfileDTO[]; length: number }) =>
+          transformDTOBooks(data.books, data.length)
         ),
         catchError(this.handleError("Couldn't fetch books"))
       );
@@ -89,15 +86,10 @@ export class ApiService {
   }
 
   postBookHttp = (book) => {
-    return this.httpClient
-      .post<{ message: string; newBook: BookProfileDTO }>(
-        this.BOOKS_API_URL,
-        book
-      )
-      .pipe(
-        tap(() => this.handleSuccess('Book added successfully')),
-        catchError(this.handleError("Couldn't add book"))
-      );
+    return this.httpClient.post<BookProfileDTO>(this.BOOKS_API_URL, book).pipe(
+      tap(() => this.handleSuccess('Book added successfully')),
+      catchError(this.handleError("Couldn't add book"))
+    );
   };
 
   putBooksHttp = (books) => {
@@ -121,6 +113,7 @@ export class ApiService {
         authData
       )
       .pipe(
+        tap(() => this.handleSuccess('User added successfully')),
         catchError(
           this.handleError(
             "Couldn't sign up. Please make sure you completed every input"
@@ -177,6 +170,17 @@ export class ApiService {
       .pipe(
         tap(() => this.handleSuccess(`Trade updated successfully`)),
         catchError(this.handleError("Couldn't save books/book"))
+      );
+  };
+
+  putReadBy = (readBy: string, tradeIds: string[]): Observable<string> => {
+    return this.httpClient
+      .put<string>(`${this.TRADE_API_URL}/${READ_BY}`, {
+        userEmail: readBy,
+        ids: tradeIds,
+      })
+      .pipe(
+        catchError(this.handleError("Couldn't update notification status"))
       );
   };
 

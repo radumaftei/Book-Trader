@@ -29,12 +29,17 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.homepageService.getHomepageBooks();
+    this.commonService.fetchDataBooks$
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe((data) => {
+        if (!data) return;
+        this.homepageService.getHomepageBooks();
+        this.commonService.setFetchDataBooks(false);
+      });
     this.homepageService.homepageBooksUpdate$
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((books) => {
-        if (!books) return;
         this.commonService.setLoading(false);
-        if (!books.length) return;
         this.bookCards = books;
         this.bookCategories = books
           .reduce(
@@ -109,9 +114,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
                   tradeMethod,
                 })
                 .pipe(takeUntil(this.unsubscribe))
-                .subscribe((data) => {
-                  console.log('resulted shit', data);
-                });
+                .subscribe((data) => {});
             }
           });
       });

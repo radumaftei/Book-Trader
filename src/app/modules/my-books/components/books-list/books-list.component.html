@@ -75,10 +75,6 @@
             [matTooltipPosition]="'right'"
             matTooltipHideDelay="100"
           >
-            <ng-container *ngIf="column.type === COLUMN_TYPES.INDEX">
-              <p>{{ row.lineNumber }}</p>
-            </ng-container>
-
             <ng-container *ngIf="column.type === COLUMN_TYPES.IMAGE">
               <img
                 class="book-image"
@@ -149,7 +145,7 @@
     color="primary"
     [disabled]="dataSource.loading$ | async"
     [pageSize]="defaultPageSizeOptions.pageSize"
-    [length]="dataSource.totalBooksLength"
+    [length]="dataSource.counter$ | async"
     [showFirstLastButtons]="true"
   ></mat-paginator>
 </div>

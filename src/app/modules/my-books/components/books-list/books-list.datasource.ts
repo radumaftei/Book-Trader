@@ -47,10 +47,6 @@ export class BooksListDatasource implements DataSource<BookProfile> {
     return this.initialDataSubject.getValue();
   }
 
-  get totalBooksLength(): number {
-    return this.countSubject.getValue();
-  }
-
   getBooksForTable(queryParams: PageOptions): void {
     this.loadingSubject.next(true);
     this.setNoData(false);
@@ -65,16 +61,8 @@ export class BooksListDatasource implements DataSource<BookProfile> {
         this.countSubject.next(data.length);
         if (!data.books) return;
         this.setNoData(!data.books.length);
-        let lineNumber = 0;
-        const bookData = data.books.map((book) => {
-          lineNumber = lineNumber + 1;
-          return {
-            ...book,
-            lineNumber,
-          };
-        });
-        this.initialDataSubject.next(JSON.parse(JSON.stringify(bookData)));
-        this.dataSubject.next(JSON.parse(JSON.stringify(bookData)));
+        this.initialDataSubject.next(JSON.parse(JSON.stringify(data.books)));
+        this.dataSubject.next(JSON.parse(JSON.stringify(data.books)));
       });
   }
 
@@ -87,7 +75,7 @@ export class BooksListDatasource implements DataSource<BookProfile> {
       this.apiService
         .postBookHttp(book)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(({ newBook }) => {
+        .subscribe((newBook) => {
           if (!newBook) return;
           this.dataSubject.next([
             ...this.books,

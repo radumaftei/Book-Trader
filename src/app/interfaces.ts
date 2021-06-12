@@ -2,7 +2,6 @@ import { TRADE_STATUSES } from './enums';
 
 export interface BookProfile extends CommonBook {
   changed: boolean;
-  lineNumber?: number;
 }
 
 export interface BookProfileDTO extends CommonBook {
@@ -55,5 +54,6 @@ export interface TradeDetails {
   tradedWithBookId: string;
   status?: TRADE_STATUSES;
   completedBy?: string;
+  readBy?: string;
   tradeMethod: string;
 }

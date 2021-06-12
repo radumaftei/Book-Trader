@@ -7,11 +7,15 @@ import {
   SameTownConfig,
   TradeDetails,
 } from '../interfaces';
+import { TRADE_STATUSES } from '../enums';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommonService {
+  private fetchDataBooksSubject = new BehaviorSubject<boolean>(false);
+  fetchDataBooks$ = this.fetchDataBooksSubject.asObservable();
+
   private loadingSubject = new BehaviorSubject<boolean>(true);
   loading$ = this.loadingSubject.asObservable();
 
@@ -43,21 +47,36 @@ export class CommonService {
     return this.apiService.postTrade(tradeDetails);
   }
 
+  updateReadBy(readBy: string): Observable<string> {
+    const tradeIds: string[] = this.userTradesSubject
+      .getValue()
+      .map((trade: TradeDetails) => trade._id);
+    return this.apiService.putReadBy(readBy, tradeIds);
+  }
+
   getTrades(all = false): void {
     this.apiService.fetchTrades(all).subscribe((trades: TradeDetails[]) => {
-      !all && this.userTradesSubject.next(trades);
-      all && this.allTradesForUserSubject.next(trades);
+      if (!all) {
+        this.userTradesSubject.next(trades);
+      } else {
+        this.allTradesForUserSubject.next(trades);
+      }
     });
   }
 
   acceptRejectTrades(
     trade: TradeDetails,
-    tradeType: string
+    tradeType: TRADE_STATUSES
   ): Observable<unknown> {
+    tradeType === TRADE_STATUSES.IN_PROGRESS && this.setFetchDataBooks(true);
     return this.apiService.putTrade(trade, tradeType);
   }
 
   setLoading(flag: boolean): void {
     this.loadingSubject.next(flag);
+  }
+
+  setFetchDataBooks(flag: boolean): void {
+    this.fetchDataBooksSubject.next(flag);
   }
 }

@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../modules/auth/auth.service';
 import { CommonService } from '../common.service';
-import { Observable } from 'rxjs';
-import { TradeDetails } from '../../interfaces';
 
 @Component({
   selector: 'app-header',
@@ -11,9 +9,6 @@ import { TradeDetails } from '../../interfaces';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  userTrades$: Observable<TradeDetails[]> = this.commonService.userTrades$;
-  // notificationsRead: boolean;
-
   constructor(
     private router: Router,
     private authService: AuthService,

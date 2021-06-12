@@ -26,11 +26,7 @@ export class NotificationMenuComponent implements OnDestroy {
   ) {}
 
   markAllNotificationsAsRead(): void {
-    console.log('marked');
-  }
-
-  deleteAllNotifications(): void {
-    console.log('deleted');
+    this.commonService.updateReadBy(localStorage.getItem('loggedInUserEmail'));
   }
 
   showRejectedInProgress = (trade: TradeDetails): boolean =>
@@ -73,9 +69,7 @@ export class NotificationMenuComponent implements OnDestroy {
 
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('result', result);
-    });
+    dialogRef.afterClosed().subscribe(() => {});
   }
 
   ngOnDestroy(): void {

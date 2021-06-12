@@ -20,6 +20,8 @@ import {
   DIALOG_POPUP_MESSAGES,
 } from '../../../../enums';
 import { getBookCategoriesArr } from '../../../helpers';
+import { MyBooksService } from '../../my-books.service';
+import { displayedColumns, headerConfig } from './table-config';
 
 @Component({
   selector: 'app-books-list',
@@ -29,57 +31,13 @@ import { getBookCategoriesArr } from '../../../helpers';
 export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   private unsubscribe = new Subject<void>();
   bookCategories = getBookCategoriesArr();
-  headerConfig = [
-    { field_name: '', column_name: '#', type: 'INDEX' },
-    { field_name: 'Image', column_name: 'image', type: 'IMAGE' },
-    { field_name: 'Title', column_name: 'title', type: 'STRING' },
-    { field_name: 'Author', column_name: 'author', type: 'STRING' },
-    { field_name: 'Category', column_name: 'category', type: 'DROPDOWN' },
-    {
-      field_name: 'Description',
-      column_name: 'description',
-      type: 'STRING',
-    },
-    {
-      field_name: 'Trading Preference Authors',
-      column_name: 'tradingPreferenceAuthor',
-      type: 'STRING',
-    },
-    {
-      field_name: 'Trading Preference Books',
-      column_name: 'tradingPreferenceBook',
-      type: 'STRING',
-    },
-    {
-      field_name: 'Trading Preference Genres',
-      column_name: 'tradingPreferenceGenre',
-      type: 'STRING',
-    },
-    {
-      field_name: 'Trading Preference Description',
-      column_name: 'tradingPreferenceDescription',
-      type: 'STRING',
-    },
-    { field_name: '', column_name: 'delete', type: 'BUTTON' },
-  ];
+  headerConfig = headerConfig;
 
   COLUMN_TYPES = COLUMN_TYPES;
   editPressed = false;
 
   defaultPageSizeOptions = defaultPageOptions;
-  displayedColumns: string[] = [
-    '#',
-    'image',
-    'title',
-    'author',
-    'category',
-    'description',
-    'tradingPreferenceAuthor',
-    'tradingPreferenceBook',
-    'tradingPreferenceGenre',
-    'tradingPreferenceDescription',
-    'delete',
-  ];
+  displayedColumns: string[] = displayedColumns;
 
   @ViewChild('searchInput') searchInput: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -91,11 +49,18 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
   constructor(
     public dataSource: BooksListDatasource,
     private dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private myBooksService: MyBooksService
   ) {}
 
   ngOnInit(): void {
-    this.dataSource.getBooksForTable(this.defaultPageSizeOptions);
+    this.myBooksService.selectedTab$
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe((index) => {
+        if (!index) {
+          this.dataSource.getBooksForTable(this.defaultPageSizeOptions);
+        }
+      });
   }
 
   ngAfterViewInit(): void {
