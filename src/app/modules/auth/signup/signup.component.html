@@ -18,29 +18,66 @@
           formControlName="email"
           placeholder="E-mail"
         />
-        <mat-error *ngIf="form.get('email').invalid"
+        <mat-error *ngIf="form.get('email')?.errors?.required"
           >Please enter your e-mail</mat-error
+        >
+        <mat-error *ngIf="form.get('email')?.errors?.email"
+          >The e-mail is not valid</mat-error
         >
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Enter your Password</mat-label>
         <input
           matInput
-          [type]="hide ? 'password' : 'text'"
+          [type]="hidePassword ? 'password' : 'text'"
           formControlName="password"
           placeholder="Password"
         />
         <button
           mat-icon-button
           matSuffix
-          (click)="hide = !hide"
+          (click)="hidePassword = !hidePassword"
           [attr.aria-label]="'Hide password'"
-          [attr.aria-pressed]="hide"
+          [attr.aria-pressed]="hidePassword"
         >
-          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+          <mat-icon>{{
+            hidePassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
         </button>
-        <mat-error *ngIf="form.get('password').invalid"
+        <mat-error *ngIf="form.get('password')?.errors?.required"
           >Please enter your password</mat-error
+        >
+        <mat-error *ngIf="form.get('password')?.errors?.minlength"
+          >The password is not long enough</mat-error
+        >
+        <mat-error *ngIf="form.get('password')?.errors?.strong"
+          >The password is not strong enough</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Confirm Password</mat-label>
+        <input
+          matInput
+          [type]="hideConfirmPassword ? 'password' : 'text'"
+          formControlName="confirmPassword"
+          placeholder="Confirm Password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="hideConfirmPassword = !hideConfirmPassword"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hideConfirmPassword"
+        >
+          <mat-icon>{{
+            hideConfirmPassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+        <mat-error *ngIf="form.get('confirmPassword')?.errors?.required"
+          >Please confirm your password</mat-error
+        >
+        <mat-error *ngIf="form.get('confirmPassword')?.errors?.isMatching"
+          >The passwords don't match</mat-error
         >
       </mat-form-field>
       <mat-form-field appearance="fill">
@@ -52,8 +89,11 @@
           formControlName="phoneNumber"
           placeholder="Phone Number"
         />
-        <mat-error *ngIf="form.get('phoneNumber').invalid"
+        <mat-error *ngIf="form.get('phoneNumber')?.errors?.required"
           >Please enter your phone number</mat-error
+        >
+        <mat-error *ngIf="form.get('phoneNumber')?.errors?.pattern"
+          >The phone number is not correct/long enough</mat-error
         >
       </mat-form-field>
       <mat-form-field appearance="fill">
@@ -64,7 +104,7 @@
           formControlName="location"
           placeholder="Location"
         />
-        <mat-error *ngIf="form.get('location').invalid"
+        <mat-error *ngIf="form.get('location')?.errors?.required"
           >Please enter your location</mat-error
         >
       </mat-form-field>

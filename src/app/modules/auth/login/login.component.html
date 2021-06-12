@@ -18,8 +18,11 @@
           formControlName="email"
           placeholder="E-mail"
         />
-        <mat-error *ngIf="form.get('email').invalid"
+        <mat-error *ngIf="form.get('email')?.errors?.required"
           >Please enter your e-mail</mat-error
+        >
+        <mat-error *ngIf="form.get('email')?.errors?.email"
+          >The e-mail is not valid</mat-error
         >
       </mat-form-field>
       <mat-form-field appearance="fill">
@@ -39,8 +42,14 @@
         >
           <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
-        <mat-error *ngIf="form.get('password').invalid"
+        <mat-error *ngIf="form.get('password')?.errors?.required"
           >Please enter your password</mat-error
+        >
+        <mat-error *ngIf="form.get('password')?.errors?.minlength"
+          >The password is not long enough</mat-error
+        >
+        <mat-error *ngIf="form.get('password')?.errors?.strong"
+          >The password is not strong enough</mat-error
         >
       </mat-form-field>
       <button
