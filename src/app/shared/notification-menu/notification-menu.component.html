@@ -4,54 +4,62 @@
       mat-button
       aria-label="Mark all as read"
       (click)="markAllNotificationsAsRead()"
-      [disabled]="(userTrades$ | async)?.length === 0"
+      [disabled]="
+        (userTrades$ | async)?.length === 0 ||
+        (unreadNotificationsNumber$ | async) === 0
+      "
     >
       <mat-icon>done_all</mat-icon>
       Mark all as read
     </button>
   </div>
-  <mat-card
-    *ngFor="let userTrade of userTrades$ | async"
-    [ngClass]="{ 'unread-notifications': unreadNotification(userTrade.readBy) }"
-  >
-    <ng-container *ngIf="userTrade.status === TRADE_STATUSES.PENDING">
-      User <span class="highlighted">{{ userTrade.fromUser }}</span> wants to
-      trade your book
-      <span class="highlighted">{{ userTrade.tradedBookTitle }}</span> with
-      <span class="highlighted">{{ userTrade.tradedWithBookTitle }}</span>
-      <div class="trade-button-wrapper">
-        <button
-          mat-button
-          color="primary"
-          (click)="handleTrade(userTrade, TRADE_STATUSES.IN_PROGRESS)"
-        >
-          Accept Trade
-        </button>
-        <button
-          mat-button
-          color="warn"
-          (click)="handleTrade(userTrade, TRADE_STATUSES.REJECTED)"
-        >
-          Reject Trade
-        </button>
-        <button
-          mat-icon-button
-          color="primary"
-          (click)="showNotificationInformation(userTrade)"
-          matTooltip="Show delivery information wanted by {{
-            userTrade.fromUser
-          }}"
-          [matTooltipHideDelay]="400"
-        >
-          <mat-icon>info</mat-icon>
-        </button>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="showRejectedInProgress(userTrade)">
-      User <span class="highlighted">{{ userTrade.toUser }}</span>
-      {{ getMessageForRejectedInProgress(userTrade) }} your trade offer for
-      <span class="highlighted">{{ userTrade.tradedBookTitle }}</span> book with
-      <span class="highlighted">{{ userTrade.tradedWithBookTitle }}</span>
-    </ng-container>
-  </mat-card>
+  <ng-container *ngFor="let userTrade of userTrades$ | async">
+    <mat-card
+      *ngIf="userTrade.status !== TRADE_STATUSES.COMPLETED"
+      [ngClass]="{
+        'unread-notifications': unreadNotification(userTrade.readBy)
+      }"
+    >
+      <ng-container *ngIf="userTrade.status === TRADE_STATUSES.PENDING">
+        User <span class="highlighted">{{ userTrade.fromUser }}</span> wants to
+        trade your book
+        <span class="highlighted">{{ userTrade.tradedBookTitle }}</span> with
+        <span class="highlighted">{{ userTrade.tradedWithBookTitle }}</span>
+        <div class="trade-button-wrapper">
+          <button
+            mat-button
+            color="primary"
+            (click)="handleTrade(userTrade, TRADE_STATUSES.IN_PROGRESS)"
+          >
+            Accept Trade
+          </button>
+          <button
+            mat-button
+            color="warn"
+            (click)="handleTrade(userTrade, TRADE_STATUSES.REJECTED)"
+          >
+            Reject Trade
+          </button>
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="showNotificationInformation(userTrade)"
+            matTooltip="Show delivery information wanted by {{
+              userTrade.fromUser
+            }}"
+            [matTooltipHideDelay]="400"
+          >
+            <mat-icon>info</mat-icon>
+          </button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="showNotificationWithoutActions(userTrade)">
+        User <span class="highlighted">{{ userTrade.toUser }}</span>
+        {{ getMessageForRejectedInProgress(userTrade) }} your trade offer for
+        <span class="highlighted">{{ userTrade.tradedBookTitle }}</span> book
+        with
+        <span class="highlighted">{{ userTrade.tradedWithBookTitle }}</span>
+      </ng-container>
+    </mat-card>
+  </ng-container>
 </div>

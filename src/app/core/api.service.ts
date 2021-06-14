@@ -10,6 +10,7 @@ import {
 import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
+  COMPLETED_TRADE_URL,
   defaultPageOptions,
   DELIVERY_CONFIG,
   HOME_URL,
@@ -25,6 +26,7 @@ import { Observable, throwError } from 'rxjs';
 import { NotificationService } from '../shared/notification/notification.service';
 import { NotificationType } from '../shared/notification/notification-type.enum';
 import { transformDTOBooks } from '../modules/helpers';
+import { TRADE_STATUSES } from '../enums';
 
 interface IDelivery {
   sameTownConfig: SameTownConfig;
@@ -158,10 +160,16 @@ export class ApiService {
           all,
         },
       })
-      .pipe(catchError(this.handleError('Trouble fetching notifications')));
+      .pipe(
+        map((trades) => trades.reverse()),
+        catchError(this.handleError('Trouble fetching notifications'))
+      );
   };
 
-  putTrade = (trade: TradeDetails, tradeType: string): Observable<unknown> => {
+  updateNotificationTrade = (
+    trade: TradeDetails,
+    tradeType: TRADE_STATUSES
+  ): Observable<unknown> => {
     return this.httpClient
       .put(this.TRADE_API_URL, {
         trade,
@@ -169,14 +177,28 @@ export class ApiService {
       })
       .pipe(
         tap(() => this.handleSuccess(`Trade updated successfully`)),
-        catchError(this.handleError("Couldn't save books/book"))
+        catchError(this.handleError("Couldn't update trade"))
+      );
+  };
+
+  completeTrade = (
+    trade: TradeDetails,
+    tradeType: TRADE_STATUSES.COMPLETED
+  ): Observable<unknown> => {
+    return this.httpClient
+      .put(`${this.TRADE_API_URL}/${COMPLETED_TRADE_URL}`, {
+        trade,
+        tradeType,
+      })
+      .pipe(
+        tap(() => this.handleSuccess(`Trade completed successfully`)),
+        catchError(this.handleError("Couldn't complete trade"))
       );
   };
 
   putReadBy = (readBy: string, tradeIds: string[]): Observable<unknown> => {
-    const url = `${this.TRADE_API_URL}/${READ_BY}`;
     return this.httpClient
-      .put<string>(`${this.TRADE_API_URL}/${READ_BY}`, {
+      .put(`${this.TRADE_API_URL}/${READ_BY}`, {
         userEmail: readBy,
         tradeIds,
       })

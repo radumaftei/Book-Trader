@@ -7,7 +7,7 @@ import { DIALOG_POPUP_MESSAGES, TRADE_STATUSES } from '../../enums';
 import { DialogComponent } from '../dialog/dialog.component';
 import { HomepageService } from '../../modules/homepage/homepage.service';
 import { takeUntil } from 'rxjs/operators';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-notification-menu',
@@ -20,6 +20,7 @@ export class NotificationMenuComponent implements OnDestroy {
 
   TRADE_STATUSES = TRADE_STATUSES;
   userTrades$: Observable<TradeDetails[]> = this.commonService.userTrades$;
+  unreadNotificationsNumber$ = this.commonService.unreadNotificationsNumber$;
 
   constructor(
     private commonService: CommonService,
@@ -33,15 +34,17 @@ export class NotificationMenuComponent implements OnDestroy {
       .updateReadBy(localStorage.getItem('loggedInUserEmail'))
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(() => {
-        this.commonService.getTrades();
+        this.commonService.getTrades(false, true);
         this.router.url === '/profile' && this.commonService.getTrades(true);
       });
   }
 
-  showRejectedInProgress = (trade: TradeDetails): boolean =>
-    [TRADE_STATUSES.REJECTED, TRADE_STATUSES.IN_PROGRESS].includes(
-      trade.status
-    );
+  showNotificationWithoutActions = (trade: TradeDetails): boolean =>
+    [
+      TRADE_STATUSES.REJECTED,
+      TRADE_STATUSES.IN_PROGRESS,
+      TRADE_STATUSES.CANCELED,
+    ].includes(trade.status);
 
   getMessageForRejectedInProgress = (trade: TradeDetails): string => {
     switch (trade.status) {
@@ -51,6 +54,9 @@ export class NotificationMenuComponent implements OnDestroy {
       case TRADE_STATUSES.IN_PROGRESS: {
         return 'accepted';
       }
+      case TRADE_STATUSES.CANCELED: {
+        return 'cancelled';
+      }
       default: {
         return '';
       }
@@ -58,12 +64,14 @@ export class NotificationMenuComponent implements OnDestroy {
   };
 
   handleTrade(trade: TradeDetails, tradeType: TRADE_STATUSES): void {
-    this.commonService.acceptRejectTrades(trade, tradeType).subscribe(() => {
-      this.commonService.getTrades();
-      if (tradeType === TRADE_STATUSES.IN_PROGRESS) {
-        this.homepageService.getHomepageBooks();
-      }
-    });
+    this.commonService
+      .updateNotificationTrade(trade, tradeType)
+      .subscribe(() => {
+        this.commonService.getTrades();
+        if (tradeType === TRADE_STATUSES.IN_PROGRESS) {
+          this.homepageService.getHomepageBooks();
+        }
+      });
   }
 
   showNotificationInformation(trade: TradeDetails): void {

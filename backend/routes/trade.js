@@ -50,6 +50,7 @@ router.get("", checkAuth, (req, res, next) => {
 router.put("", checkAuth, (req, res, next) => {
   const { trade: { fromUser, toUser, _id, fromPhoneNumber, toPhoneNumber }, tradeType } = req.body;
   const { trade } = req.body;
+  const bookIds = [trade.tradedBookId, trade.tradedWithBookId];
   Trade.updateOne({ _id }, {
     status: tradeType,
     fromUser: toUser,
@@ -58,7 +59,6 @@ router.put("", checkAuth, (req, res, next) => {
     toPhoneNumber: fromPhoneNumber
   } ).then(() => {
     if (tradeType === TRADE_STATUSES.IN_PROGRESS) {
-      const bookIds = [trade.tradedBookId, trade.tradedWithBookId];
       bookIds.forEach((bookId) => {
         Book.updateOne({ _id: bookId }, {
           hidden: true
@@ -68,8 +68,27 @@ router.put("", checkAuth, (req, res, next) => {
       })
     } else if (tradeType === TRADE_STATUSES.REJECTED) {
       res.status(201).json();
+    } else if (tradeType === TRADE_STATUSES.CANCELED) {
+      bookIds.forEach((bookId) => {
+        Book.updateOne({ _id: bookId }, {
+          hidden: false
+        }).then(() => {
+          res.status(201).json();
+        })
+      })
     }
   });
+});
+
+router.put('/completeTrade', checkAuth, (req, res) => {
+  const { trade: { fromUser, toUser, _id }, tradeType } = req.body;
+  console.log(req.body)
+  res.status(201).json();
+  // Trade.updateOne({ _id }, {
+  //   status: tradeType
+  // }).then(() => {
+  //
+  // })
 });
 
 router.put("/readBy", checkAuth, (req, res) => {

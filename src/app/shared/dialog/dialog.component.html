@@ -25,22 +25,22 @@
         <div class="book-details">
           <p class="section-title">Description</p>
           {{ book.description }}
-        </div>
-        <div class="book-details" *ngIf="book.tradingPreferenceAuthor">
-          <p class="section-title">Trading authors</p>
-          {{ book.tradingPreferenceAuthor }}
-        </div>
-        <div class="book-details" *ngIf="book.tradingPreferenceBook">
-          <p class="section-title">Trading books</p>
-          {{ book.tradingPreferenceBook }}
-        </div>
-        <div class="book-details" *ngIf="book.tradingPreferenceDescription">
-          <p class="section-title">Trading description</p>
-          {{ book.tradingPreferenceDescription }}
-        </div>
-        <div class="book-details" *ngIf="book.tradingPreferenceGenre">
-          <p class="section-title">Trading genres</p>
-          {{ book.tradingPreferenceGenre }}
+          <ng-container *ngIf="book.tradingPreferenceAuthor">
+            <p class="section-title">Trading authors</p>
+            {{ book.tradingPreferenceAuthor }}
+          </ng-container>
+          <ng-container *ngIf="book.tradingPreferenceBook">
+            <p class="section-title">Trading books</p>
+            {{ book.tradingPreferenceBook }}
+          </ng-container>
+          <ng-container *ngIf="book.tradingPreferenceDescription">
+            <p class="section-title">Trading description</p>
+            {{ book.tradingPreferenceDescription }}
+          </ng-container>
+          <ng-container *ngIf="book.tradingPreferenceGenre">
+            <p class="section-title">Trading genres</p>
+            {{ book.tradingPreferenceGenre }}
+          </ng-container>
         </div>
         <p class="section-title">Choose an option for delivery</p>
         <div class="actions">

@@ -2,7 +2,7 @@
   <app-header></app-header>
 
   <div class="profile-content">
-    <h1>Welcome, user</h1>
+    <h1>Welcome, {{ username }}</h1>
     <mat-expansion-panel *ngIf="(loading$ | async) === false">
       <mat-expansion-panel-header>
         <mat-panel-title>Delivery methods by location</mat-panel-title>

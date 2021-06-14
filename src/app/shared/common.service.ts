@@ -57,7 +57,7 @@ export class CommonService {
     return this.apiService.putReadBy(readBy, tradeIds);
   }
 
-  getTrades(all = false): void {
+  getTrades(all = false, filterSeenFromNotification = false): void {
     this.apiService.fetchTrades(all).subscribe((trades: TradeDetails[]) => {
       if (!all) {
         const unreadNotifications = trades.filter(
@@ -72,12 +72,19 @@ export class CommonService {
     });
   }
 
-  acceptRejectTrades(
+  updateNotificationTrade(
     trade: TradeDetails,
     tradeType: TRADE_STATUSES
   ): Observable<unknown> {
     tradeType === TRADE_STATUSES.IN_PROGRESS && this.setFetchDataBooks(true);
-    return this.apiService.putTrade(trade, tradeType);
+    return this.apiService.updateNotificationTrade(trade, tradeType);
+  }
+
+  completeTrade(
+    trade: TradeDetails,
+    tradeType: TRADE_STATUSES.COMPLETED
+  ): Observable<unknown> {
+    return this.apiService.completeTrade(trade, tradeType);
   }
 
   setLoading(flag: boolean): void {

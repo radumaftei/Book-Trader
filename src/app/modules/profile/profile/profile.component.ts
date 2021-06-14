@@ -3,7 +3,6 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   OnDestroy,
-  ChangeDetectorRef,
 } from '@angular/core';
 import { DifferentTownConfig, SameTownConfig } from '../../../interfaces';
 import { takeUntil } from 'rxjs/operators';
@@ -31,6 +30,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
   };
   sameTownAllChecked = true;
   differentTownAllChecked = true;
+
+  get username(): string {
+    return localStorage.getItem('loggedInUserEmail').split('@')[0];
+  }
 
   get deliveryMethodsEmpty(): boolean {
     return (

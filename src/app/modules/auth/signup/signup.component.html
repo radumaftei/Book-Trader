@@ -44,6 +44,10 @@
             hidePassword ? "visibility_off" : "visibility"
           }}</mat-icon>
         </button>
+        <mat-hint
+          >Your password must contain at least one lowercase, one uppercase, and
+          one digit</mat-hint
+        >
         <mat-error *ngIf="form.get('password')?.errors?.required"
           >Please enter your password</mat-error
         >

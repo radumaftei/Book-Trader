@@ -76,6 +76,7 @@ export class AuthService {
     this.removeFromLs('expirationDate');
     this.removeFromLs('loggedInUserEmail');
     this.removeFromLs('loggedInUserLocation');
+    this.removeFromLs('phoneNumber');
   };
 
   private saveToLs = (key: string, value: string): void => {
