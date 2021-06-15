@@ -63,6 +63,7 @@ export class AuthService {
   private saveLoggedInUserToLs = (user) => {
     this.saveToLs('loggedInUserEmail', user.email);
     this.saveToLs('loggedInUserLocation', user.location);
+    this.saveToLs('phoneNumber', user.phoneNumber);
   };
 
   private saveAuthDataToLS = (token: string, expirationDate: Date) => {
@@ -75,6 +76,7 @@ export class AuthService {
     this.removeFromLs('expirationDate');
     this.removeFromLs('loggedInUserEmail');
     this.removeFromLs('loggedInUserLocation');
+    this.removeFromLs('phoneNumber');
   };
 
   private saveToLs = (key: string, value: string): void => {

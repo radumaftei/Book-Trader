@@ -1,12 +1,13 @@
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AuthGuard } from './modules/auth/auth.guard';
+import { NotFoundComponent } from './shared/not-found/not-found.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'login',
+    redirectTo: 'signup',
   },
   {
     path: 'login',
@@ -57,7 +58,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '/login',
+    component: NotFoundComponent,
   },
 ];
 

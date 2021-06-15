@@ -28,8 +28,8 @@
             max-width: 248px;
             margin: 20px;
 
-            .example-header-image {
-              background-image: url("http://localhost:3000/images/profile-pic-1623188442491.jpg");
+            .profile-pic {
+              background-image: url("http://localhost:3000/images/profile-pic.jpg");
               background-size: cover;
             }
 
@@ -47,15 +47,15 @@
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;
-              font-size: 15px;
+              font-size: 18px;
             }
 
             mat-card-subtitle {
-              font-size: 10px;
+              font-size: 15px;
             }
 
             mat-card-content {
-              height: 100px;
+              height: 50px;
               overflow: hidden;
 
               p {
@@ -66,7 +66,7 @@
                   content: "";
                   text-align: right;
                   position: absolute;
-                  bottom: 0;
+                  bottom: -5px;
                   right: 0;
                   width: 70%;
                   height: 1.2em;

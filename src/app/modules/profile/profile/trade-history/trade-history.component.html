@@ -1,0 +1,42 @@
+<div class="history-wrapper">
+  <h1>Trade history</h1>
+  <mat-card
+    *ngFor="let userTrade of tradeHistoryForUser$ | async"
+    [ngClass]="{
+      'unread-notifications':
+        unreadNotification(userTrade.readBy) &&
+        (unreadNotificationsNumber$ | async) > 0
+    }"
+  >
+    Your trade:
+    <span class="highlighted">{{ userTrade.tradedBookTitle }}</span> for
+    <span class="highlighted">{{ userTrade.tradedWithBookTitle }}</span> is
+    <span class="highlighted">{{ userTrade.status.toLowerCase() }}</span
+    >.
+    <br />
+    <ng-container *ngIf="showActions(userTrade)">
+      You can find the other user at
+      <span class="highlighted">{{ userTrade.toPhoneNumber }}</span
+      >.
+    </ng-container>
+    <div class="trade-button-wrapper" *ngIf="showActions(userTrade)">
+      <button
+        mat-button
+        color="primary"
+        (click)="handleTrade(userTrade, TRADE_STATUSES.COMPLETED)"
+      >
+        Complete
+      </button>
+      <button
+        mat-button
+        color="primary"
+        (click)="handleTrade(userTrade, TRADE_STATUSES.CANCELED)"
+      >
+        Cancel
+      </button>
+    </div>
+  </mat-card>
+  <p *ngIf="(tradeHistoryForUser$ | async).length === 0">
+    No Trades were made !
+  </p>
+</div>

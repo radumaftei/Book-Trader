@@ -2,46 +2,115 @@ const express = require("express");
 
 const checkAuth = require("../middleware/check-auth");
 const Trade = require("../models/trade");
+const Book = require("../models/book");
 
 const router = express.Router();
 
+const TRADE_STATUSES = Object.freeze({
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  REJECTED: 'REJECTED',
+  COMPLETED: 'COMPLETED',
+  CANCELED: 'CANCELED',
+})
+
 router.post("", checkAuth, (req, res) => {
-  const {
-    fromUser,
-    toUser,
-    description,
-    tradeMethod,
-    tradedBookTitle,
-    tradedWithBookTitle,
-    tradedBookId,
-    tradedWithBookId
-  } = req.body;
-  const [ town, method ] = tradeMethod.split('-');
+  const [ town, method ] = req.body.tradeMethod.split('-');
   new Trade({
-    fromUser,
-    toUser,
-    tradedBookTitle,
-    tradedWithBookTitle,
-    tradedBookId,
-    tradedWithBookId,
-    description,
+    ...req.body,
     accepted: false,
     rejected: false,
     tradeMethod: {
       [town]: method
-    }
+    },
+    status: TRADE_STATUSES.PENDING,
+    completedBy: '',
+    readBy: ''
   }).save()
-    .then((trade) => {
+    .then(() => {
       res.status(201).json()
     })
 })
 
 router.get("", checkAuth, (req, res, next) => {
-  Trade.find({ toUser: req.userData.email }).then((trades) => {
+  const {all} = req.query;
+  all === 'false' ? Trade.find({ toUser: req.userData.email }).then((trades) => {
     res.status(200).json(
       trades
     );
+  }) : Trade.find({ toUser: req.userData.email }).then((firstTrades) => {
+    Trade.find({ fromUser: req.userData.email }).then((secondTrades) => {
+      res.status(200).json(
+        firstTrades.concat(secondTrades)
+      );
+    })
+  })
+});
+
+router.put("", checkAuth, (req, res, next) => {
+  const { trade: { fromUser, toUser, _id, fromPhoneNumber, toPhoneNumber, readBy }, tradeType } = req.body;
+  const { trade } = req.body;
+  const bookIds = [trade.tradedBookId, trade.tradedWithBookId];
+  Trade.updateOne({ _id }, {
+    status: tradeType,
+    fromUser: toUser,
+    toUser: fromUser,
+    fromPhoneNumber: toPhoneNumber,
+    toPhoneNumber: fromPhoneNumber
+  }).then(() => {
+    if (tradeType === TRADE_STATUSES.IN_PROGRESS) {
+      bookIds.forEach((bookId) => {
+        Book.updateOne({ _id: bookId }, {
+          hidden: true
+        }).then(() => {
+          res.status(201).json();
+        })
+      })
+    } else if (tradeType === TRADE_STATUSES.REJECTED) {
+      res.status(201).json();
+    } else if (tradeType === TRADE_STATUSES.CANCELED) {
+      const includedInReadBy = readBy.includes(req.userData.email);
+      const finalReadBy = includedInReadBy ? readBy : trade.readBy.concat(',', req.userData.email);
+      Trade.updateOne({ _id }, {
+        readBy: finalReadBy
+      }).then(() => {
+        bookIds.forEach((bookId) => {
+          Book.updateOne({ _id: bookId }, {
+            hidden: false
+          }).then(() => {
+            res.status(201).json();
+          })
+        })
+      })
+    }
   });
+});
+
+router.put('/completeTrade', checkAuth, (req, res) => {
+  const { trade: { fromUser, toUser, _id }, tradeType } = req.body;
+  console.log(req.body)
+  res.status(201).json();
+  // Trade.updateOne({ _id }, {
+  //   status: tradeType
+  // }).then(() => {
+  //
+  // })
+});
+
+router.put("/readBy", checkAuth, (req, res) => {
+  const { userEmail, tradeIds } = req.body;
+  tradeIds.forEach((_id) => {
+    Trade.findOne({ _id })
+      .then((trade) => {
+        const readBy = trade.readBy;
+          const finalReadBy = !readBy.includes(userEmail) ? trade.readBy.concat(',', userEmail) : readBy;
+          Trade.updateOne({ _id }, {
+            readBy: finalReadBy
+          }).then(() => {
+            res.status(201).json();
+          })
+      })
+  })
 });
 
 module.exports = router;

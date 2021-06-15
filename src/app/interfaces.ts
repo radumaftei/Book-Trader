@@ -1,6 +1,7 @@
+import { TRADE_STATUSES } from './enums';
+
 export interface BookProfile extends CommonBook {
   changed: boolean;
-  lineNumber?: number;
 }
 
 export interface BookProfileDTO extends CommonBook {
@@ -21,6 +22,7 @@ type CommonBook = {
   tradingPreferenceGenre: string;
   tradingPreferenceDescription: string;
   userId: string;
+  hidden: boolean;
 };
 
 export interface DifferentTownConfig {
@@ -42,14 +44,18 @@ export interface BookApi {
 }
 
 export interface TradeDetails {
+  _id?: string;
   fromUser: string;
   toUser: string;
+  fromPhoneNumber: number;
+  toPhoneNumber: number;
   description: string;
   tradedBookTitle: string;
   tradedWithBookTitle: string;
   tradedBookId: string;
   tradedWithBookId: string;
-  accepted?: boolean;
-  rejected?: boolean;
+  status?: TRADE_STATUSES;
+  completedBy?: string;
+  readBy?: string;
   tradeMethod: string;
 }

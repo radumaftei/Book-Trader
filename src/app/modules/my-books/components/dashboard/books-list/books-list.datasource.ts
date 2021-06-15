@@ -1,10 +1,10 @@
 import { catchError, finalize, takeUntil } from 'rxjs/operators';
-import { ApiService } from '../../../../core/api.service';
+import { ApiService } from '../../../../../core/api.service';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { BookApi, BookProfile, PageOptions } from 'src/app/interfaces';
 import { Injectable } from '@angular/core';
-import { defaultPageOptions } from '../../../../constants';
+import { defaultPageOptions } from '../../../../../constants';
 
 interface BookProps {
   author: string;
@@ -47,13 +47,9 @@ export class BooksListDatasource implements DataSource<BookProfile> {
     return this.initialDataSubject.getValue();
   }
 
-  get totalBooksLength(): number {
-    return this.countSubject.getValue();
-  }
-
   getBooksForTable(queryParams: PageOptions): void {
     this.loadingSubject.next(true);
-    this.noDataSubject.next(false);
+    this.setNoData(false);
     this.apiService
       .fetchBooks(false, true, queryParams)
       .pipe(
@@ -64,17 +60,9 @@ export class BooksListDatasource implements DataSource<BookProfile> {
       .subscribe((data: BookApi) => {
         this.countSubject.next(data.length);
         if (!data.books) return;
-        this.noDataSubject.next(!data.books.length);
-        let lineNumber = 0;
-        const bookData = data.books.map((book) => {
-          lineNumber = lineNumber + 1;
-          return {
-            ...book,
-            lineNumber,
-          };
-        });
-        this.initialDataSubject.next(JSON.parse(JSON.stringify(bookData)));
-        this.dataSubject.next(JSON.parse(JSON.stringify(bookData)));
+        this.setNoData(!data.books.length);
+        this.initialDataSubject.next(JSON.parse(JSON.stringify(data.books)));
+        this.dataSubject.next(JSON.parse(JSON.stringify(data.books)));
       });
   }
 
@@ -87,7 +75,7 @@ export class BooksListDatasource implements DataSource<BookProfile> {
       this.apiService
         .postBookHttp(book)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(({ newBook }) => {
+        .subscribe((newBook) => {
           if (!newBook) return;
           this.dataSubject.next([
             ...this.books,
@@ -99,6 +87,10 @@ export class BooksListDatasource implements DataSource<BookProfile> {
           resolve(true);
         });
     });
+  }
+
+  setNoData(noData: boolean): void {
+    this.noDataSubject.next(noData);
   }
 
   updateBooks = (): void => {

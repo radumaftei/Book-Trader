@@ -1,24 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../modules/auth/auth.service';
 import { CommonService } from '../common.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent {
-  notificationsNumber$: Observable<number> =
-    this.commonService.notificationsNumber$;
-  // notificationsRead: boolean;
+export class HeaderComponent implements OnInit {
+  unreadNotificationsNumber$ = this.commonService.unreadNotificationsNumber$;
 
   constructor(
     private router: Router,
     private authService: AuthService,
     private commonService: CommonService
   ) {}
+
+  ngOnInit(): void {
+    this.fetchUserNotifications();
+  }
 
   get actionButtonsDisabled(): boolean {
     return !this.authService.authorized();
@@ -38,5 +39,9 @@ export class HeaderComponent {
 
   async onMyBooksClick(): Promise<void> {
     await this.router.navigate(['personal-book-page']);
+  }
+
+  fetchUserNotifications(): void {
+    this.commonService.getTrades();
   }
 }

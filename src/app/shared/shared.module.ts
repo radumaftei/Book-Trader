@@ -24,6 +24,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { NotificationMenuComponent } from './notification-menu/notification-menu.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const MATERIAL_MODULES = [
   MatMenuModule,
@@ -48,7 +49,12 @@ const MATERIAL_MODULES = [
 ];
 
 @NgModule({
-  declarations: [HeaderComponent, DialogComponent, NotificationMenuComponent],
+  declarations: [
+    HeaderComponent,
+    DialogComponent,
+    NotificationMenuComponent,
+    NotFoundComponent,
+  ],
   imports: [CommonModule, ...MATERIAL_MODULES, NotificationModule, FormsModule],
   exports: [
     HeaderComponent,

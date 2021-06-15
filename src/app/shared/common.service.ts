@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, noop, Observable } from 'rxjs';
 import { UserData } from '../modules/auth/auth.model';
 import { ApiService } from '../core/api.service';
 import {
@@ -7,19 +7,26 @@ import {
   SameTownConfig,
   TradeDetails,
 } from '../interfaces';
+import { TRADE_STATUSES } from '../enums';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommonService {
-  private notificationsNumberSubject = new BehaviorSubject<number>(0);
-  notificationsNumber$ = this.notificationsNumberSubject.asObservable();
+  private fetchDataBooksSubject = new BehaviorSubject<boolean>(false);
+  fetchDataBooks$ = this.fetchDataBooksSubject.asObservable();
 
   private loadingSubject = new BehaviorSubject<boolean>(true);
   loading$ = this.loadingSubject.asObservable();
 
-  private tradesSubject = new BehaviorSubject<TradeDetails[]>([]);
-  trades$ = this.tradesSubject.asObservable();
+  private userTradesSubject = new BehaviorSubject<TradeDetails[]>([]);
+  userTrades$ = this.userTradesSubject.asObservable();
+
+  private tradeHistoryForUserSubject = new BehaviorSubject<TradeDetails[]>([]);
+  tradeHistoryForUser$ = this.tradeHistoryForUserSubject.asObservable();
+
+  private unreadNotificationsSubject = new BehaviorSubject<number>(0);
+  unreadNotificationsNumber$ = this.unreadNotificationsSubject.asObservable();
 
   constructor(private apiService: ApiService) {}
 
@@ -36,21 +43,55 @@ export class CommonService {
         sameTownConfig: sameTownConfig,
         differentTownConfig: differentTownConfig,
       })
-      .subscribe(() => {});
+      .subscribe(noop);
   }
 
   createTrade(tradeDetails: TradeDetails): Observable<unknown> {
     return this.apiService.postTrade(tradeDetails);
   }
 
-  getTrades(): void {
-    this.apiService.fetchTrades().subscribe((trades: TradeDetails[]) => {
-      this.tradesSubject.next(trades);
-      this.notificationsNumberSubject.next(trades.length);
+  updateReadBy(readBy: string): Observable<unknown> {
+    const tradeIds: string[] = this.userTradesSubject
+      .getValue()
+      .map((trade: TradeDetails) => trade._id);
+    return this.apiService.putReadBy(readBy, tradeIds);
+  }
+
+  getTrades(all = false, filterSeenFromNotification = false): void {
+    this.apiService.fetchTrades(all).subscribe((trades: TradeDetails[]) => {
+      if (!all) {
+        const unreadNotifications = trades.filter(
+          (trade: TradeDetails) =>
+            !trade.readBy.includes(localStorage.getItem('loggedInUserEmail'))
+        ).length;
+        this.unreadNotificationsSubject.next(unreadNotifications);
+        this.userTradesSubject.next(trades);
+      } else {
+        this.tradeHistoryForUserSubject.next(trades);
+      }
     });
+  }
+
+  updateNotificationTrade(
+    trade: TradeDetails,
+    tradeType: TRADE_STATUSES
+  ): Observable<unknown> {
+    tradeType === TRADE_STATUSES.IN_PROGRESS && this.setFetchDataBooks(true);
+    return this.apiService.updateNotificationTrade(trade, tradeType);
+  }
+
+  completeTrade(
+    trade: TradeDetails,
+    tradeType: TRADE_STATUSES.COMPLETED
+  ): Observable<unknown> {
+    return this.apiService.completeTrade(trade, tradeType);
   }
 
   setLoading(flag: boolean): void {
     this.loadingSubject.next(flag);
+  }
+
+  setFetchDataBooks(flag: boolean): void {
+    this.fetchDataBooksSubject.next(flag);
   }
 }

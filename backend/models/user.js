@@ -6,6 +6,7 @@ const userSchema = Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   location: { type: String, required: true },
+  phoneNumber: { type: Number, required: true },
   sameTownConfig: Schema.Types.Mixed,
   differentTownConfig: Schema.Types.Mixed,
 });

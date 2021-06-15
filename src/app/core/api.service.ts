@@ -10,11 +10,13 @@ import {
 import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
+  COMPLETED_TRADE_URL,
   defaultPageOptions,
   DELIVERY_CONFIG,
   HOME_URL,
   HOMEPAGE,
   MY_BOOKS_URL,
+  READ_BY,
   TRADE_URL,
   USER_LOGIN_URL,
   USER_SIGNUP_URL,
@@ -24,6 +26,7 @@ import { Observable, throwError } from 'rxjs';
 import { NotificationService } from '../shared/notification/notification.service';
 import { NotificationType } from '../shared/notification/notification-type.enum';
 import { transformDTOBooks } from '../modules/helpers';
+import { TRADE_STATUSES } from '../enums';
 
 interface IDelivery {
   sameTownConfig: SameTownConfig;
@@ -54,7 +57,7 @@ export class ApiService {
       pageIndex: queryParams.pageIndex + 1,
     };
     return this.httpClient
-      .get<{ message: string; books: BookProfileDTO[]; length: number }>(
+      .get<{ books: BookProfileDTO[]; length: number }>(
         homepage ? this.HOMEPAGE_API_URL : this.BOOKS_API_URL,
         {
           observe: 'body',
@@ -65,12 +68,8 @@ export class ApiService {
         }
       )
       .pipe(
-        map(
-          (data: {
-            message: string;
-            books: BookProfileDTO[];
-            length: number;
-          }) => transformDTOBooks(data.books, data.length)
+        map((data: { books: BookProfileDTO[]; length: number }) =>
+          transformDTOBooks(data.books, data.length)
         ),
         catchError(this.handleError("Couldn't fetch books"))
       );
@@ -89,15 +88,10 @@ export class ApiService {
   }
 
   postBookHttp = (book) => {
-    return this.httpClient
-      .post<{ message: string; newBook: BookProfileDTO }>(
-        this.BOOKS_API_URL,
-        book
-      )
-      .pipe(
-        tap(() => this.handleSuccess('Book added successfully')),
-        catchError(this.handleError("Couldn't add book"))
-      );
+    return this.httpClient.post<BookProfileDTO>(this.BOOKS_API_URL, book).pipe(
+      tap(() => this.handleSuccess('Book added successfully')),
+      catchError(this.handleError("Couldn't add book"))
+    );
   };
 
   putBooksHttp = (books) => {
@@ -121,6 +115,7 @@ export class ApiService {
         authData
       )
       .pipe(
+        tap(() => this.handleSuccess('User added successfully')),
         catchError(
           this.handleError(
             "Couldn't sign up. Please make sure you completed every input"
@@ -145,15 +140,9 @@ export class ApiService {
       .post<{
         token: string;
         expiresIn: number;
-        user: { email: string; location: string };
+        user: { email: string; location: string; phoneNumber: number };
       }>(`${this.USER_API_URL}/${USER_LOGIN_URL}`, authData)
-      .pipe(
-        catchError(
-          this.handleError(
-            "Couldn't login. Please re-check username and password"
-          )
-        )
-      );
+      .pipe(catchError(this.handleError('', true)));
   };
 
   postTrade = (tradeDetails: TradeDetails): Observable<unknown> => {
@@ -163,14 +152,63 @@ export class ApiService {
     );
   };
 
-  fetchTrades = (): Observable<TradeDetails[]> => {
+  fetchTrades = (all: boolean): Observable<TradeDetails[]> => {
     return this.httpClient
-      .get<TradeDetails[]>(this.TRADE_API_URL)
-      .pipe(catchError(this.handleError('Trouble fetching notifications')));
+      .get<TradeDetails[]>(this.TRADE_API_URL, {
+        observe: 'body',
+        params: {
+          all,
+        },
+      })
+      .pipe(
+        map((trades) => trades.reverse()),
+        catchError(this.handleError('Trouble fetching notifications'))
+      );
+  };
+
+  updateNotificationTrade = (
+    trade: TradeDetails,
+    tradeType: TRADE_STATUSES
+  ): Observable<unknown> => {
+    return this.httpClient
+      .put(this.TRADE_API_URL, {
+        trade,
+        tradeType,
+      })
+      .pipe(
+        tap(() => this.handleSuccess(`Trade updated successfully`)),
+        catchError(this.handleError("Couldn't update trade"))
+      );
+  };
+
+  completeTrade = (
+    trade: TradeDetails,
+    tradeType: TRADE_STATUSES.COMPLETED
+  ): Observable<unknown> => {
+    return this.httpClient
+      .put(`${this.TRADE_API_URL}/${COMPLETED_TRADE_URL}`, {
+        trade,
+        tradeType,
+      })
+      .pipe(
+        tap(() => this.handleSuccess(`Trade completed successfully`)),
+        catchError(this.handleError("Couldn't complete trade"))
+      );
+  };
+
+  putReadBy = (readBy: string, tradeIds: string[]): Observable<unknown> => {
+    return this.httpClient
+      .put(`${this.TRADE_API_URL}/${READ_BY}`, {
+        userEmail: readBy,
+        tradeIds,
+      })
+      .pipe(
+        catchError(this.handleError("Couldn't update notification status"))
+      );
   };
 
   handleError =
-    (notificationMessage: string) =>
+    (notificationMessage: string, showBeError = false) =>
     (error: HttpErrorResponse): Observable<never> => {
       let errorMessage = 'Unknown error!';
       if (error.error instanceof ErrorEvent) {
@@ -182,7 +220,7 @@ export class ApiService {
       }
 
       this.notificationService.showNotification(
-        notificationMessage,
+        !showBeError ? notificationMessage : error.error.message,
         NotificationType.ERROR
       );
       console.error(errorMessage);

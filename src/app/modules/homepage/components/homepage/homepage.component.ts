@@ -14,7 +14,6 @@ import { DIALOG_POPUP_ACTIONS, DIALOG_POPUP_MESSAGES } from '../../../../enums';
 })
 export class HomepageComponent implements OnInit, OnDestroy {
   private unsubscribe = new Subject<void>();
-
   loading$ = this.commonService.loading$;
 
   bookCards: BookProfile[];
@@ -29,14 +28,18 @@ export class HomepageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.commonService.getTrades();
     this.homepageService.getHomepageBooks();
+    this.commonService.fetchDataBooks$
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe((data) => {
+        if (!data) return;
+        this.homepageService.getHomepageBooks();
+        this.commonService.setFetchDataBooks(false);
+      });
     this.homepageService.homepageBooksUpdate$
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((books) => {
-        if (!books) return;
         this.commonService.setLoading(false);
-        if (!books.length) return;
         this.bookCards = books;
         this.bookCategories = books
           .reduce(
@@ -90,6 +93,10 @@ export class HomepageComponent implements OnInit, OnDestroy {
           .subscribe((result) => {
             if (result) {
               const fromUser = localStorage.getItem('loggedInUserEmail');
+              const fromPhoneNumber = parseInt(
+                localStorage.getItem('phoneNumber')
+              );
+              const toPhoneNumber = dialogConfig.data.user.phoneNumber;
               const toUser = dialogConfig.data.user.email;
               const { tradedWithBookId, tradedWithBookTitle, tradeMethod } =
                 result;
@@ -103,6 +110,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
                 .createTrade({
                   fromUser,
                   toUser,
+                  fromPhoneNumber,
+                  toPhoneNumber,
                   description: informationForUser,
                   tradedWithBookId,
                   tradedWithBookTitle,
@@ -111,9 +120,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
                   tradeMethod,
                 })
                 .pipe(takeUntil(this.unsubscribe))
-                .subscribe((data) => {
-                  console.log('resulted shit', data);
-                });
+                .subscribe((data) => {});
             }
           });
       });

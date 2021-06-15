@@ -13,6 +13,7 @@ router.post("/signup", (req, res, next) => {
       email: req.body.email,
       password: hash,
       location: req.body.location,
+      phoneNumber: req.body.phoneNumber,
       sameTownConfig: {
         courier: true,
         onFoot: true
@@ -25,7 +26,6 @@ router.post("/signup", (req, res, next) => {
       .save()
       .then((result) => {
         res.status(201).json({
-          message: "User created !",
           user: {
             location: result.location,
             email: result.email,
@@ -45,7 +45,7 @@ router.post("/login", (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
-        return res.status(401).json({
+        return res.status(404).json({
           message: `Auth Failed. No user found with email ${req.body.email}`,
         });
       }
@@ -75,6 +75,7 @@ router.post("/login", (req, res, next) => {
         user: {
           email: fetchedUser.email,
           location: fetchedUser.location,
+          phoneNumber: fetchedUser.phoneNumber
         },
       });
     })
@@ -96,10 +97,11 @@ router.get("", checkAuth, (req, res, next) => {
   const byId = req.query.byId === 'true';
   const filterProperty = byId ? '_id' : 'email';
   User.findOne({[filterProperty]: userSearchQuery}).then((user) => {
-    const { email, location, differentTownConfig, sameTownConfig } = user;
+    const { email, location, differentTownConfig, sameTownConfig, phoneNumber } = user;
     res.status(201).json({
       email,
       location,
+      phoneNumber,
       differentTownConfig,
       sameTownConfig,
     });

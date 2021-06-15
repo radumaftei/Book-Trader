@@ -9,13 +9,11 @@
   {{ data.description }}
 </h3>
 <mat-dialog-content *ngIf="data.isHomepage">
-  <div class="card">
-    <div class="img-avatar">
-      <!--     round img -->
-    </div>
-    <div class="card-text">
+  <div class="card-wrapper">
+    <div class="img-avatar"></div>
+    <div class="card-text-book-image">
       <img class="book-image" [src]="book.imagePath" [alt]="book.title" />
-      <div class="title-total">
+      <div class="book-details-wrapper">
         <div class="title">
           <p>
             Book added by
@@ -24,29 +22,28 @@
           </p>
         </div>
         <h2>Title: {{ book.title }}</h2>
-        <p class="book-details">
-          <span class="trading-inline">Description:</span>
+        <div class="book-details">
+          <p class="section-title">Description</p>
           {{ book.description }}
-        </p>
-        <p class="book-details-preferences" *ngIf="preferences">Preferences:</p>
-        <p class="book-details" *ngIf="book.tradingPreferenceAuthor">
-          <span class="trading-inline">Trading authors:</span>
-          {{ book.tradingPreferenceAuthor }}
-        </p>
-        <p class="book-details" *ngIf="book.tradingPreferenceBook">
-          <span class="trading-inline">Trading books:</span>
-          {{ book.tradingPreferenceBook }}
-        </p>
-        <p class="book-details" *ngIf="book.tradingPreferenceDescription">
-          <span class="trading-inline">Trading description:</span>
-          {{ book.tradingPreferenceDescription }}
-        </p>
-        <p class="book-details" *ngIf="book.tradingPreferenceGenre">
-          <span class="trading-inline">Trading genres:</span>
-          {{ book.tradingPreferenceGenre }}
-        </p>
+          <ng-container *ngIf="book.tradingPreferenceAuthor">
+            <p class="section-title">Trading authors</p>
+            {{ book.tradingPreferenceAuthor }}
+          </ng-container>
+          <ng-container *ngIf="book.tradingPreferenceBook">
+            <p class="section-title">Trading books</p>
+            {{ book.tradingPreferenceBook }}
+          </ng-container>
+          <ng-container *ngIf="book.tradingPreferenceDescription">
+            <p class="section-title">Trading description</p>
+            {{ book.tradingPreferenceDescription }}
+          </ng-container>
+          <ng-container *ngIf="book.tradingPreferenceGenre">
+            <p class="section-title">Trading genres</p>
+            {{ book.tradingPreferenceGenre }}
+          </ng-container>
+        </div>
+        <p class="section-title">Choose an option for delivery</p>
         <div class="actions">
-          <p>Choose an option for delivery</p>
           <mat-radio-group color="primary" [required]="true">
             <div class="delivery-section">
               <p>Different town</p>
@@ -81,7 +78,7 @@
           </mat-radio-group>
 
           <mat-form-field appearance="fill" *ngIf="userBooks.length">
-            <mat-label>Select book for trade</mat-label>
+            <mat-label>Select a book for trade</mat-label>
             <mat-select [required]="true" [(ngModel)]="selectedBook">
               <mat-option *ngFor="let book of userBooks" [value]="book">
                 {{ book.title }}

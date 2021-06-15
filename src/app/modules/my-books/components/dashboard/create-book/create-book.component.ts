@@ -7,12 +7,12 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MyBooksService } from '../../my-books.service';
+import { MyBooksService } from '../../../my-books.service';
 import { BooksListDatasource } from '../books-list/books-list.datasource';
 import { mimeType } from './mime-type.validator';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { getBookCategoriesArr } from '../../../helpers';
+import { getBookCategoriesArr } from '../../../../helpers';
 
 @Component({
   selector: 'app-create-book',
@@ -100,6 +100,7 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.resetForm && this.form.reset();
     }
+    this.dataSource.setNoData(false);
   }
 
   onImagePicked(event: Event): void {

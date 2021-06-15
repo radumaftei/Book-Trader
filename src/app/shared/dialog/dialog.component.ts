@@ -32,15 +32,6 @@ export class DialogComponent {
   differentTownConfig: DifferentTownConfig;
   selectedConfig: string;
 
-  get preferences(): boolean {
-    return (
-      !!this.book.tradingPreferenceAuthor ||
-      !!this.book.tradingPreferenceGenre ||
-      !!this.book.tradingPreferenceBook ||
-      !!this.book.tradingPreferenceDescription
-    );
-  }
-
   get tradeButtonDisabled(): boolean {
     return !this.isHomepage
       ? false

@@ -5,7 +5,7 @@
     (click)="onHomepageClick()"
     [disabled]="actionButtonsDisabled"
   >
-    Home Page
+    BookTrader
   </button>
   <span class="spacer"></span>
 
@@ -18,7 +18,10 @@
     [matTooltipPosition]="'below'"
     [matMenuTriggerFor]="appMenu"
   >
-    <mat-icon [matBadge]="notificationsNumber$ | async" matBadgeColor="warn"
+    <mat-icon
+      matBadgeColor="warn"
+      [matBadge]="unreadNotificationsNumber$ | async"
+      [matBadgeHidden]="(unreadNotificationsNumber$ | async) === 0"
       >notifications</mat-icon
     >
   </button>

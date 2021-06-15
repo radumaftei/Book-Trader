@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs';
+import { noop, Subscription } from 'rxjs';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { PasswordValidator } from '../password.validator';
 
 @Component({
   templateUrl: './login.component.html',
@@ -17,7 +18,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
   form: FormGroup;
   hide = true;
-  isLoading = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -31,7 +31,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(5)]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          PasswordValidator.strong,
+        ],
+      ],
     });
   }
 
@@ -42,14 +49,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: this.form.value.password,
       location: null,
     });
-    this.isLoading = true;
     this.subscription = this.authService
       .getAuthStatusListener()
-      .subscribe((data) => {
-        if (!data) {
-          this.isLoading = false;
-        }
-      });
+      .subscribe(noop);
   }
 
   ngOnDestroy(): void {
