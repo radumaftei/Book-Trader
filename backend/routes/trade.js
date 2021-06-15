@@ -48,7 +48,7 @@ router.get("", checkAuth, (req, res, next) => {
 });
 
 router.put("", checkAuth, (req, res, next) => {
-  const { trade: { fromUser, toUser, _id, fromPhoneNumber, toPhoneNumber }, tradeType } = req.body;
+  const { trade: { fromUser, toUser, _id, fromPhoneNumber, toPhoneNumber, readBy }, tradeType } = req.body;
   const { trade } = req.body;
   const bookIds = [trade.tradedBookId, trade.tradedWithBookId];
   Trade.updateOne({ _id }, {
@@ -57,7 +57,7 @@ router.put("", checkAuth, (req, res, next) => {
     toUser: fromUser,
     fromPhoneNumber: toPhoneNumber,
     toPhoneNumber: fromPhoneNumber
-  } ).then(() => {
+  }).then(() => {
     if (tradeType === TRADE_STATUSES.IN_PROGRESS) {
       bookIds.forEach((bookId) => {
         Book.updateOne({ _id: bookId }, {
@@ -69,11 +69,17 @@ router.put("", checkAuth, (req, res, next) => {
     } else if (tradeType === TRADE_STATUSES.REJECTED) {
       res.status(201).json();
     } else if (tradeType === TRADE_STATUSES.CANCELED) {
-      bookIds.forEach((bookId) => {
-        Book.updateOne({ _id: bookId }, {
-          hidden: false
-        }).then(() => {
-          res.status(201).json();
+      const includedInReadBy = readBy.includes(req.userData.email);
+      const finalReadBy = includedInReadBy ? readBy : trade.readBy.concat(',', req.userData.email);
+      Trade.updateOne({ _id }, {
+        readBy: finalReadBy
+      }).then(() => {
+        bookIds.forEach((bookId) => {
+          Book.updateOne({ _id: bookId }, {
+            hidden: false
+          }).then(() => {
+            res.status(201).json();
+          })
         })
       })
     }

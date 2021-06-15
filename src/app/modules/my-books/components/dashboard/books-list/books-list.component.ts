@@ -9,18 +9,18 @@ import {
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Subject } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DialogComponent } from '../../../../shared/dialog/dialog.component';
-import { defaultPageOptions } from '../../../../constants';
-import { AuthService } from '../../../auth/auth.service';
+import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
+import { defaultPageOptions } from '../../../../../constants';
+import { AuthService } from '../../../../auth/auth.service';
 import { BooksListDatasource } from './books-list.datasource';
 import { takeUntil } from 'rxjs/operators';
 import {
   COLUMN_TYPES,
   DIALOG_POPUP_ACTIONS,
   DIALOG_POPUP_MESSAGES,
-} from '../../../../enums';
-import { getBookCategoriesArr } from '../../../helpers';
-import { MyBooksService } from '../../my-books.service';
+} from '../../../../../enums';
+import { getBookCategoriesArr } from '../../../../helpers';
+import { MyBooksService } from '../../../my-books.service';
 import { displayedColumns, headerConfig } from './table-config';
 
 @Component({

@@ -78,7 +78,7 @@
           </mat-radio-group>
 
           <mat-form-field appearance="fill" *ngIf="userBooks.length">
-            <mat-label>Select book for trade</mat-label>
+            <mat-label>Select a book for trade</mat-label>
             <mat-select [required]="true" [(ngModel)]="selectedBook">
               <mat-option *ngFor="let book of userBooks" [value]="book">
                 {{ book.title }}

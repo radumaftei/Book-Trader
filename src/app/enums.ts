@@ -27,7 +27,7 @@ export enum BOOK_CATEGORIES {
 
 export enum DIALOG_POPUP_MESSAGES {
   DELETE_BOOK = 'Are you sure you want to delete this book?',
-  TRADE_BOOK = 'Trading details',
+  TRADE_BOOK = 'Book Details',
   UNSAVED_CHANGES = 'Are you sure you want to exit this page?',
   SHOW_INFORMATION = 'Notification trade details',
 }

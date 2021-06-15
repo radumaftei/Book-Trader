@@ -106,7 +106,7 @@
               <ng-container *ngIf="editPressed">
                 <mat-select
                   [(value)]="row[column.column_name]"
-                  (change)="row.changed = true"
+                  (selectionChange)="row.changed = true"
                 >
                   <mat-option
                     *ngFor="let bookCat of bookCategories"
