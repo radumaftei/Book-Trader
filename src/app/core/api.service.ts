@@ -10,7 +10,6 @@ import {
 import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
-  COMPLETED_TRADE_URL,
   defaultPageOptions,
   DELIVERY_CONFIG,
   HOME_URL,
@@ -181,25 +180,9 @@ export class ApiService {
       );
   };
 
-  completeTrade = (
-    trade: TradeDetails,
-    tradeType: TRADE_STATUSES.COMPLETED
-  ): Observable<unknown> => {
-    return this.httpClient
-      .put(`${this.TRADE_API_URL}/${COMPLETED_TRADE_URL}`, {
-        trade,
-        tradeType,
-      })
-      .pipe(
-        tap(() => this.handleSuccess(`Trade completed successfully`)),
-        catchError(this.handleError("Couldn't complete trade"))
-      );
-  };
-
-  putReadBy = (readBy: string, tradeIds: string[]): Observable<unknown> => {
+  putReadBy = (tradeIds: string[]): Observable<unknown> => {
     return this.httpClient
       .put(`${this.TRADE_API_URL}/${READ_BY}`, {
-        userEmail: readBy,
         tradeIds,
       })
       .pipe(

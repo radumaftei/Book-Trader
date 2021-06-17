@@ -14,7 +14,6 @@ export class TradeHistoryComponent implements OnDestroy {
   private unsubscribe = new Subject<void>();
   tradeHistoryForUser$: Observable<TradeDetails[]> =
     this.commonService.tradeHistoryForUser$;
-  unreadNotificationsNumber$ = this.commonService.unreadNotificationsNumber$;
 
   TRADE_STATUSES = TRADE_STATUSES;
 
@@ -22,7 +21,16 @@ export class TradeHistoryComponent implements OnDestroy {
     this.commonService.getTrades(true);
   }
 
-  showActions(trade: TradeDetails): boolean {
+  showCompleteActionButton(trade: TradeDetails): boolean {
+    return ![
+      TRADE_STATUSES.COMPLETED,
+      TRADE_STATUSES.CANCELED,
+      TRADE_STATUSES.REJECTED,
+      TRADE_STATUSES.PENDING,
+    ].includes(trade.status);
+  }
+
+  showCancelActionButton(trade: TradeDetails): boolean {
     return ![
       TRADE_STATUSES.COMPLETED,
       TRADE_STATUSES.CANCELED,
@@ -31,30 +39,12 @@ export class TradeHistoryComponent implements OnDestroy {
   }
 
   handleTrade(trade: TradeDetails, tradeType: TRADE_STATUSES): void {
-    switch (tradeType) {
-      case TRADE_STATUSES.CANCELED: {
-        this.commonService
-          .updateNotificationTrade(trade, tradeType)
-          .pipe(takeUntil(this.unsubscribe))
-          .subscribe(() => {
-            this.commonService.getTrades(true);
-          });
-        break;
-      }
-      case TRADE_STATUSES.COMPLETED: {
-        this.commonService
-          .completeTrade(trade, tradeType)
-          .pipe(takeUntil(this.unsubscribe))
-          .subscribe(() => {
-            this.commonService.getTrades(true);
-          });
-        break;
-      }
-    }
-  }
-
-  unreadNotification(readBy: string): boolean {
-    return !readBy.includes(localStorage.getItem('loggedInUserEmail'));
+    this.commonService
+      .updateNotificationTrade(trade, tradeType)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(() => {
+        this.commonService.getTrades(true);
+      });
   }
 
   ngOnDestroy(): void {

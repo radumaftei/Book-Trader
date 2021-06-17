@@ -98,7 +98,7 @@ router.get("", checkAuth, (req, res, next) => {
   const filterProperty = byId ? '_id' : 'email';
   User.findOne({[filterProperty]: userSearchQuery}).then((user) => {
     const { email, location, differentTownConfig, sameTownConfig, phoneNumber } = user;
-    res.status(201).json({
+    res.status(200).json({
       email,
       location,
       phoneNumber,

@@ -54,8 +54,8 @@
         </div>
       </ng-container>
       <ng-container *ngIf="showNotificationWithoutActions(userTrade)">
-        User <span class="highlighted">{{ userTrade.toUser }}</span>
-        {{ getMessageForRejectedInProgress(userTrade) }} your trade offer for
+        User <span class="highlighted">{{ userTrade.fromUser }}</span>
+        {{ getStatusFromNoActionTrades(userTrade) }} your trade offer for
         <span class="highlighted">{{ userTrade.tradedBookTitle }}</span> book
         with
         <span class="highlighted">{{ userTrade.tradedWithBookTitle }}</span>
