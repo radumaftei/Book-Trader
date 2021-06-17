@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const tradeSchema = Schema({
@@ -8,13 +8,17 @@ const tradeSchema = Schema({
   tradedBookTitle: { type: String, required: true },
   tradedWithBookTitle: { type: String, required: true },
   tradedBookId: { type: Schema.Types.ObjectId, ref: "Book", required: true },
-  tradedWithBookId: { type: Schema.Types.ObjectId, ref: "Book", required: true },
+  tradedWithBookId: {
+    type: Schema.Types.ObjectId,
+    ref: "Book",
+    required: true,
+  },
   status: { type: String, required: true },
-  fromPhoneNumber: { type: Number, required: true},
+  fromPhoneNumber: { type: Number, required: true },
   toPhoneNumber: { type: Number, required: true },
   completedBy: { type: String },
   readBy: { type: String },
-  tradeMethod: Schema.Types.Mixed
-})
+  tradeMethod: Schema.Types.Mixed,
+});
 
-module.exports = mongoose.model('Trade', tradeSchema);
+module.exports = mongoose.model("Trade", tradeSchema);
