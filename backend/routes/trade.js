@@ -119,16 +119,30 @@ router.put("", checkAuth, (req, res, next) => {
     }
   ).then(() => {
     if (tradeType === TRADE_STATUSES.IN_PROGRESS) {
-      bookIds.forEach((bookId) => {
-        Book.updateOne(
-          { _id: bookId },
-          {
-            hidden: true,
-          }
-        ).then(() => {
-          res.status(201).json();
+      Trade.updateOne({
+        _id: { $ne: _id },
+        tradedWithBookId: { $in: [
+            ...bookIds
+          ]},
+        tradedBookId: { $in: [
+            ...bookIds
+          ]
+        },
+      }, {
+        status: TRADE_STATUSES.CANCELED
+      }).then(() => {
+        bookIds.forEach((bookId) => {
+          Book.updateOne(
+            { _id: bookId },
+            {
+              hidden: true,
+            }
+          ).then(() => {
+            res.status(201).json();
+          });
         });
-      });
+      })
+
     } else if (tradeType === TRADE_STATUSES.REJECTED) {
       res.status(201).json();
     } else if (tradeType === TRADE_STATUSES.CANCELED) {
@@ -152,10 +166,6 @@ router.put("", checkAuth, (req, res, next) => {
             }`;
             Book.deleteOne({ _id: req.params.id }).then(() => {
               fs.unlink(path, (err) => {
-                if (err) {
-                  console.error(err);
-                  return;
-                }
                 res.status(200).json();
               });
             });

@@ -102,10 +102,6 @@ router.delete("/:id", checkAuth, (req, res, next) => {
     }`;
     Book.deleteOne({ _id: req.params.id }).then(() => {
       fs.unlink(path, (err) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
         res.status(200).json();
       });
     });
