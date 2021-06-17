@@ -17,6 +17,61 @@ const TRADE_STATUSES = Object.freeze({
   CANCELED: "CANCELED",
 });
 
+const acceptingTrade = (_id, bookIds, res) => {
+  Trade.updateMany({
+    _id: { $ne: _id },
+    tradedWithBookId: { $in: [
+        ...bookIds
+      ]},
+    tradedBookId: { $in: [
+        ...bookIds
+      ]
+    },
+  }, {
+    status: TRADE_STATUSES.CANCELED
+  }).then(() => {
+    bookIds.forEach((bookId) => {
+      Book.updateOne(
+        { _id: bookId },
+        {
+          hidden: true,
+        }
+      ).then(() => {
+        res.status(201).json();
+      });
+    });
+  })
+}
+
+const deleteBooksOnTradeComplete = (bookIds, res, req) => {
+  bookIds.forEach((bookId) => {
+    Book.findOne({ _id: bookId }).then((book) => {
+      const imagePathArray = book.imagePath.split("/");
+      const path = `${IMAGES_DIR_PATH}/${
+        imagePathArray[imagePathArray.length - 1]
+      }`;
+      Book.deleteOne({ _id: req.params.id }).then(() => {
+        fs.unlink(path, (err) => {
+          res.status(200).json();
+        });
+      });
+    });
+  })
+}
+
+const cancelingTrade = (bookIds, res) => {
+  bookIds.forEach((bookId) => {
+    Book.updateOne(
+      { _id: bookId },
+      {
+        hidden: false,
+      }
+    ).then(() => {
+      res.status(201).json();
+    });
+  });
+}
+
 router.post("", checkAuth, (req, res) => {
   const [town, method] = req.body.tradeMethod.split("-");
   Book.findOne({
@@ -46,7 +101,7 @@ router.post("", checkAuth, (req, res) => {
         });
     } else {
       res.status(401).json({
-        message: "Book is present in another active trade, please try agian later",
+        message: "Book is present in another active trade, please try again later",
       });
     }
   })
@@ -83,18 +138,13 @@ router.put("", checkAuth, (req, res, next) => {
   } = req.body;
   const bookIds = [tradedBookId, tradedWithBookId];
   let isCurrentRequestingUserInReadBy = readBy.includes(req.userData.email);
-  let finalReadBy = isCurrentRequestingUserInReadBy
-    ? readBy
-    : readBy.concat(req.userData.email);
+  const otherUserToBeRemoved = fromUser !== req.userData.email ? fromUser : toUser;
+  let finalReadBy = readBy.concat(!isCurrentRequestingUserInReadBy ? req.userData.email : '').split(otherUserToBeRemoved)
+    .join("");
   let finalCompletedBy = completedBy;
   let deleteBooksAfterCompleted = false;
-  const otherUserToBeRemoved = fromUser !== req.userData.email ? fromUser : toUser;
   let finalFromUser = toUser;
   let finalToUser = fromUser;
-
-  finalReadBy = finalReadBy
-    .split(otherUserToBeRemoved)
-    .join("");
 
   if (tradeType === TRADE_STATUSES.COMPLETED) {
     finalCompletedBy = finalCompletedBy.concat(req.userData.email);
@@ -118,61 +168,26 @@ router.put("", checkAuth, (req, res, next) => {
       completedBy: finalCompletedBy
     }
   ).then(() => {
-    if (tradeType === TRADE_STATUSES.IN_PROGRESS) {
-      Trade.updateOne({
-        _id: { $ne: _id },
-        tradedWithBookId: { $in: [
-            ...bookIds
-          ]},
-        tradedBookId: { $in: [
-            ...bookIds
-          ]
-        },
-      }, {
-        status: TRADE_STATUSES.CANCELED
-      }).then(() => {
-        bookIds.forEach((bookId) => {
-          Book.updateOne(
-            { _id: bookId },
-            {
-              hidden: true,
-            }
-          ).then(() => {
-            res.status(201).json();
-          });
-        });
-      })
-
-    } else if (tradeType === TRADE_STATUSES.REJECTED) {
-      res.status(201).json();
-    } else if (tradeType === TRADE_STATUSES.CANCELED) {
-      bookIds.forEach((bookId) => {
-        Book.updateOne(
-          { _id: bookId },
-          {
-            hidden: false,
-          }
-        ).then(() => {
-          res.status(201).json();
-        });
-      });
-    } else if (tradeType === TRADE_STATUSES.COMPLETED) {
-      if (deleteBooksAfterCompleted) {
-        bookIds.forEach((bookId) => {
-          Book.findOne({ _id: bookId }).then((book) => {
-            const imagePathArray = book.imagePath.split("/");
-            const path = `${IMAGES_DIR_PATH}/${
-              imagePathArray[imagePathArray.length - 1]
-            }`;
-            Book.deleteOne({ _id: req.params.id }).then(() => {
-              fs.unlink(path, (err) => {
-                res.status(200).json();
-              });
-            });
-          });
-        })
-      } else {
-        res.status(200).json();
+    switch (tradeType) {
+      case TRADE_STATUSES.IN_PROGRESS: {
+        acceptingTrade(_id, bookIds, res);
+        break;
+      }
+      case TRADE_STATUSES.REJECTED: {
+        res.status(201).json();
+        break;
+      }
+      case TRADE_STATUSES.CANCELED: {
+        cancelingTrade(bookIds, res);
+        break;
+      }
+      case TRADE_STATUSES.COMPLETED: {
+        if (deleteBooksAfterCompleted) {
+          deleteBooksOnTradeComplete(bookIds, res, req);
+        } else {
+          res.status(200).json();
+        }
+        break;
       }
     }
   });
