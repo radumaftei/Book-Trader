@@ -63,22 +63,20 @@ router.put("", checkAuth, (req, res, next) => {
   } = req.body;
   const bookIds = [tradedBookId, tradedWithBookId];
   let isCurrentRequestingUserInReadBy = readBy.includes(req.userData.email);
-  let finalReadBy;
+  let finalReadBy = isCurrentRequestingUserInReadBy
+    ? readBy
+    : readBy.concat(req.userData.email);
+  let finalCompletedBy = completedBy;
+  let deleteBooksAfterCompleted = false;
 
-  switch (tradeType) {
-    case TRADE_STATUSES.IN_PROGRESS:
-    case TRADE_STATUSES.REJECTED:
-    case TRADE_STATUSES.CANCELED: {
-      finalReadBy = isCurrentRequestingUserInReadBy
-        ? readBy
-        : readBy.concat(",", req.userData.email);
-      finalReadBy = finalReadBy
-        .split(fromUser !== req.userData.email ? fromUser : toUser)
-        .join("");
-    }
+  finalReadBy = finalReadBy
+    .split(fromUser !== req.userData.email ? fromUser : toUser)
+    .join("");
+
+  if (tradeType === TRADE_STATUSES.COMPLETED) {
+    finalCompletedBy = finalCompletedBy.concat(req.userData.email);
+    deleteBooksAfterCompleted = finalCompletedBy.includes(toUser) && finalCompletedBy.includes(fromUser);
   }
-
-  console.log("finalReadBy ", finalReadBy);
 
   Trade.updateOne(
     { _id },
@@ -89,8 +87,9 @@ router.put("", checkAuth, (req, res, next) => {
       fromPhoneNumber: toPhoneNumber,
       toPhoneNumber: fromPhoneNumber,
       readBy: finalReadBy,
+      completedBy: finalCompletedBy
     }
-  ).then((trade) => {
+  ).then(() => {
     if (tradeType === TRADE_STATUSES.IN_PROGRESS) {
       bookIds.forEach((bookId) => {
         Book.updateOne(
@@ -115,6 +114,15 @@ router.put("", checkAuth, (req, res, next) => {
           res.status(201).json();
         });
       });
+    } else if (tradeType === TRADE_STATUSES.COMPLETED && deleteBooksAfterCompleted) {
+      console.log('deleted books')
+      Book.deleteMany({
+        _id: {
+          $in: [...bookIds]
+        }
+      }).then(() => {
+        res.status(201).json();
+      })
     }
   });
 });
@@ -125,7 +133,7 @@ router.put("/readBy", checkAuth, (req, res) => {
     Trade.findOne({ _id }).then((trade) => {
       const readBy = trade.readBy;
       const finalReadBy = !readBy.includes(req.userData.email)
-        ? trade.readBy.concat(",", req.userData.email)
+        ? trade.readBy.concat(req.userData.email)
         : readBy;
       Trade.updateOne(
         { _id },

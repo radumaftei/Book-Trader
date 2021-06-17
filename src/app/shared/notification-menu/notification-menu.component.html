@@ -15,7 +15,6 @@
   </div>
   <ng-container *ngFor="let userTrade of userTrades$ | async">
     <mat-card
-      *ngIf="userTrade.status !== TRADE_STATUSES.COMPLETED"
       [ngClass]="{
         'unread-notifications': unreadNotification(userTrade.readBy)
       }"

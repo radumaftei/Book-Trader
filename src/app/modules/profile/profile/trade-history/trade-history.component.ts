@@ -21,21 +21,40 @@ export class TradeHistoryComponent implements OnDestroy {
     this.commonService.getTrades(true);
   }
 
+  showCompletedText(trade: TradeDetails): boolean {
+    return (
+      !trade.completedBy.includes(localStorage.getItem('loggedInUserEmail')) &&
+      trade.status === TRADE_STATUSES.COMPLETED
+    );
+  }
+
+  showPhoneNumber(trade: TradeDetails): boolean {
+    return trade.status === TRADE_STATUSES.IN_PROGRESS;
+  }
+
   showCompleteActionButton(trade: TradeDetails): boolean {
-    return ![
-      TRADE_STATUSES.COMPLETED,
-      TRADE_STATUSES.CANCELED,
-      TRADE_STATUSES.REJECTED,
-      TRADE_STATUSES.PENDING,
-    ].includes(trade.status);
+    return (
+      [TRADE_STATUSES.COMPLETED, TRADE_STATUSES.IN_PROGRESS].includes(
+        trade.status
+      ) &&
+      !trade.completedBy.includes(localStorage.getItem('loggedInUserEmail'))
+    );
   }
 
   showCancelActionButton(trade: TradeDetails): boolean {
-    return ![
-      TRADE_STATUSES.COMPLETED,
-      TRADE_STATUSES.CANCELED,
-      TRADE_STATUSES.REJECTED,
-    ].includes(trade.status);
+    return (
+      [
+        TRADE_STATUSES.PENDING,
+        TRADE_STATUSES.IN_PROGRESS,
+        TRADE_STATUSES.COMPLETED,
+      ].includes(trade.status) &&
+      ((trade.completedBy.includes(trade.toUser) &&
+        !trade.completedBy.includes(trade.fromUser)) ||
+        (!trade.completedBy.includes(trade.toUser) &&
+          trade.completedBy.includes(trade.fromUser)) ||
+        !trade.completedBy) &&
+      !trade.completedBy.includes(localStorage.getItem('loggedInUserEmail'))
+    );
   }
 
   handleTrade(trade: TradeDetails, tradeType: TRADE_STATUSES): void {
@@ -50,5 +69,6 @@ export class TradeHistoryComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+    this.commonService.setTradeHistoryForUser([]);
   }
 }

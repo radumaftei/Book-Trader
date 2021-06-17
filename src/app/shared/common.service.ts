@@ -67,7 +67,7 @@ export class CommonService {
         this.unreadNotificationsSubject.next(unreadNotifications);
         this.userTradesSubject.next(trades);
       } else {
-        this.tradeHistoryForUserSubject.next(trades);
+        this.setTradeHistoryForUser(trades);
       }
     });
   }
@@ -86,5 +86,9 @@ export class CommonService {
 
   setFetchDataBooks(flag: boolean): void {
     this.fetchDataBooksSubject.next(flag);
+  }
+
+  setTradeHistoryForUser(trades: TradeDetails[]): void {
+    this.tradeHistoryForUserSubject.next(trades);
   }
 }

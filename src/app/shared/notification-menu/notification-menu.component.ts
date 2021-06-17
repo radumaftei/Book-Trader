@@ -44,6 +44,7 @@ export class NotificationMenuComponent implements OnDestroy {
       TRADE_STATUSES.REJECTED,
       TRADE_STATUSES.IN_PROGRESS,
       TRADE_STATUSES.CANCELED,
+      TRADE_STATUSES.COMPLETED,
     ].includes(trade.status);
 
   getStatusFromNoActionTrades = (trade: TradeDetails): string => {
@@ -51,6 +52,7 @@ export class NotificationMenuComponent implements OnDestroy {
       [TRADE_STATUSES.REJECTED]: 'rejected',
       [TRADE_STATUSES.IN_PROGRESS]: 'accepted',
       [TRADE_STATUSES.CANCELED]: 'cancelled',
+      [TRADE_STATUSES.COMPLETED]: 'completed',
     };
     return statusObjects[trade.status];
   };
