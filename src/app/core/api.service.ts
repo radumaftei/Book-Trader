@@ -147,7 +147,7 @@ export class ApiService {
   postTrade = (tradeDetails: TradeDetails): Observable<unknown> => {
     return this.httpClient.post(this.TRADE_API_URL, tradeDetails).pipe(
       tap(() => this.handleSuccess('Trade made successfully')),
-      catchError(this.handleError("Couldn't make the trade, please try again"))
+      catchError(this.handleError('', true))
     );
   };
 
@@ -161,7 +161,7 @@ export class ApiService {
       })
       .pipe(
         map((trades) => trades.reverse()),
-        catchError(this.handleError('Trouble fetching notifications'))
+        catchError(this.handleError('Trouble fetching trades'))
       );
   };
 

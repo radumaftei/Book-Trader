@@ -1,10 +1,13 @@
 const express = require("express");
+const fs = require("fs");
 
 const checkAuth = require("../middleware/check-auth");
 const Trade = require("../models/trade");
 const Book = require("../models/book");
 
 const router = express.Router();
+
+const IMAGES_DIR_PATH = "backend/images";
 
 const TRADE_STATUSES = Object.freeze({
   PENDING: "PENDING",
@@ -16,21 +19,38 @@ const TRADE_STATUSES = Object.freeze({
 
 router.post("", checkAuth, (req, res) => {
   const [town, method] = req.body.tradeMethod.split("-");
-  new Trade({
-    ...req.body,
-    accepted: false,
-    rejected: false,
-    tradeMethod: {
-      [town]: method,
+  Book.findOne({
+    _id: {
+      $in: [
+        req.body.tradedWithBookId,
+        req.body.tradedBookId
+      ]
     },
-    status: TRADE_STATUSES.PENDING,
-    completedBy: "",
-    readBy: req.userData.email,
+    hidden: true
+  }).then((book) => {
+    if (!book) {
+      new Trade({
+        ...req.body,
+        accepted: false,
+        rejected: false,
+        tradeMethod: {
+          [town]: method,
+        },
+        status: TRADE_STATUSES.PENDING,
+        completedBy: "",
+        readBy: req.userData.email,
+      })
+        .save()
+        .then(() => {
+          res.status(201).json();
+        });
+    } else {
+      res.status(401).json({
+        message: "Book is present in another active trade, please try agian later",
+      });
+    }
   })
-    .save()
-    .then(() => {
-      res.status(201).json();
-    });
+
 });
 
 router.get("", checkAuth, (req, res, next) => {
@@ -68,9 +88,12 @@ router.put("", checkAuth, (req, res, next) => {
     : readBy.concat(req.userData.email);
   let finalCompletedBy = completedBy;
   let deleteBooksAfterCompleted = false;
+  const otherUserToBeRemoved = fromUser !== req.userData.email ? fromUser : toUser;
+  let finalFromUser = toUser;
+  let finalToUser = fromUser;
 
   finalReadBy = finalReadBy
-    .split(fromUser !== req.userData.email ? fromUser : toUser)
+    .split(otherUserToBeRemoved)
     .join("");
 
   if (tradeType === TRADE_STATUSES.COMPLETED) {
@@ -78,12 +101,17 @@ router.put("", checkAuth, (req, res, next) => {
     deleteBooksAfterCompleted = finalCompletedBy.includes(toUser) && finalCompletedBy.includes(fromUser);
   }
 
+  if (fromUser === req.userData.email) {
+    finalFromUser = fromUser;
+    finalToUser = toUser;
+  }
+
   Trade.updateOne(
     { _id },
     {
       status: tradeType,
-      fromUser: toUser,
-      toUser: fromUser,
+      fromUser: finalFromUser,
+      toUser: finalToUser,
       fromPhoneNumber: toPhoneNumber,
       toPhoneNumber: fromPhoneNumber,
       readBy: finalReadBy,
@@ -114,15 +142,28 @@ router.put("", checkAuth, (req, res, next) => {
           res.status(201).json();
         });
       });
-    } else if (tradeType === TRADE_STATUSES.COMPLETED && deleteBooksAfterCompleted) {
-      console.log('deleted books')
-      Book.deleteMany({
-        _id: {
-          $in: [...bookIds]
-        }
-      }).then(() => {
-        res.status(201).json();
-      })
+    } else if (tradeType === TRADE_STATUSES.COMPLETED) {
+      if (deleteBooksAfterCompleted) {
+        bookIds.forEach((bookId) => {
+          Book.findOne({ _id: bookId }).then((book) => {
+            const imagePathArray = book.imagePath.split("/");
+            const path = `${IMAGES_DIR_PATH}/${
+              imagePathArray[imagePathArray.length - 1]
+            }`;
+            Book.deleteOne({ _id: req.params.id }).then(() => {
+              fs.unlink(path, (err) => {
+                if (err) {
+                  console.error(err);
+                  return;
+                }
+                res.status(200).json();
+              });
+            });
+          });
+        })
+      } else {
+        res.status(200).json();
+      }
     }
   });
 });

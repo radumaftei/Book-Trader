@@ -63,9 +63,16 @@ export class CommonService {
         const unreadNotifications = trades.filter(
           (trade: TradeDetails) =>
             !trade.readBy.includes(localStorage.getItem('loggedInUserEmail'))
-        ).length;
-        this.unreadNotificationsSubject.next(unreadNotifications);
-        this.userTradesSubject.next(trades);
+        );
+        this.unreadNotificationsSubject.next(unreadNotifications.length);
+        this.userTradesSubject.next(
+          trades.filter(
+            (trade) =>
+              !trade.readBy.includes(
+                localStorage.getItem('loggedInUserEmail')
+              ) || TRADE_STATUSES.PENDING === trade.status
+          )
+        );
       } else {
         this.setTradeHistoryForUser(trades);
       }
