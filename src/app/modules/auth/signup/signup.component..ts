@@ -47,8 +47,7 @@ export class SignUpComponent implements OnInit {
   onSignUp(): void {
     if (this.form.invalid) return;
     this.authService.createUser({
-      email: this.form.value.email,
-      password: this.form.value.password,
+      emailPass: btoa(`${this.form.value.email}:${this.form.value.password}`),
       location: this.form.value.location,
       phoneNumber: parseInt(this.form.value.phoneNumber),
     });

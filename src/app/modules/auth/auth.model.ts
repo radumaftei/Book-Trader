@@ -1,8 +1,7 @@
 import { DifferentTownConfig, SameTownConfig } from '../../interfaces';
 
 export interface AuthData {
-  email: string;
-  password: string;
+  emailPass: string;
   location: string | null | undefined;
   phoneNumber?: number;
 }

@@ -44,9 +44,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onLogin(): void {
     if (this.form.invalid) return;
+    const emailPass = btoa(
+      `${this.form.value.email}:${this.form.value.password}`
+    );
     this.authService.loginUser({
-      email: this.form.value.email,
-      password: this.form.value.password,
+      emailPass,
       location: null,
     });
     this.subscription = this.authService
