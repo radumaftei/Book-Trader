@@ -46,32 +46,6 @@ const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
 
 const server = http.createServer(app);
-const io = require("socket.io")(server, {
-  cors: {
-    origin: '*',
-    methods: ["GET, POST, PATCH, DELETE, OPTIONS, PUT"]
-  }
-});
-
-io.on('connection', (socket) => {
-  let previousId;
-
-  const safeJoin = currentId => {
-    socket.leave(previousId);
-    socket.join(currentId, () => console.log(`Socket ${socket.id} joined room ${currentId}`));
-    previousId = currentId;
-  };
-
-  console.log('a user connected');
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-
-  socket.on('eventulDeTest', (msg) => {
-    console.log('msg', msg)
-  })
-});
-
 server.on("error", onError);
 server.on("listening", onListening);
 server.listen(port);
