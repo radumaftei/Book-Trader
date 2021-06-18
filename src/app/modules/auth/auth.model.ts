@@ -2,7 +2,7 @@ import { DifferentTownConfig, SameTownConfig } from '../../interfaces';
 
 export interface AuthData {
   emailPass: string;
-  location: string | null | undefined;
+  location?: string;
   phoneNumber?: number;
 }
 

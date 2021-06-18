@@ -11,7 +11,7 @@
     <br />
     <ng-container *ngIf="showPhoneNumber(userTrade)">
       You can find the other user at
-      <span class="highlighted">{{ userTrade.toPhoneNumber }}</span
+      <span class="highlighted">{{ phoneNumberToDisplay(userTrade) }}</span
       >.
     </ng-container>
     <div class="trade-button-wrapper">

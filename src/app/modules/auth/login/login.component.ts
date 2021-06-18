@@ -49,7 +49,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     );
     this.authService.loginUser({
       emailPass,
-      location: null,
     });
     this.subscription = this.authService
       .getAuthStatusListener()
