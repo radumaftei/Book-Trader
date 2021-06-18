@@ -21,41 +21,35 @@ export class TradeHistoryComponent implements OnDestroy {
     this.commonService.getTrades(true);
   }
 
-  showCompletedText(trade: TradeDetails): boolean {
-    return (
-      !trade.completedBy.includes(localStorage.getItem('loggedInUserEmail')) &&
-      trade.status === TRADE_STATUSES.COMPLETED
-    );
-  }
+  showCompletedText = (trade: TradeDetails): boolean =>
+    !trade.completedBy.includes(localStorage.getItem('loggedInUserEmail')) &&
+    trade.status === TRADE_STATUSES.COMPLETED;
 
-  showPhoneNumber(trade: TradeDetails): boolean {
-    return trade.status === TRADE_STATUSES.IN_PROGRESS;
-  }
+  showPhoneNumber = (trade: TradeDetails): boolean =>
+    trade.status === TRADE_STATUSES.IN_PROGRESS;
 
-  showCompleteActionButton(trade: TradeDetails): boolean {
-    return (
-      [TRADE_STATUSES.COMPLETED, TRADE_STATUSES.IN_PROGRESS].includes(
-        trade.status
-      ) &&
-      !trade.completedBy.includes(localStorage.getItem('loggedInUserEmail'))
-    );
-  }
+  phoneNumberToDisplay = (trade: TradeDetails): string =>
+    trade.toPhoneNumber.toString() !== localStorage.getItem('phoneNumber')
+      ? trade.toPhoneNumber.toString()
+      : trade.fromPhoneNumber.toString();
 
-  showCancelActionButton(trade: TradeDetails): boolean {
-    return (
-      [
-        TRADE_STATUSES.PENDING,
-        TRADE_STATUSES.IN_PROGRESS,
-        TRADE_STATUSES.COMPLETED,
-      ].includes(trade.status) &&
-      ((trade.completedBy.includes(trade.toUser) &&
-        !trade.completedBy.includes(trade.fromUser)) ||
-        (!trade.completedBy.includes(trade.toUser) &&
-          trade.completedBy.includes(trade.fromUser)) ||
-        !trade.completedBy) &&
-      !trade.completedBy.includes(localStorage.getItem('loggedInUserEmail'))
-    );
-  }
+  showCompleteActionButton = (trade: TradeDetails): boolean =>
+    [TRADE_STATUSES.COMPLETED, TRADE_STATUSES.IN_PROGRESS].includes(
+      trade.status
+    ) && !trade.completedBy.includes(localStorage.getItem('loggedInUserEmail'));
+
+  showCancelActionButton = (trade: TradeDetails): boolean =>
+    [
+      TRADE_STATUSES.PENDING,
+      TRADE_STATUSES.IN_PROGRESS,
+      TRADE_STATUSES.COMPLETED,
+    ].includes(trade.status) &&
+    ((trade.completedBy.includes(trade.toUser) &&
+      !trade.completedBy.includes(trade.fromUser)) ||
+      (!trade.completedBy.includes(trade.toUser) &&
+        trade.completedBy.includes(trade.fromUser)) ||
+      !trade.completedBy) &&
+    !trade.completedBy.includes(localStorage.getItem('loggedInUserEmail'));
 
   handleTrade(trade: TradeDetails, tradeType: TRADE_STATUSES): void {
     this.commonService

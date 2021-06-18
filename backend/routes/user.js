@@ -8,9 +8,10 @@ const User = require("../models/user");
 const router = express.Router();
 
 router.post("/signup", (req, res, next) => {
-  bcrypt.hash(req.body.password, 10).then((hash) => {
+  const [email, password] = Buffer.from(req.body.emailPass, 'base64').toString().split(':');
+  bcrypt.hash(password, 10).then((hash) => {
     const user = new User({
-      email: req.body.email,
+      email,
       password: hash,
       location: req.body.location,
       phoneNumber: req.body.phoneNumber,
@@ -42,15 +43,16 @@ router.post("/signup", (req, res, next) => {
 
 router.post("/login", (req, res, next) => {
   let fetchedUser;
-  User.findOne({ email: req.body.email })
+  const [email, password] = Buffer.from(req.body.emailPass, 'base64').toString().split(':');
+  User.findOne({ email })
     .then((user) => {
       if (!user) {
         return res.status(404).json({
-          message: `Auth Failed. No user found with email ${req.body.email}`,
+          message: `Auth Failed. No user found with email ${email}`,
         });
       }
       fetchedUser = user;
-      return bcrypt.compare(req.body.password, user.password);
+      return bcrypt.compare(password, user.password);
     })
     .then((result) => {
       if (!result) {

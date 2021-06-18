@@ -1,6 +1,7 @@
 import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -13,17 +14,20 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    // Angular Stuff
+    // Angular Modules
     CommonModule,
     BrowserAnimationsModule,
     BrowserModule,
     ReactiveFormsModule,
     RouterModule,
     HttpClientModule,
-    // My stuff
+    SocketIoModule.forRoot(config),
+    // Application Modules
     AppRoutingModule,
     MyBooksModule,
     SharedModule,
