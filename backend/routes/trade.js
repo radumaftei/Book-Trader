@@ -18,18 +18,16 @@ const TRADE_STATUSES = Object.freeze({
 });
 
 const acceptingTrade = (_id, bookIds, res) => {
-  Trade.updateMany({
-    _id: { $ne: _id },
-    tradedWithBookId: { $in: [
-        ...bookIds
-      ]},
-    tradedBookId: { $in: [
-        ...bookIds
-      ]
+  Trade.updateMany(
+    {
+      _id: { $ne: _id },
+      tradedWithBookId: { $in: [...bookIds] },
+      tradedBookId: { $in: [...bookIds] },
     },
-  }, {
-    status: TRADE_STATUSES.CANCELED
-  }).then(() => {
+    {
+      status: TRADE_STATUSES.CANCELED,
+    }
+  ).then(() => {
     bookIds.forEach((bookId) => {
       Book.updateOne(
         { _id: bookId },
@@ -40,8 +38,8 @@ const acceptingTrade = (_id, bookIds, res) => {
         res.status(201).json();
       });
     });
-  })
-}
+  });
+};
 
 const deleteBooksOnTradeComplete = (bookIds, res, req) => {
   bookIds.forEach((bookId) => {
@@ -56,8 +54,8 @@ const deleteBooksOnTradeComplete = (bookIds, res, req) => {
         });
       });
     });
-  })
-}
+  });
+};
 
 const cancelingTrade = (bookIds, res) => {
   bookIds.forEach((bookId) => {
@@ -70,18 +68,15 @@ const cancelingTrade = (bookIds, res) => {
       res.status(201).json();
     });
   });
-}
+};
 
 router.post("", checkAuth, (req, res) => {
   const [town, method] = req.body.tradeMethod.split("-");
   Book.findOne({
     _id: {
-      $in: [
-        req.body.tradedWithBookId,
-        req.body.tradedBookId
-      ]
+      $in: [req.body.tradedWithBookId, req.body.tradedBookId],
     },
-    hidden: true
+    hidden: true,
   }).then((book) => {
     if (!book) {
       new Trade({
@@ -101,11 +96,11 @@ router.post("", checkAuth, (req, res) => {
         });
     } else {
       res.status(401).json({
-        message: "Book is present in another active trade, please try again later",
+        message:
+          "Book is present in another active trade, please try again later",
       });
     }
-  })
-
+  });
 });
 
 router.get("", checkAuth, (req, res, next) => {
@@ -138,8 +133,11 @@ router.put("", checkAuth, (req, res, next) => {
   } = req.body;
   const bookIds = [tradedBookId, tradedWithBookId];
   let isCurrentRequestingUserInReadBy = readBy.includes(req.userData.email);
-  const otherUserToBeRemoved = fromUser !== req.userData.email ? fromUser : toUser;
-  let finalReadBy = readBy.concat(!isCurrentRequestingUserInReadBy ? req.userData.email : '').split(otherUserToBeRemoved)
+  const otherUserToBeRemoved =
+    fromUser !== req.userData.email ? fromUser : toUser;
+  let finalReadBy = readBy
+    .concat(!isCurrentRequestingUserInReadBy ? req.userData.email : "")
+    .split(otherUserToBeRemoved)
     .join("");
   let finalCompletedBy = completedBy;
   let deleteBooksAfterCompleted = false;
@@ -148,7 +146,8 @@ router.put("", checkAuth, (req, res, next) => {
 
   if (tradeType === TRADE_STATUSES.COMPLETED) {
     finalCompletedBy = finalCompletedBy.concat(req.userData.email);
-    deleteBooksAfterCompleted = finalCompletedBy.includes(toUser) && finalCompletedBy.includes(fromUser);
+    deleteBooksAfterCompleted =
+      finalCompletedBy.includes(toUser) && finalCompletedBy.includes(fromUser);
   }
 
   if (fromUser === req.userData.email) {
@@ -165,7 +164,7 @@ router.put("", checkAuth, (req, res, next) => {
       fromPhoneNumber: toPhoneNumber,
       toPhoneNumber: fromPhoneNumber,
       readBy: finalReadBy,
-      completedBy: finalCompletedBy
+      completedBy: finalCompletedBy,
     }
   ).then(() => {
     switch (tradeType) {

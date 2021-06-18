@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../modules/auth/auth.service';
 import { CommonService } from '../common.service';
@@ -7,9 +7,21 @@ import { CommonService } from '../common.service';
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
   unreadNotificationsNumber$ = this.commonService.unreadNotificationsNumber$;
+
+  // liveData$ = this.webSocket.messages$.pipe(
+  //   map((rows) => rows.data),
+  //   catchError((error) => {
+  //     throw error;
+  //   }),
+  //   tap({
+  //     error: (error) => console.log('[Live component] Error:', error),
+  //     complete: () => console.log('[Live component] Connection Closed'),
+  //   })
+  // );
 
   constructor(
     private router: Router,

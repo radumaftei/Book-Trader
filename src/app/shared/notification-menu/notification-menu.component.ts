@@ -8,6 +8,7 @@ import { DialogComponent } from '../dialog/dialog.component';
 import { HomepageService } from '../../modules/homepage/homepage.service';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { WebsocketService } from '../../core/websocket.service';
 
 @Component({
   selector: 'app-notification-menu',
@@ -26,8 +27,12 @@ export class NotificationMenuComponent implements OnDestroy {
     private commonService: CommonService,
     private dialog: MatDialog,
     private homepageService: HomepageService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private webSocket: WebsocketService
+  ) {
+    console.log('sending message');
+    this.webSocket.sendMessage('HELLO BOSS HOW ARE U?');
+  }
 
   markAllNotificationsAsRead(): void {
     this.commonService
