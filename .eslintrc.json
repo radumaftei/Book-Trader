@@ -19,8 +19,10 @@
         "prettier/prettier"
       ],
       "rules": {
-        "@typescript-eslint/no-non-null-assertion": "off"
-      }
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "prettier/prettier": "error"
+      },
+      "plugins": ["prettier"]
     },
     {
       "files": ["*.html"],
@@ -29,7 +31,10 @@
         "plugin:prettier/recommended",
         "prettier/prettier"
       ],
-      "rules": {}
+      "rules": {
+        "prettier/prettier": "error"
+      },
+      "plugins": ["prettier"]
     }
   ]
 }

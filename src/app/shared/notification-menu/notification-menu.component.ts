@@ -31,10 +31,10 @@ export class NotificationMenuComponent implements OnDestroy {
 
   markAllNotificationsAsRead(): void {
     this.commonService
-      .updateReadBy(localStorage.getItem('loggedInUserEmail'))
+      .updateReadBy()
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(() => {
-        this.commonService.getTrades(false, true);
+        this.commonService.getTrades(false);
         this.router.url === '/profile' && this.commonService.getTrades(true);
       });
   }
@@ -44,23 +44,17 @@ export class NotificationMenuComponent implements OnDestroy {
       TRADE_STATUSES.REJECTED,
       TRADE_STATUSES.IN_PROGRESS,
       TRADE_STATUSES.CANCELED,
+      TRADE_STATUSES.COMPLETED,
     ].includes(trade.status);
 
-  getMessageForRejectedInProgress = (trade: TradeDetails): string => {
-    switch (trade.status) {
-      case TRADE_STATUSES.REJECTED: {
-        return 'rejected';
-      }
-      case TRADE_STATUSES.IN_PROGRESS: {
-        return 'accepted';
-      }
-      case TRADE_STATUSES.CANCELED: {
-        return 'cancelled';
-      }
-      default: {
-        return '';
-      }
-    }
+  getStatusFromNoActionTrades = (trade: TradeDetails): string => {
+    const statusObjects = {
+      [TRADE_STATUSES.REJECTED]: 'rejected',
+      [TRADE_STATUSES.IN_PROGRESS]: 'accepted',
+      [TRADE_STATUSES.CANCELED]: 'cancelled',
+      [TRADE_STATUSES.COMPLETED]: 'completed',
+    };
+    return statusObjects[trade.status];
   };
 
   handleTrade(trade: TradeDetails, tradeType: TRADE_STATUSES): void {
@@ -71,6 +65,7 @@ export class NotificationMenuComponent implements OnDestroy {
         if (tradeType === TRADE_STATUSES.IN_PROGRESS) {
           this.homepageService.getHomepageBooks();
         }
+        this.router.url === '/profile' && this.commonService.getTrades(true);
       });
   }
 

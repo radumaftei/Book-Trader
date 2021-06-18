@@ -50,24 +50,31 @@ export class CommonService {
     return this.apiService.postTrade(tradeDetails);
   }
 
-  updateReadBy(readBy: string): Observable<unknown> {
+  updateReadBy(): Observable<unknown> {
     const tradeIds: string[] = this.userTradesSubject
       .getValue()
       .map((trade: TradeDetails) => trade._id);
-    return this.apiService.putReadBy(readBy, tradeIds);
+    return this.apiService.putReadBy(tradeIds);
   }
 
-  getTrades(all = false, filterSeenFromNotification = false): void {
+  getTrades(all = false): void {
     this.apiService.fetchTrades(all).subscribe((trades: TradeDetails[]) => {
       if (!all) {
         const unreadNotifications = trades.filter(
           (trade: TradeDetails) =>
             !trade.readBy.includes(localStorage.getItem('loggedInUserEmail'))
-        ).length;
-        this.unreadNotificationsSubject.next(unreadNotifications);
-        this.userTradesSubject.next(trades);
+        );
+        this.unreadNotificationsSubject.next(unreadNotifications.length);
+        this.userTradesSubject.next(
+          trades.filter(
+            (trade) =>
+              !trade.readBy.includes(
+                localStorage.getItem('loggedInUserEmail')
+              ) || TRADE_STATUSES.PENDING === trade.status
+          )
+        );
       } else {
-        this.tradeHistoryForUserSubject.next(trades);
+        this.setTradeHistoryForUser(trades);
       }
     });
   }
@@ -80,18 +87,15 @@ export class CommonService {
     return this.apiService.updateNotificationTrade(trade, tradeType);
   }
 
-  completeTrade(
-    trade: TradeDetails,
-    tradeType: TRADE_STATUSES.COMPLETED
-  ): Observable<unknown> {
-    return this.apiService.completeTrade(trade, tradeType);
-  }
-
   setLoading(flag: boolean): void {
     this.loadingSubject.next(flag);
   }
 
   setFetchDataBooks(flag: boolean): void {
     this.fetchDataBooksSubject.next(flag);
+  }
+
+  setTradeHistoryForUser(trades: TradeDetails[]): void {
+    this.tradeHistoryForUserSubject.next(trades);
   }
 }

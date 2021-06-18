@@ -16,11 +16,11 @@ router.post("/signup", (req, res, next) => {
       phoneNumber: req.body.phoneNumber,
       sameTownConfig: {
         courier: true,
-        onFoot: true
+        onFoot: true,
       },
       differentTownConfig: {
-        courier: true
-      }
+        courier: true,
+      },
     });
     user
       .save()
@@ -75,7 +75,7 @@ router.post("/login", (req, res, next) => {
         user: {
           email: fetchedUser.email,
           location: fetchedUser.location,
-          phoneNumber: fetchedUser.phoneNumber
+          phoneNumber: fetchedUser.phoneNumber,
         },
       });
     })
@@ -94,11 +94,17 @@ router.put("/deliveryConfig", checkAuth, (req, res, next) => {
 
 router.get("", checkAuth, (req, res, next) => {
   const userSearchQuery = req.query.userSearchQuery;
-  const byId = req.query.byId === 'true';
-  const filterProperty = byId ? '_id' : 'email';
-  User.findOne({[filterProperty]: userSearchQuery}).then((user) => {
-    const { email, location, differentTownConfig, sameTownConfig, phoneNumber } = user;
-    res.status(201).json({
+  const byId = req.query.byId === "true";
+  const filterProperty = byId ? "_id" : "email";
+  User.findOne({ [filterProperty]: userSearchQuery }).then((user) => {
+    const {
+      email,
+      location,
+      differentTownConfig,
+      sameTownConfig,
+      phoneNumber,
+    } = user;
+    res.status(200).json({
       email,
       location,
       phoneNumber,

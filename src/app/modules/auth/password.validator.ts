@@ -17,7 +17,7 @@ export class PasswordValidator {
   }
 
   public static matchValues(
-    matchTo: string // name of the control to match to
+    matchTo: string
   ): (AbstractControl) => ValidationErrors | null {
     return (control: AbstractControl): ValidationErrors | null => {
       return !!control.parent &&

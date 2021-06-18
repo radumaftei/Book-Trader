@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { forkJoin, Subject } from 'rxjs';
+import { forkJoin, noop, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BookProfile } from 'src/app/interfaces';
 import { HomepageService } from '../../homepage.service';
@@ -120,7 +120,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
                   tradeMethod,
                 })
                 .pipe(takeUntil(this.unsubscribe))
-                .subscribe((data) => {});
+                .subscribe(noop);
             }
           });
       });

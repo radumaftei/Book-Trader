@@ -1,29 +1,25 @@
 <div class="history-wrapper">
   <h1>Trade history</h1>
-  <mat-card
-    *ngFor="let userTrade of tradeHistoryForUser$ | async"
-    [ngClass]="{
-      'unread-notifications':
-        unreadNotification(userTrade.readBy) &&
-        (unreadNotificationsNumber$ | async) > 0
-    }"
-  >
+  <mat-card *ngFor="let userTrade of tradeHistoryForUser$ | async">
     Your trade:
     <span class="highlighted">{{ userTrade.tradedBookTitle }}</span> for
     <span class="highlighted">{{ userTrade.tradedWithBookTitle }}</span> is
-    <span class="highlighted">{{ userTrade.status.toLowerCase() }}</span
-    >.
+    <span class="highlighted">{{ userTrade.status.toLowerCase() }}</span>
+    <span class="highlighted" *ngIf="showCompletedText(userTrade)">
+      by {{ userTrade.completedBy }}</span
+    >
     <br />
-    <ng-container *ngIf="showActions(userTrade)">
+    <ng-container *ngIf="showPhoneNumber(userTrade)">
       You can find the other user at
       <span class="highlighted">{{ userTrade.toPhoneNumber }}</span
       >.
     </ng-container>
-    <div class="trade-button-wrapper" *ngIf="showActions(userTrade)">
+    <div class="trade-button-wrapper">
       <button
         mat-button
         color="primary"
         (click)="handleTrade(userTrade, TRADE_STATUSES.COMPLETED)"
+        *ngIf="showCompleteActionButton(userTrade)"
       >
         Complete
       </button>
@@ -31,6 +27,7 @@
         mat-button
         color="primary"
         (click)="handleTrade(userTrade, TRADE_STATUSES.CANCELED)"
+        *ngIf="showCancelActionButton(userTrade)"
       >
         Cancel
       </button>
