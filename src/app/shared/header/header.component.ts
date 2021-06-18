@@ -12,17 +12,6 @@ import { CommonService } from '../common.service';
 export class HeaderComponent implements OnInit {
   unreadNotificationsNumber$ = this.commonService.unreadNotificationsNumber$;
 
-  // liveData$ = this.webSocket.messages$.pipe(
-  //   map((rows) => rows.data),
-  //   catchError((error) => {
-  //     throw error;
-  //   }),
-  //   tap({
-  //     error: (error) => console.log('[Live component] Error:', error),
-  //     complete: () => console.log('[Live component] Connection Closed'),
-  //   })
-  // );
-
   constructor(
     private router: Router,
     private authService: AuthService,
