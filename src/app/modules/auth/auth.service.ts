@@ -22,12 +22,13 @@ export class AuthService {
     return this.authStatusListener.getValue();
   };
 
-  getToken = (): string => {
-    return this.token;
-  };
+  getToken = (): string =>
+    !localStorage.getItem('token') || !localStorage.getItem('loggedInUserEmail')
+      ? ''
+      : this.token;
 
   createUser(authData: AuthData): void {
-    this.apiService.createUserHttp(authData).subscribe(({ user }) => {
+    this.apiService.createUserHttp(authData).subscribe(() => {
       this.loginUser(authData);
     });
   }
