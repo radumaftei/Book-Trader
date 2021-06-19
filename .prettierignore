@@ -13,3 +13,5 @@ karma.conf.json
 angular.json
 karma.conf.js
 tsconfig.json
+report.html
+.vscode

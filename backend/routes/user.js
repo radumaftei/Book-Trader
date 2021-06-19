@@ -8,7 +8,9 @@ const User = require("../models/user");
 const router = express.Router();
 
 router.post("/signup", (req, res, next) => {
-  const [email, password] = Buffer.from(req.body.emailPass, 'base64').toString().split(':');
+  const [email, password] = Buffer.from(req.body.emailPass, "base64")
+    .toString()
+    .split(":");
   bcrypt.hash(password, 10).then((hash) => {
     const user = new User({
       email,
@@ -43,7 +45,9 @@ router.post("/signup", (req, res, next) => {
 
 router.post("/login", (req, res, next) => {
   let fetchedUser;
-  const [email, password] = Buffer.from(req.body.emailPass, 'base64').toString().split(':');
+  const [email, password] = Buffer.from(req.body.emailPass, "base64")
+    .toString()
+    .split(":");
   User.findOne({ email })
     .then((user) => {
       if (!user) {
