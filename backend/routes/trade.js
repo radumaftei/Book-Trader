@@ -4,7 +4,7 @@ const fs = require("fs");
 const checkAuth = require("../middleware/check-auth");
 const Trade = require("../models/trade");
 const Book = require("../models/book");
-const TRADE_STATUSES = require('../constants').TRADE_STATUSES;
+const TRADE_STATUSES = require("../constants").TRADE_STATUSES;
 
 const router = express.Router();
 
