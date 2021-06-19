@@ -9,6 +9,7 @@ export const MY_BOOKS_URL = 'personal-book-page';
 export const USER_SIGNUP_URL = 'signup';
 export const DELIVERY_CONFIG = 'deliveryConfig';
 export const USER_LOGIN_URL = 'login';
+export const USER_URL = 'user';
 export const HOMEPAGE = 'homepage';
 export const TRADE_URL = 'trade';
 export const READ_BY = 'readBy';

@@ -68,7 +68,7 @@ export class BooksListDatasource implements DataSource<BookProfile> {
 
   async addBook(props: BookProps): Promise<boolean> {
     return new Promise((resolve) => {
-      const book = new FormData();
+      const book: FormData = new FormData();
       Object.keys(props).forEach((key: string) => {
         book.append(key, props[key]);
       });

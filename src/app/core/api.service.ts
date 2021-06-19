@@ -19,6 +19,7 @@ import {
   TRADE_URL,
   USER_LOGIN_URL,
   USER_SIGNUP_URL,
+  USER_URL,
 } from '../constants';
 import { AuthData, UserData } from '../modules/auth/auth.model';
 import { Observable, throwError } from 'rxjs';
@@ -37,7 +38,7 @@ interface IDelivery {
 })
 export class ApiService {
   private BOOKS_API_URL = `${HOME_URL}/${MY_BOOKS_URL}`;
-  private USER_API_URL = `${HOME_URL}/user`;
+  private USER_API_URL = `${HOME_URL}/${USER_URL}`;
   private HOMEPAGE_API_URL = `${HOME_URL}/${HOMEPAGE}`;
   private TRADE_API_URL = `${HOME_URL}/${TRADE_URL}`;
 
@@ -86,7 +87,7 @@ export class ApiService {
       .pipe(catchError(this.handleError("Couldn't get user")));
   }
 
-  postBookHttp = (book) => {
+  postBookHttp = (book: FormData): Observable<BookProfileDTO> => {
     return this.httpClient.post<BookProfileDTO>(this.BOOKS_API_URL, book).pipe(
       tap(() => this.handleSuccess('Book added successfully')),
       catchError(this.handleError("Couldn't add book"))
