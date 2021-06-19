@@ -112,6 +112,7 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
       this.imagePreview = <string>reader.result;
       this.cdr.detectChanges();
     };
+    this.cdr.detectChanges();
     reader.readAsDataURL(file);
   }
 

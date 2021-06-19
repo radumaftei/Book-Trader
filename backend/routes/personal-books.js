@@ -4,6 +4,8 @@ const fs = require("fs");
 
 const checkAuth = require("../middleware/check-auth");
 const Book = require("../models/book");
+const Trade = require("../models/trade");
+const TRADE_STATUSES = require('../constants').TRADE_STATUSES;
 
 const MIME_TYPE_MAP = {
   "image/png": "png",
@@ -95,16 +97,25 @@ router.put("", checkAuth, (req, res, next) => {
 });
 
 router.delete("/:id", checkAuth, (req, res, next) => {
-  Book.findOne({ _id: req.params.id }).then((book) => {
+  const bookIdToDelete = req.params.id;
+  Book.findOneAndDelete({ _id: bookIdToDelete }).then((book) => {
     const imagePathArray = book.imagePath.split("/");
     const path = `${IMAGES_DIR_PATH}/${
       imagePathArray[imagePathArray.length - 1]
     }`;
-    Book.deleteOne({ _id: req.params.id }).then(() => {
-      fs.unlink(path, (err) => {
-        res.status(200).json();
-      });
-    });
+    fs.unlink(path, (err) => {});
+
+    Trade.updateMany({
+      $or: [ {
+        tradedBookId: bookIdToDelete
+      },
+        {tradedWithBookId: bookIdToDelete}]
+    },
+      {
+        status: TRADE_STATUSES.CANCELED
+      }).then((trades) => {
+        res.status(201).json();
+    })
   });
 });
 
