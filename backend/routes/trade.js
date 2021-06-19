@@ -4,18 +4,11 @@ const fs = require("fs");
 const checkAuth = require("../middleware/check-auth");
 const Trade = require("../models/trade");
 const Book = require("../models/book");
+const TRADE_STATUSES = require("../constants").TRADE_STATUSES;
 
 const router = express.Router();
 
 const IMAGES_DIR_PATH = "backend/images";
-
-const TRADE_STATUSES = Object.freeze({
-  PENDING: "PENDING",
-  IN_PROGRESS: "IN_PROGRESS",
-  REJECTED: "REJECTED",
-  COMPLETED: "COMPLETED",
-  CANCELED: "CANCELED",
-});
 
 const acceptingTrade = (_id, bookIds, res) => {
   Trade.updateMany(

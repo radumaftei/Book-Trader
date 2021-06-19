@@ -40,7 +40,13 @@ export class SignUpComponent implements OnInit {
         [Validators.required, PasswordValidator.matchValues('password')],
       ],
       location: ['', [Validators.required]],
-      phoneNumber: ['', [Validators.required, Validators.pattern('[0-9]{10}')]],
+      phoneNumber: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^(\\+407|07)\\d{2}[.]?\\d{3}[.]?\\d{3}$'),
+        ],
+      ],
     });
   }
 
