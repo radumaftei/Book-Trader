@@ -15,6 +15,7 @@ import { AuthService } from '../../../../auth/auth.service';
 import { BooksListDatasource } from './books-list.datasource';
 import {
   debounceTime,
+  delay,
   distinctUntilChanged,
   map,
   switchMap,
@@ -86,21 +87,16 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
         .pipe(
           takeUntil(this.unsubscribe),
           map((input: Event) => (<HTMLInputElement>input.target).value),
-          debounceTime(200),
+          debounceTime(400),
           distinctUntilChanged()
         )
         .subscribe((searchValue: string) => {
-          this.searchValue = searchValue;
-          this.paginator.pageIndex = 0;
-          this.dataSource.getBooksForTable({
-            ...this.defaultPageSizeOptions,
-            filterText: this.searchValue,
-          });
+          this.fetchDataWithSearchInput(searchValue);
         });
   }
 
-  emptiedInput(): void {
-    this.searchValue = '';
+  fetchDataWithSearchInput(searchValue: string): void {
+    this.searchValue = searchValue;
     this.paginator.pageIndex = 0;
     this.dataSource.getBooksForTable({
       ...this.defaultPageSizeOptions,

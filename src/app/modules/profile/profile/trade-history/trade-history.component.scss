@@ -5,6 +5,10 @@
   display: flex;
   flex-direction: column;
 
+  .center {
+    text-align: center;
+  }
+
   mat-spinner {
     top: 0;
   }
