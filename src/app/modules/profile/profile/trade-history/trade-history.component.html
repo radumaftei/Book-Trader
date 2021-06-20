@@ -1,5 +1,5 @@
 <div class="history-wrapper">
-  <h1>Trade history</h1>
+  <h1 class="center">Trade history</h1>
   <mat-card *ngFor="let userTrade of tradeHistoryForUser$ | async">
     Your trade:
     <span class="highlighted">{{ userTrade.tradedBookTitle }}</span> for
@@ -33,7 +33,7 @@
       </button>
     </div>
   </mat-card>
-  <p *ngIf="(tradeHistoryForUser$ | async).length === 0">
+  <p class="center" *ngIf="(tradeHistoryForUser$ | async).length === 0">
     No Trades were made !
   </p>
 </div>

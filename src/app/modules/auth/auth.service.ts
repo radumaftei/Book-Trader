@@ -14,20 +14,14 @@ export class AuthService {
 
   constructor(private apiService: ApiService, private router: Router) {}
 
-  getAuthStatusListener = (): Observable<boolean> => {
-    return this.authStatusListener.asObservable();
-  };
-
   authorized = (): boolean => {
     return this.authStatusListener.getValue();
   };
 
-  getToken = (): string => {
-    return this.token;
-  };
+  getToken = (): string => (!localStorage.getItem('token') ? '' : this.token);
 
   createUser(authData: AuthData): void {
-    this.apiService.createUserHttp(authData).subscribe(({ user }) => {
+    this.apiService.createUserHttp(authData).subscribe(() => {
       this.loginUser(authData);
     });
   }

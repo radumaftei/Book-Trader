@@ -50,9 +50,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.loginUser({
       emailPass,
     });
-    this.subscription = this.authService
-      .getAuthStatusListener()
-      .subscribe(noop);
   }
 
   ngOnDestroy(): void {

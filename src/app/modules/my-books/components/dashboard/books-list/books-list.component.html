@@ -5,14 +5,19 @@
 
     <mat-form-field class="filter">
       <mat-label>Filter</mat-label>
-      <input matInput placeholder="Filter books" #searchInput />
+      <input
+        matInput
+        placeholder="Filter books"
+        #searchInput
+        [(ngModel)]="searchValue"
+      />
       <button
         mat-button
-        *ngIf="searchInput.value"
+        *ngIf="searchValue"
         matSuffix
         mat-icon-button
         aria-label="Clear"
-        (click)="searchInput.value = ''"
+        (click)="fetchDataWithSearchInput('')"
       >
         <mat-icon>close</mat-icon>
       </button>
