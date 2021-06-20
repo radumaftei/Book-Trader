@@ -208,10 +208,10 @@ export class ApiService {
         NotificationType.ERROR
       );
       console.error(errorMessage);
-      return throwError(errorMessage);
+      return throwError(() => errorMessage);
     };
 
-  handleSuccess = (notificationMessage: string) => {
+  handleSuccess = (notificationMessage: string): void => {
     this.notificationService.showNotification(
       notificationMessage,
       NotificationType.SUCCESS

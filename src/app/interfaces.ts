@@ -36,6 +36,7 @@ export interface SameTownConfig extends DifferentTownConfig {
 export interface PageOptions {
   pageIndex: number;
   pageSize: number;
+  filterText: string;
 }
 
 export interface BookApi {

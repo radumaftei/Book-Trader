@@ -73,8 +73,11 @@ router.post("", checkAuth, upload.single("image"), (req, res, next) => {
 });
 
 router.get("", checkAuth, (req, res, next) => {
-  const { pageIndex, pageSize, withPagination } = req.query;
-  Book.find({ userId: req.userData.userId }).then((books) => {
+  const { pageIndex, pageSize, withPagination, filterText } = req.query;
+  Book.find({
+    userId: req.userData.userId,
+    title: { $regex: `.*${filterText}.*`, $options: "i" },
+  }).then((books) => {
     const length = books.length;
     const booksByQuery =
       withPagination === "true"

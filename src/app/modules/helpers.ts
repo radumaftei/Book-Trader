@@ -45,4 +45,4 @@ export const transformDTOBooks = (
 });
 
 export const getBookCategoriesArr = (): string[] =>
-  Object.values(BOOK_CATEGORIES);
+  Object.values(BOOK_CATEGORIES).sort();

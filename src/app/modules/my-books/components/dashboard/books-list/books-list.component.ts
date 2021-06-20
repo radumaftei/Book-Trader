@@ -7,13 +7,19 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { Subject } from 'rxjs';
+import { fromEvent, Subject } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '../../../../../shared/dialog/dialog.component';
 import { defaultPageOptions } from '../../../../../constants';
 import { AuthService } from '../../../../auth/auth.service';
 import { BooksListDatasource } from './books-list.datasource';
-import { takeUntil } from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  switchMap,
+  takeUntil,
+} from 'rxjs/operators';
 import {
   COLUMN_TYPES,
   DIALOG_POPUP_ACTIONS,
@@ -38,6 +44,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
 
   defaultPageSizeOptions = defaultPageOptions;
   displayedColumns: string[] = displayedColumns;
+  searchValue = '';
 
   @ViewChild('searchInput') searchInput: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -57,6 +64,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
     this.myBooksService.selectedTab$
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((index) => {
+        this.searchValue = '';
         if (!index) {
           this.dataSource.getBooksForTable(this.defaultPageSizeOptions);
         }
@@ -70,18 +78,34 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
         this.dataSource.getBooksForTable({
           pageSize,
           pageIndex,
+          filterText: this.searchValue,
         });
       });
-    // this.searchInput &&
-    //   fromEvent(this.searchInput.nativeElement, 'keyup')
-    //     .pipe(
-    //       takeUntil(this.unsubscribe),
-    //       debounceTime(200),
-    //       distinctUntilChanged()
-    //     )
-    //     .subscribe((searchValue) => {
-    //       console.log('searchValue', searchValue);
-    //     });
+    this.searchInput &&
+      fromEvent(this.searchInput.nativeElement, 'keyup')
+        .pipe(
+          takeUntil(this.unsubscribe),
+          map((input: Event) => (<HTMLInputElement>input.target).value),
+          debounceTime(200),
+          distinctUntilChanged()
+        )
+        .subscribe((searchValue: string) => {
+          this.searchValue = searchValue;
+          this.paginator.pageIndex = 0;
+          this.dataSource.getBooksForTable({
+            ...this.defaultPageSizeOptions,
+            filterText: this.searchValue,
+          });
+        });
+  }
+
+  emptiedInput(): void {
+    this.searchValue = '';
+    this.paginator.pageIndex = 0;
+    this.dataSource.getBooksForTable({
+      ...this.defaultPageSizeOptions,
+      filterText: this.searchValue,
+    });
   }
 
   topTableButtonClicked = (action: string): void => {
@@ -90,7 +114,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
         this.editPressed = true;
         break;
       case 'save':
-        this.dataSource.updateBooks();
+        this.dataSource.updateBooks(this.searchValue);
         this.paginator.pageIndex = 0;
         this.editPressed = false;
         break;
@@ -118,7 +142,7 @@ export class BooksListComponent implements AfterViewInit, OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.dataSource.deleteBook(bookId);
+        this.dataSource.deleteBook(bookId, this.searchValue);
       }
     });
   };
