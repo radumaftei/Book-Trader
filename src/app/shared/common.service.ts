@@ -98,4 +98,8 @@ export class CommonService {
   setTradeHistoryForUser(trades: TradeDetails[]): void {
     this.tradeHistoryForUserSubject.next(trades);
   }
+
+  fetchLocations(): Observable<string[]> {
+    return this.apiService.fetchLocations();
+  }
 }

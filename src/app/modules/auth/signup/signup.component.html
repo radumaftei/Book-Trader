@@ -104,15 +104,33 @@
         >
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label>Enter your Location</mat-label>
-        <input
-          matInput
-          type="text"
+        <mat-label>Choose your Location</mat-label>
+        <mat-select
           formControlName="location"
-          placeholder="Location"
-        />
+          (openedChange)="openChange($event)"
+        >
+          <input (keyup)="onKey($event)" />
+          <cdk-virtual-scroll-viewport
+            [itemSize]="50"
+            [style.height.px]="5 * 30"
+          >
+            <mat-option
+              *cdkVirtualFor="let location of locations"
+              [value]="location"
+            >
+              {{ location }}
+            </mat-option>
+          </cdk-virtual-scroll-viewport>
+        </mat-select>
+        <!--        <mat-select formControlName="location">-->
+        <!--          <mat-option-->
+        <!--            *ngFor="let location of locations$ | async"-->
+        <!--            [value]="location"-->
+        <!--            >{{ location }}</mat-option-->
+        <!--          >-->
+        <!--        </mat-select>-->
         <mat-error *ngIf="form.get('location')?.errors?.required"
-          >Please enter your location</mat-error
+          >Please select a location</mat-error
         >
       </mat-form-field>
       <button

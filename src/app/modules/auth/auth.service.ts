@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../../core/api.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthData } from './auth.model';
 
@@ -31,7 +31,9 @@ export class AuthService {
       ({ token, expiresIn, user }) => {
         this.token = token;
         if (token) {
-          this.saveLoggedInUserToLs(user);
+          this.saveToLs('loggedInUserEmail', user.email);
+          this.saveToLs('loggedInUserLocation', user.location);
+          this.saveToLs('phoneNumber', user.phoneNumber.toString());
           this.setAuthTimer(expiresIn);
           this.authStatusListener.next(true);
           const now = new Date();
@@ -46,30 +48,16 @@ export class AuthService {
     );
   }
 
-  async logout(): Promise<void> {
-    this.token = null;
-    this.authStatusListener.next(false);
-    this.clearAuthDataFromLS();
-    clearTimeout(this.expiresInTimeOutID);
-    await this.router.navigate(['login']);
-  }
-
-  private saveLoggedInUserToLs = (user) => {
-    this.saveToLs('loggedInUserEmail', user.email);
-    this.saveToLs('loggedInUserLocation', user.location);
-    this.saveToLs('phoneNumber', user.phoneNumber);
-  };
-
   private saveAuthDataToLS = (token: string, expirationDate: Date) => {
     this.saveToLs('token', token);
     this.saveToLs('expirationDate', expirationDate.toISOString());
   };
 
-  private clearAuthDataFromLS = () => {
-    this.removeFromLs('token');
-    this.removeFromLs('expirationDate');
+  private clearAuthDataFromLocalStorage = () => {
     this.removeFromLs('loggedInUserEmail');
     this.removeFromLs('loggedInUserLocation');
+    this.removeFromLs('token');
+    this.removeFromLs('expirationDate');
     this.removeFromLs('phoneNumber');
   };
 
@@ -81,8 +69,8 @@ export class AuthService {
     localStorage.removeItem(key);
   };
 
-  autoAuthUser = (): void => {
-    const authInformation = this.getAuthData();
+  autoAuthorizeUser = (): void => {
+    const authInformation = this.getAuthorizationData();
     if (!authInformation) return;
     const now = new Date();
     const expiresIn = authInformation.expirationDate.getTime() - now.getTime();
@@ -99,15 +87,23 @@ export class AuthService {
     }, duration * 6000);
   };
 
-  private getAuthData = () => {
+  private getAuthorizationData = () => {
     const token = localStorage.getItem('token');
-    const expirationDate = localStorage.getItem('expirationDate');
-    if (!token || !expirationDate) {
+    const expiration = localStorage.getItem('expirationDate');
+    if (!token || !expiration) {
       return;
     }
     return {
       token,
-      expirationDate: new Date(expirationDate),
+      expirationDate: new Date(expiration),
     };
   };
+
+  async logout(): Promise<void> {
+    this.token = null;
+    this.authStatusListener.next(false);
+    this.clearAuthDataFromLocalStorage();
+    clearTimeout(this.expiresInTimeOutID);
+    await this.router.navigate(['login']);
+  }
 }
