@@ -10,9 +10,9 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { PasswordValidator } from '../password.validator';
 import { CommonService } from '../../../shared/common.service';
-import { Observable, Subject } from 'rxjs';
+import { noop, Subject } from 'rxjs';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { takeUntil } from 'rxjs/operators';
+import { map, startWith, takeUntil } from 'rxjs/operators';
 
 @Component({
   templateUrl: './signup.component.html',
@@ -26,7 +26,8 @@ export class SignUpComponent implements OnInit, OnDestroy {
   unsubscribe = new Subject<void>();
 
   locations: string[] = [];
-  selectedLocations: string[] = [];
+  filteredLocations: string[] = [];
+  height: string;
 
   @ViewChild(CdkVirtualScrollViewport, { static: true })
   cdkVirtualScrollViewPort: CdkVirtualScrollViewport;
@@ -72,25 +73,29 @@ export class SignUpComponent implements OnInit, OnDestroy {
         ],
       ],
     });
+
+    this.form
+      .get('location')
+      .valueChanges.pipe(
+        takeUntil(this.unsubscribe),
+        startWith(''),
+        map((value: string) => {
+          this.filteredLocations = this.locations.filter((option) =>
+            option.toLowerCase().startsWith(value.toLowerCase())
+          );
+          if (this.filteredLocations.length < 4) {
+            this.height = this.filteredLocations.length * 50 + 'px';
+          } else {
+            this.height = '200px';
+          }
+        })
+      )
+      .subscribe(noop);
   }
 
-  openChange(event: boolean): void {
-    if (event) {
-      this.cdkVirtualScrollViewPort.scrollToIndex(0);
-      this.cdkVirtualScrollViewPort.checkViewportSize();
-    }
-  }
-
-  onKey(event: KeyboardEvent): void {
-    const value = (<HTMLInputElement>event.target).value;
-    this.selectedLocations = this.search(value);
-  }
-
-  search(value: string): string[] {
-    const filter = value.toLowerCase();
-    return this.locations.filter((option) =>
-      option.toLowerCase().startsWith(filter)
-    );
+  openChange(): void {
+    this.cdkVirtualScrollViewPort.scrollToIndex(0);
+    this.cdkVirtualScrollViewPort.checkViewportSize();
   }
 
   onSignUp(): void {

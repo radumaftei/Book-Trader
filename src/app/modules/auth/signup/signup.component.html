@@ -88,6 +88,7 @@
         <mat-label>Enter your Phone Number</mat-label>
         <input
           matInput
+          maxlength="10"
           type="tel"
           formControlName="phoneNumber"
           placeholder="Phone Number"
@@ -104,31 +105,26 @@
         >
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label>Choose your Location</mat-label>
-        <mat-select
+        <mat-label>Enter your Location</mat-label>
+        <input
+          type="text"
           formControlName="location"
-          (openedChange)="openChange($event)"
-        >
-          <input (keyup)="onKey($event)" />
+          matInput
+          [matAutocomplete]="auto"
+        />
+        <mat-autocomplete #auto="matAutocomplete" (opened)="openChange()">
           <cdk-virtual-scroll-viewport
-            [itemSize]="50"
-            [style.height.px]="5 * 30"
+            [ngStyle]="{ height: height }"
+            itemSize="25"
           >
             <mat-option
-              *cdkVirtualFor="let location of locations"
-              [value]="location"
+              *cdkVirtualFor="let option of filteredLocations"
+              [value]="option"
             >
-              {{ location }}
+              {{ option }}
             </mat-option>
           </cdk-virtual-scroll-viewport>
-        </mat-select>
-        <!--        <mat-select formControlName="location">-->
-        <!--          <mat-option-->
-        <!--            *ngFor="let location of locations$ | async"-->
-        <!--            [value]="location"-->
-        <!--            >{{ location }}</mat-option-->
-        <!--          >-->
-        <!--        </mat-select>-->
+        </mat-autocomplete>
         <mat-error *ngIf="form.get('location')?.errors?.required"
           >Please select a location</mat-error
         >

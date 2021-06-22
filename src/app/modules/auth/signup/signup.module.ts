@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 const MATERIAL_MODULES = [
   MatProgressSpinnerModule,
@@ -18,6 +19,8 @@ const MATERIAL_MODULES = [
   MatInputModule,
   MatIconModule,
   MatSelectModule,
+  MatAutocompleteModule,
+  ScrollingModule,
 ];
 
 @NgModule({
@@ -27,7 +30,6 @@ const MATERIAL_MODULES = [
     SignupRoutingModule,
     ...MATERIAL_MODULES,
     ReactiveFormsModule,
-    ScrollingModule,
   ],
 })
 export class SignupModule {}
