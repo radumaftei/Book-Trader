@@ -1,3 +1,5 @@
+let ceva = "este empty";
+
 const TRADE_STATUSES = Object.freeze({
   PENDING: "PENDING",
   IN_PROGRESS: "IN_PROGRESS",
@@ -8,4 +10,5 @@ const TRADE_STATUSES = Object.freeze({
 
 module.exports = {
   TRADE_STATUSES,
+  ceva,
 };

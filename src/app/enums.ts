@@ -52,3 +52,8 @@ export enum TRADE_STATUSES {
   COMPLETED = 'COMPLETED',
   CANCELED = 'CANCELED',
 }
+
+export enum TRADE_ACTION_ENUM {
+  ACCEPT = 'ACCEPT',
+  REJECT = 'REJECT',
+}

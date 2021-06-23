@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../modules/auth/auth.service';
 import { CommonService } from '../common.service';
+import { NotificationSocketService } from '../notification-menu/notification-socket.service';
+import { TradeDetails } from '../../interfaces';
 
 @Component({
   selector: 'app-header',
@@ -15,11 +17,18 @@ export class HeaderComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private notificationSocketService: NotificationSocketService
   ) {}
 
   ngOnInit(): void {
     this.fetchUserNotifications();
+    this.notificationSocketService
+      .listen('new_notification')
+      .subscribe((data: { tradeData: TradeDetails }) => {
+        this.commonService.incrementUnreadNotifications();
+        this.commonService.addUnreadNotification(data.tradeData);
+      });
   }
 
   get actionButtonsDisabled(): boolean {

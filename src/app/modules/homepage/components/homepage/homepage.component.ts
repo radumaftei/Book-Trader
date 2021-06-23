@@ -7,6 +7,7 @@ import { HomepageService } from '../../homepage.service';
 import { DialogComponent } from '../../../../shared/dialog/dialog.component';
 import { CommonService } from '../../../../shared/common.service';
 import { DIALOG_POPUP_ACTIONS, DIALOG_POPUP_MESSAGES } from '../../../../enums';
+import { NotificationSocketService } from '../../../../shared/notification-menu/notification-socket.service';
 
 @Component({
   templateUrl: './homepage.component.html',

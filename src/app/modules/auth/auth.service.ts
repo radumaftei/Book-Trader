@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../../core/api.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthData } from './auth.model';
 
@@ -8,6 +8,8 @@ import { AuthData } from './auth.model';
   providedIn: 'root',
 })
 export class AuthService {
+  userDataSubject = new Subject<any>();
+
   private token: string;
   private expiresInTimeOutID: ReturnType<typeof setTimeout>;
   private authStatusListener = new BehaviorSubject<boolean>(false);
@@ -34,6 +36,7 @@ export class AuthService {
           this.saveToLs('loggedInUserEmail', user.email);
           this.saveToLs('loggedInUserLocation', user.location);
           this.saveToLs('phoneNumber', user.phoneNumber.toString());
+          this.userDataSubject.next(user.email);
           this.setAuthTimer(expiresIn);
           this.authStatusListener.next(true);
           const now = new Date();
@@ -72,6 +75,10 @@ export class AuthService {
   autoAuthorizeUser = (): void => {
     const authInformation = this.getAuthorizationData();
     if (!authInformation) return;
+    const loggedUser = localStorage.getItem('loggedInUserEmail');
+    if (localStorage.getItem('loggedInUserEmail')) {
+      this.userDataSubject.next(loggedUser);
+    }
     const now = new Date();
     const expiresIn = authInformation.expirationDate.getTime() - now.getTime();
     if (expiresIn > 0) {

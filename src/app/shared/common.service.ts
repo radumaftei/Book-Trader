@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, noop, Observable } from 'rxjs';
+import { BehaviorSubject, noop, Observable, Subject } from 'rxjs';
 import { UserData } from '../modules/auth/auth.model';
 import { ApiService } from '../core/api.service';
 import {
@@ -101,5 +101,15 @@ export class CommonService {
 
   fetchLocations(): Observable<string[]> {
     return this.apiService.fetchLocations();
+  }
+
+  incrementUnreadNotifications() {
+    this.unreadNotificationsSubject.next(
+      this.unreadNotificationsSubject.getValue() + 1
+    );
+  }
+
+  addUnreadNotification(value: TradeDetails) {
+    this.userTradesSubject.next([...this.userTradesSubject.getValue(), value]);
   }
 }
