@@ -89,7 +89,7 @@ router.post("", checkAuth, (req, res) => {
         .save()
         .then((trade) => {
           const newTrade = trade.toObject();
-          const general = require("../general-file");
+          const general = require("../socket-server");
           general()
             .io.sockets.in(general().connections[req.body.toUser])
             .emit("new_notification", { tradeData: { ...newTrade } });
@@ -170,7 +170,7 @@ router.put("", checkAuth, (req, res, next) => {
   ).then(() => {
     Trade.findOne({ _id }).then((trade) => {
       const newTrade = trade.toObject();
-      const general = require("../general-file");
+      const general = require("../socket-server");
       general()
         .io.sockets.in(general().connections[finalToUser])
         .emit("new_notification", { tradeData: { ...newTrade } });

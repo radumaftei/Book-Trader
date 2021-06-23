@@ -76,7 +76,7 @@ export class AuthService {
     const authInformation = this.getAuthorizationData();
     if (!authInformation) return;
     const loggedUser = localStorage.getItem('loggedInUserEmail');
-    if (localStorage.getItem('loggedInUserEmail')) {
+    if (loggedUser) {
       this.userDataSubject.next(loggedUser);
     }
     const now = new Date();

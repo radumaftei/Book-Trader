@@ -14,4 +14,4 @@ const normalizePort = (val) => {
 const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
 
-const general = require("./backend/general-file")(app, port);
+const general = require("./backend/socket-server")(app, port);
