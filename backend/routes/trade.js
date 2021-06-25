@@ -36,15 +36,13 @@ const acceptingTrade = (_id, bookIds, res) => {
 
 const deleteBooksOnTradeComplete = (bookIds, res, req) => {
   bookIds.forEach((bookId) => {
-    Book.findOne({ _id: bookId }).then((book) => {
+    Book.findOneAndDelete({ _id: bookId }).then((book) => {
       const imagePathArray = book.imagePath.split("/");
       const path = `${IMAGES_DIR_PATH}/${
         imagePathArray[imagePathArray.length - 1]
       }`;
-      Book.deleteOne({ _id: req.params.id }).then(() => {
-        fs.unlink(path, (err) => {
-          res.status(200).json();
-        });
+      fs.unlink(path, () => {
+        res.status(200).json();
       });
     });
   });
