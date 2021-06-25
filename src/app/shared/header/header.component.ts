@@ -35,7 +35,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .listen('new_notification')
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((data: { tradeData: TradeDetails }) => {
-        console.log('data', data);
         this.commonService.incrementUnreadNotifications();
         this.commonService.addUnreadNotification(data.tradeData);
       });

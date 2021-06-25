@@ -21,6 +21,16 @@ export class TradeHistoryComponent implements OnDestroy {
     this.commonService.getTrades(true);
   }
 
+  showOwnBook = (trade: TradeDetails): string =>
+    trade.fromUser === localStorage.getItem('loggedInUserEmail')
+      ? trade.tradedWithBookTitle
+      : trade.tradedBookTitle;
+
+  showOtherUserBook = (trade: TradeDetails): string =>
+    trade.fromUser === localStorage.getItem('loggedInUserEmail')
+      ? trade.tradedBookTitle
+      : trade.tradedWithBookTitle;
+
   showCompletedText = (trade: TradeDetails): boolean =>
     !trade.completedBy.includes(localStorage.getItem('loggedInUserEmail')) &&
     trade.status === TRADE_STATUSES.COMPLETED;

@@ -2,8 +2,8 @@
   <h1 class="center">Trade history</h1>
   <mat-card *ngFor="let userTrade of tradeHistoryForUser$ | async">
     Your trade:
-    <span class="highlighted">{{ userTrade.tradedBookTitle }}</span> for
-    <span class="highlighted">{{ userTrade.tradedWithBookTitle }}</span> is
+    <span class="highlighted">{{ showOwnBook(userTrade) }}</span> for
+    <span class="highlighted">{{ showOtherUserBook(userTrade) }}</span> is
     <span class="highlighted">{{ userTrade.status.toLowerCase() }}</span>
     <span class="highlighted" *ngIf="showCompletedText(userTrade)">
       by {{ userTrade.completedBy }}</span
