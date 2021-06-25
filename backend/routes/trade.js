@@ -36,15 +36,13 @@ const acceptingTrade = (_id, bookIds, res) => {
 
 const deleteBooksOnTradeComplete = (bookIds, res, req) => {
   bookIds.forEach((bookId) => {
-    Book.findOne({ _id: bookId }).then((book) => {
+    Book.findOneAndDelete({ _id: bookId }).then((book) => {
       const imagePathArray = book.imagePath.split("/");
       const path = `${IMAGES_DIR_PATH}/${
         imagePathArray[imagePathArray.length - 1]
       }`;
-      Book.deleteOne({ _id: req.params.id }).then(() => {
-        fs.unlink(path, (err) => {
-          res.status(200).json();
-        });
+      fs.unlink(path, () => {
+        res.status(200).json();
       });
     });
   });
@@ -65,6 +63,17 @@ const cancelingTrade = (bookIds, res) => {
 
 router.post("", checkAuth, (req, res) => {
   const [town, method] = req.body.tradeMethod.split("-");
+  const tradeData = {
+    ...req.body,
+    accepted: false,
+    rejected: false,
+    tradeMethod: {
+      [town]: method,
+    },
+    status: TRADE_STATUSES.PENDING,
+    completedBy: "",
+    readBy: req.userData.email,
+  };
   Book.findOne({
     _id: {
       $in: [req.body.tradedWithBookId, req.body.tradedBookId],
@@ -73,18 +82,15 @@ router.post("", checkAuth, (req, res) => {
   }).then((book) => {
     if (!book) {
       new Trade({
-        ...req.body,
-        accepted: false,
-        rejected: false,
-        tradeMethod: {
-          [town]: method,
-        },
-        status: TRADE_STATUSES.PENDING,
-        completedBy: "",
-        readBy: req.userData.email,
+        ...tradeData,
       })
         .save()
-        .then(() => {
+        .then((trade) => {
+          const newTrade = trade.toObject();
+          const general = require("../socket-server");
+          general()
+            .io.sockets.in(general().connections[req.body.toUser])
+            .emit("new_notification", { tradeData: { ...newTrade } });
           res.status(201).json();
         });
     } else {
@@ -160,28 +166,36 @@ router.put("", checkAuth, (req, res, next) => {
       completedBy: finalCompletedBy,
     }
   ).then(() => {
-    switch (tradeType) {
-      case TRADE_STATUSES.IN_PROGRESS: {
-        acceptingTrade(_id, bookIds, res);
-        break;
-      }
-      case TRADE_STATUSES.REJECTED: {
-        res.status(201).json();
-        break;
-      }
-      case TRADE_STATUSES.CANCELED: {
-        cancelingTrade(bookIds, res);
-        break;
-      }
-      case TRADE_STATUSES.COMPLETED: {
-        if (deleteBooksAfterCompleted) {
-          deleteBooksOnTradeComplete(bookIds, res, req);
-        } else {
-          res.status(200).json();
+    Trade.findOne({ _id }).then((trade) => {
+      const newTrade = trade.toObject();
+      const general = require("../socket-server");
+      general()
+        .io.sockets.in(general().connections[finalToUser])
+        .emit("new_notification", { tradeData: { ...newTrade } });
+
+      switch (tradeType) {
+        case TRADE_STATUSES.IN_PROGRESS: {
+          acceptingTrade(_id, bookIds, res);
+          break;
         }
-        break;
+        case TRADE_STATUSES.REJECTED: {
+          res.status(201).json();
+          break;
+        }
+        case TRADE_STATUSES.CANCELED: {
+          cancelingTrade(bookIds, res);
+          break;
+        }
+        case TRADE_STATUSES.COMPLETED: {
+          if (deleteBooksAfterCompleted) {
+            deleteBooksOnTradeComplete(bookIds, res, req);
+          } else {
+            res.status(200).json();
+          }
+          break;
+        }
       }
-    }
+    });
   });
 });
 

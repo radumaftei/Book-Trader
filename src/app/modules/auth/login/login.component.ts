@@ -1,4 +1,4 @@
-import { noop, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import {
   ChangeDetectionStrategy,
   Component,

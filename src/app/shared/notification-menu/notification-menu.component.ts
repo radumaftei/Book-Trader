@@ -8,6 +8,7 @@ import { DialogComponent } from '../dialog/dialog.component';
 import { HomepageService } from '../../modules/homepage/homepage.service';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { NotificationSocketService } from './notification-socket.service';
 
 @Component({
   selector: 'app-notification-menu',

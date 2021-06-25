@@ -135,7 +135,13 @@ export class ApiService {
       );
   };
 
-  loginUserHttp = (authData: AuthData) => {
+  loginUserHttp = (
+    authData: AuthData
+  ): Observable<{
+    token: string;
+    expiresIn: number;
+    user: { email: string; location: string; phoneNumber: number };
+  }> => {
     return this.httpClient
       .post<{
         token: string;
@@ -188,6 +194,21 @@ export class ApiService {
       })
       .pipe(
         catchError(this.handleError("Couldn't update notification status"))
+      );
+  };
+
+  fetchLocations = (): Observable<string[]> => {
+    return this.httpClient
+      .post<{
+        msg: string;
+        error: boolean;
+        data: string[];
+      }>('https://countriesnow.space/api/v0.1/countries/cities', {
+        country: 'romania',
+      })
+      .pipe(
+        map((data) => data.data.sort()),
+        catchError(this.handleError('No cities were found'))
       );
   };
 

@@ -106,8 +106,7 @@ router.delete("/:id", checkAuth, (req, res, next) => {
     const path = `${IMAGES_DIR_PATH}/${
       imagePathArray[imagePathArray.length - 1]
     }`;
-    fs.unlink(path, (err) => {});
-
+    fs.unlink(path, () => {});
     Trade.updateMany(
       {
         $or: [
@@ -120,7 +119,7 @@ router.delete("/:id", checkAuth, (req, res, next) => {
       {
         status: TRADE_STATUSES.CANCELED,
       }
-    ).then((trades) => {
+    ).then(() => {
       res.status(201).json();
     });
   });

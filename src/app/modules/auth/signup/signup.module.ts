@@ -8,6 +8,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 const MATERIAL_MODULES = [
   MatProgressSpinnerModule,
@@ -15,6 +18,9 @@ const MATERIAL_MODULES = [
   MatFormFieldModule,
   MatInputModule,
   MatIconModule,
+  MatSelectModule,
+  MatAutocompleteModule,
+  ScrollingModule,
 ];
 
 @NgModule({
