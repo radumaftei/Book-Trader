@@ -127,9 +127,12 @@ router.put("", checkAuth, (req, res, next) => {
       tradedBookId,
       tradedWithBookId,
       completedBy,
+      tradedWithBookTitle,
+      tradedBookTitle,
     },
     tradeType,
   } = req.body;
+
   const bookIds = [tradedBookId, tradedWithBookId];
   let isCurrentRequestingUserInReadBy = readBy.includes(req.userData.email);
   const otherUserToBeRemoved =
@@ -138,10 +141,12 @@ router.put("", checkAuth, (req, res, next) => {
     .concat(!isCurrentRequestingUserInReadBy ? req.userData.email : "")
     .split(otherUserToBeRemoved)
     .join("");
-  let finalCompletedBy = completedBy;
-  let deleteBooksAfterCompleted = false;
-  let finalFromUser = toUser;
-  let finalToUser = fromUser;
+  let finalCompletedBy = completedBy,
+    deleteBooksAfterCompleted = false,
+    finalFromUser = toUser,
+    finalToUser = fromUser,
+    finalTradedWithBookTitle = tradedWithBookTitle,
+    finalTradedBookTitle = tradedBookTitle;
 
   if (tradeType === TRADE_STATUSES.COMPLETED) {
     finalCompletedBy = finalCompletedBy.concat(req.userData.email);
@@ -154,6 +159,11 @@ router.put("", checkAuth, (req, res, next) => {
     finalToUser = toUser;
   }
 
+  if (finalFromUser !== fromUser || finalToUser !== toUser) {
+    finalTradedWithBookTitle = tradedBookTitle;
+    finalTradedBookTitle = tradedWithBookTitle;
+  }
+
   Trade.updateOne(
     { _id },
     {
@@ -164,6 +174,8 @@ router.put("", checkAuth, (req, res, next) => {
       toPhoneNumber: fromPhoneNumber,
       readBy: finalReadBy,
       completedBy: finalCompletedBy,
+      tradedWithBookTitle: finalTradedWithBookTitle,
+      tradedBookTitle: finalTradedBookTitle,
     }
   ).then(() => {
     Trade.findOne({ _id }).then((trade) => {
