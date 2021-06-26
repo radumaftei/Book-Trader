@@ -11,16 +11,42 @@ const router = express.Router();
 const IMAGES_DIR_PATH = "backend/images";
 
 const acceptingTrade = (_id, bookIds, res) => {
-  Trade.updateMany(
-    {
-      _id: { $ne: _id },
-      tradedWithBookId: { $in: [...bookIds] },
-      tradedBookId: { $in: [...bookIds] },
-    },
-    {
-      status: TRADE_STATUSES.CANCELED,
+  Trade.find({
+    _id: { $ne: _id },
+    $or: [
+      {
+        tradedWithBookId: { $in: [...bookIds] },
+      },
+      {
+        tradedBookId: { $in: [...bookIds] },
+      },
+    ],
+  }).then((trades) => {
+    if (trades.length) {
+      trades.forEach((trade) => {
+        Trade.findOneAndUpdate(
+          {
+            _id: { _id: trade._id },
+          },
+          {
+            status: TRADE_STATUSES.CANCELED,
+            fromUser: trade.toUser,
+            toUser: trade.fromUser,
+            readBy: "",
+            tradedBookTitle: trade.tradedWithBookTitle,
+            tradedWithBookTitle: trade.tradedBookTitle,
+          },
+          {
+            new: true,
+          }
+        ).then((updatedTrade) => {
+          const general = require("../socket-server");
+          general()
+            .io.sockets.in(general().connections[updatedTrade.toUser])
+            .emit("new_notification", { tradeData: { ...updatedTrade } });
+        });
+      });
     }
-  ).then(() => {
     bookIds.forEach((bookId) => {
       Book.updateOne(
         { _id: bookId },
