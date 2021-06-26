@@ -1,5 +1,6 @@
 <div class="wrapper">
   <app-header></app-header>
+  <h1 class="welcome">Welcome, {{ username }}</h1>
   <div class="backdrop" *ngIf="loading$ | async"></div>
   <mat-spinner *ngIf="loading$ | async"></mat-spinner>
   <ng-container *ngIf="bookCategories?.length && (loading$ | async) === false">

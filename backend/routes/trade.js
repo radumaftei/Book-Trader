@@ -40,10 +40,11 @@ const acceptingTrade = (_id, bookIds, res) => {
             new: true,
           }
         ).then((updatedTrade) => {
+          const updatedTradeObject = updatedTrade.toObject();
           const general = require("../socket-server");
           general()
-            .io.sockets.in(general().connections[updatedTrade.toUser])
-            .emit("new_notification", { tradeData: { ...updatedTrade } });
+            .io.sockets.in(general().connections[updatedTradeObject.toUser])
+            .emit("new_notification", { tradeData: { ...updatedTradeObject } });
         });
       });
     }

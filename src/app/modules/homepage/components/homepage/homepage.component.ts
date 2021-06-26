@@ -22,6 +22,10 @@ export class HomepageComponent implements OnInit, OnDestroy {
   offsetBookNumberMapper = {};
   navigationButtonsStatuses = {};
 
+  get username(): string {
+    return localStorage.getItem('loggedInUserEmail').split('@')[0];
+  }
+
   constructor(
     private homepageService: HomepageService,
     private dialog: MatDialog,
