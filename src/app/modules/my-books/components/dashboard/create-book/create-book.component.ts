@@ -46,7 +46,9 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
     this.form.valueChanges
       .pipe(debounceTime(100), takeUntil(this.unsubscribe))
       .subscribe((formData) => {
-        const setChangesBoolean = Object.keys((key) => formData[key] === null);
+        const setChangesBoolean = Object.keys(formData).every(
+          (key) => formData[key] === null
+        );
         this.myBooksService.setChanges(!setChangesBoolean);
       });
   }
