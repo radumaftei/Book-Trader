@@ -5,8 +5,9 @@ import {
   Component,
   OnDestroy,
   OnInit,
+  ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { MyBooksService } from '../../../my-books.service';
 import { BooksListDatasource } from '../books-list/books-list.datasource';
 import { mimeType } from './mime-type.validator';
@@ -22,12 +23,13 @@ import { getBookCategoriesArr } from '../../../../helpers';
 })
 export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe = new Subject<void>();
+  @ViewChild('formDirective') formDirective: NgForm;
+
   form: FormGroup;
   bookCategories = getBookCategoriesArr();
   imagePreview: string;
 
   addMultipleBooks = false;
-  resetForm = false;
 
   get createBookDisabled(): boolean {
     return !this.form.valid;
@@ -42,9 +44,10 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.form.valueChanges
-      .pipe(debounceTime(500), takeUntil(this.unsubscribe))
-      .subscribe(() => {
-        this.myBooksService.setChanges(true);
+      .pipe(debounceTime(100), takeUntil(this.unsubscribe))
+      .subscribe((formData) => {
+        const setChangesBoolean = Object.keys((key) => formData[key] === null);
+        this.myBooksService.setChanges(!setChangesBoolean);
       });
   }
 
@@ -83,6 +86,10 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
       category,
       image,
     } = this.form.value;
+    if (!this.addMultipleBooks) {
+      this.form.reset();
+      this.formDirective.resetForm();
+    }
     await this.dataSource.addBook({
       title,
       author,
@@ -94,12 +101,7 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
       category,
       image,
     });
-    this.myBooksService.setChanges(false);
-    if (!this.addMultipleBooks) {
-      this.myBooksService.updateSelectedTab(0);
-    } else {
-      this.resetForm && this.form.reset();
-    }
+    !this.addMultipleBooks && this.myBooksService.updateSelectedTab(0);
     this.dataSource.setNoData(false);
   }
 
@@ -117,8 +119,8 @@ export class CreateBookComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.myBooksService.setChanges(false);
     this.unsubscribe.next();
     this.unsubscribe.complete();
-    this.myBooksService.setChanges(false);
   }
 }

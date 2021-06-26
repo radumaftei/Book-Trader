@@ -1,6 +1,11 @@
 <div class="form-container">
   <div class="formular">
-    <form class="inputs" [formGroup]="form" enctype="multipart/form-data">
+    <form
+      class="inputs"
+      [formGroup]="form"
+      enctype="multipart/form-data"
+      #formDirective="ngForm"
+    >
       <mat-hint class="reminder-delivery"
         >Keep in mind to change your delivery methods from the profile page
         !(default is all delivery methods selected)</mat-hint
@@ -159,14 +164,6 @@
         [ngModelOptions]="{ standalone: true }"
       >
         Add multiple books</mat-checkbox
-      >
-      <mat-checkbox
-        class="bottom-checkbox"
-        color="primary"
-        [(ngModel)]="resetForm"
-        [ngModelOptions]="{ standalone: true }"
-      >
-        Reset form</mat-checkbox
       >
       <button
         class="form-button"
